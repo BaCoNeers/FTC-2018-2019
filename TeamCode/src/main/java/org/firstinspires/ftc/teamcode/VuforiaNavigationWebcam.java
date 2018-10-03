@@ -35,6 +35,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.RobotLog;
 import com.qualcomm.robotcore.util.ThreadPool;
 import com.vuforia.Frame;
+import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -100,6 +101,7 @@ public class VuforiaNavigationWebcam {
 
     HardwareMap hwMap = null;
     Telemetry telemetry = null;
+    VuforiaLocalizer vuforia = null;
 
     public static final String TAG = "Vuforia Navigation Sample";
 
@@ -113,7 +115,7 @@ public class VuforiaNavigationWebcam {
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
      * localization engine.
      */
-    VuforiaLocalizer vuforia;
+
     /**
      * This is the webcam we are to use. As with other hardware devices such as motors and
      * servos, this device is identified using the robot configuration tool in the FTC application.
@@ -123,9 +125,12 @@ public class VuforiaNavigationWebcam {
     OpenGLMatrix lastLocation = null;
 
 
-    public void intVuforia(HardwareMap ahwmap , Telemetry atelemetry , String webCam , int CAMERA_FORWARD_DISPLACEMENT /* eg: Camera is 110 mm in front of robot center*/,int CAMERA_VERTICAL_DISPLACEMENT /* eg: Camera is 200 mm above ground*/ ,int CAMERA_LEFT_DISPLACEMENT  /* eg: Camera is ON the robot's center line*/){
+    public void intVuforia(VuforiaLocalizer avuforia, HardwareMap ahwmap , Telemetry atelemetry , String webCam , int CAMERA_FORWARD_DISPLACEMENT /* eg: Camera is 110 mm in front of robot center*/, int CAMERA_VERTICAL_DISPLACEMENT /* eg: Camera is 200 mm above ground*/ , int CAMERA_LEFT_DISPLACEMENT  /* eg: Camera is ON the robot's center line*/){
         hwMap = ahwmap;
         telemetry = atelemetry;
+        vuforia = avuforia;
+
+
         /*
          * Retrieve the camera we are to use.
          */
@@ -179,7 +184,7 @@ public class VuforiaNavigationWebcam {
 
         // Load the data sets that for the trackable objects. These particular data
         // sets are stored in the 'assets' part of our application.
-        VuforiaTrackables targetsRoverRuckus = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
+        VuforiaTrackables targetsRoverRuckus = vuforia.loadTrackablesFromAsset("RoverRuckus");
         VuforiaTrackable blueRover = targetsRoverRuckus.get(0);
         blueRover.setName("Blue-Rover");
         VuforiaTrackable redFootprint = targetsRoverRuckus.get(1);

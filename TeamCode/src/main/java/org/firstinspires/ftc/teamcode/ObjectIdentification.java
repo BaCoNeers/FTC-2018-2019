@@ -33,19 +33,26 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+
 
 @Autonomous(name="Vuforia test", group="Vuforia")
 public class ObjectIdentification extends LinearOpMode {
 
+    VuforiaLocalizer vuforia;
+   //VuforiaLocalizer vuforia2;
+    VuforiaLocalizer vuforia3;
 
     private ElapsedTime runtime = new ElapsedTime();
     private VuforiaNavigationWebcam vuforiaNavigation = new VuforiaNavigationWebcam();
-    //private VuforiaNavigationWebcam vuforiaNavigation2 = new VuforiaNavigationWebcam()
+    //private VuforiaNavigationWebcam vuforiaNavigation2 = new VuforiaNavigationWebcam();
+    //private VuforiaNavigationWebcam vuforiaNavigation3 = new VuforiaNavigationWebcam();
 
     @Override public void runOpMode() {
 
-        vuforiaNavigation.intVuforia(hardwareMap,telemetry,"Webcam 1",0,0,0);
-        //vuforiaNavigation2.intVuforia(hardwareMap,telemetry,"Webcam 2",0,0,0,);
+        vuforiaNavigation.intVuforia(vuforia,hardwareMap,telemetry,"Webcam 1",0,0,0);
+       // vuforiaNavigation2.intVuforia(vuforia2,hardwareMap,telemetry,"Webcam 2",0,0,0);
+        //vuforiaNavigation3.intVuforia(vuforia3,hardwareMap,telemetry,"Webcam 3",0,0,0);
 
         waitForStart();
         runtime.reset();
@@ -54,6 +61,8 @@ public class ObjectIdentification extends LinearOpMode {
         while (opModeIsActive()) {
 
             vuforiaNavigation.updateVuforia();
+            //vuforiaNavigation2.updateVuforia();
+            //vuforiaNavigation3.updateVuforia();
         }
     }
 }
