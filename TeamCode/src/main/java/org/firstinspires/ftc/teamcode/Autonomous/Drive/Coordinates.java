@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.Autonomous.Drive;
 
+import org.firstinspires.ftc.teamcode.Configuration.Configuration;
+
 /**
  * Created by Simon on 27/09/2018.
  */
 
-public class Coordinates {
+public class Coordinates extends Configuration {
 
     public float x = 0;
     public float y = 0;
@@ -14,4 +16,5 @@ public class Coordinates {
         x = InputX;
         y = InputY;
     }
+
 }
