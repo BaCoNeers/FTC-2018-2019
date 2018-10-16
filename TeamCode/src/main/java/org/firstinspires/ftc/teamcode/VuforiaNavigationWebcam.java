@@ -97,11 +97,12 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.
  * is explained below.
  */
 
-public class VuforiaNavigationWebcam {
+public class VuforiaNavigationWebcam extends Thread {
 
     HardwareMap hwMap = null;
     Telemetry telemetry = null;
     VuforiaLocalizer vuforia = null;
+    public boolean running = true;
 
     public static final String TAG = "Vuforia Navigation Sample";
 
@@ -123,6 +124,7 @@ public class VuforiaNavigationWebcam {
     WebcamName webcamName;
     List<VuforiaTrackable> allTrackables;
     OpenGLMatrix lastLocation = null;
+
 
 
     public void intVuforia(VuforiaLocalizer avuforia, HardwareMap ahwmap , Telemetry atelemetry , String webCam , int CAMERA_FORWARD_DISPLACEMENT /* eg: Camera is 110 mm in front of robot center*/, int CAMERA_VERTICAL_DISPLACEMENT /* eg: Camera is 200 mm above ground*/ , int CAMERA_LEFT_DISPLACEMENT  /* eg: Camera is ON the robot's center line*/){
@@ -415,18 +417,17 @@ public class VuforiaNavigationWebcam {
 
 
 
-    public void updateVuforia() {
-
-
+    public void run() {
+        while (running) {
             for (VuforiaTrackable trackable : allTrackables) {
                 /**
                  * getUpdatedRobotLocation() will return null if no new information is available since
                  * the last time that call was made, or if the trackable is not currently visible.
                  * getRobotLocation() will return null if the trackable is not currently visible.
                  */
-                telemetry.addData(trackable.getName(), ((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible() ? "Visible" : "Not Visible");    //
+                telemetry.addData(trackable.getName(), ((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible() ? "Visible" : "Not Visible");    //
 
-                OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
+                OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
                 if (robotLocationTransform != null) {
                     lastLocation = robotLocationTransform;
                 }
@@ -441,7 +442,7 @@ public class VuforiaNavigationWebcam {
                 telemetry.addData("Pos", "Unknown");
             }
             telemetry.update();
-
+        }
     }
 
     /**
