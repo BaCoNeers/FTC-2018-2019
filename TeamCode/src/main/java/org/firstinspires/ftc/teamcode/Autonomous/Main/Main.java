@@ -1,10 +1,7 @@
 package org.firstinspires.ftc.teamcode.Autonomous.Main;
 
-import org.firstinspires.ftc.teamcode.Autonomous.Drive.CoordinateDrive;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.Coordinates;
 import org.firstinspires.ftc.teamcode.Autonomous.Path_Finder.PathFinder;
-import org.firstinspires.ftc.teamcode.Autonomous.Tree.Tree;
-import org.firstinspires.ftc.teamcode.Configuration.Configuration;
 
 /**
  * Created by Simon on 27/09/2018.
