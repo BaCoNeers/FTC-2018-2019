@@ -33,6 +33,7 @@ import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -53,8 +54,8 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Basic: Linear OpMode", group="Linear Opmode")
-public class Configuration extends LinearOpMode {
+@Autonomous(name="Basic: Linear OpMode", group="Iterative Opmode")
+abstract public class Configuration extends OpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -67,7 +68,7 @@ public class Configuration extends LinearOpMode {
 
 
     @Override
-    public void runOpMode() {
+    public void init() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
@@ -99,8 +100,6 @@ public class Configuration extends LinearOpMode {
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
         IMU = hardwareMap.get(BNO055IMU.class, "imu");
         IMU.initialize(parameters);
-
-
 
     }
 }
