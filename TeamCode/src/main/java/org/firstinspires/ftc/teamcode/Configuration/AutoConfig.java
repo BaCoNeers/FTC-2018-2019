@@ -55,7 +55,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
  */
 
 @Autonomous(name="Basic: Linear OpMode", group="Iterative Opmode")
-abstract public class Configuration extends OpMode {
+abstract public class AutoConfig extends OpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
