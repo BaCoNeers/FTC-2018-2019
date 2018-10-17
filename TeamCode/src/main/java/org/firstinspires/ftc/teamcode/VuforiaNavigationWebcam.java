@@ -254,10 +254,10 @@ public class VuforiaNavigationWebcam {
          * This example places the "chips" image on the perimeter wall to the Right
          *  of the Blue Driver station.  Similar to the Blue Beacon Location on the Res-Q
          *
-         * See the doc folder of this project for a description of the Field Coordinate System
+         * See the doc folder of this project for a description of the Field Coord System
          * conventions.
          *
-         * Initially the target is conceptually lying at the origin of the Field Coordinate System
+         * Initially the target is conceptually lying at the origin of the Field Coord System
          * (the center of the field), facing up.
          *
          * In this configuration, the target's coordinate system aligns with that of the field.
@@ -314,50 +314,50 @@ public class VuforiaNavigationWebcam {
         /**
          * We also need to tell Vuforia where the <em>cameras</em> are relative to the robot.
          *
-         * Just as there is a Field Coordinate System, so too there is a Robot Coordinate System.
-         * The two share many similarities. The origin of the Robot Coordinate System is wherever
+         * Just as there is a Field Coord System, so too there is a Robot Coord System.
+         * The two share many similarities. The origin of the Robot Coord System is wherever
          * you choose to make it on the robot, but typically you'd choose somewhere in the middle
          * of the robot. From that origin, the Y axis is horizontal and positive out towards the
          * "front" of the robot (however you choose "front" to be defined), the X axis is horizontal
          * and positive out towards the "right" of the robot (i.e.: 90deg horizontally clockwise from
          * the positive Y axis), and the Z axis is vertical towards the sky.
          *
-         * Similarly, for each camera there is a Camera Coordinate System. The origin of a Camera
-         * Coordinate System lies in the middle of the sensor inside of the camera. The Z axis is
+         * Similarly, for each camera there is a Camera Coord System. The origin of a Camera
+         * Coord System lies in the middle of the sensor inside of the camera. The Z axis is
          * positive coming out of the lens of the camera in a direction perpendicular to the plane
          * of the sensor. When looking at the face of the lens of the camera (down the positive Z
          * axis), the X axis is positive off to the right in the plane of the sensor, and the Y axis
          * is positive out the top of the lens in the plane of the sensor at 90 horizontally
          * counter clockwise from the X axis.
          *
-         * Next, there is Phone Coordinate System (for robots that have phones, of course), though
+         * Next, there is Phone Coord System (for robots that have phones, of course), though
          * with the advent of Vuforia support for Webcams, this coordinate system is less significant
-         * than it was previously. The Phone Coordinate System is defined thusly: with the phone in
+         * than it was previously. The Phone Coord System is defined thusly: with the phone in
          * flat front of you in portrait mode (i.e. as it is when running the robot controller app)
          * and you are staring straight at the face of the phone,
          *     * X is positive heading off to your right,
          *     * Y is positive heading up through the top edge of the phone, and
          *     * Z is pointing out of the screen, toward you.
-         * The origin of the Phone Coordinate System is at the origin of the Camera Coordinate System
+         * The origin of the Phone Coord System is at the origin of the Camera Coord System
          * of the front-facing camera on the phone.
          *
          * Finally, it is worth noting that trackable Vuforia Image Targets have their <em>own</em>
          * coordinate system (see {@link VuforiaTrackable}. This is sometimes referred to as the
-         * Target Coordinate System. In keeping with the above, when looking at the target in its
+         * Target Coord System. In keeping with the above, when looking at the target in its
          * natural orientation, in the Target Coodinate System
          *     * X is positive heading off to your right,
          *     * Y is positive heading up through the top edge of the target, and
          *     * Z is pointing out of the target, toward you.
          *
-         * One can observe that the Camera Coordinate System of the front-facing camera on a phone
-         * coincides with the Phone Coordinate System. Further, when a phone is placed on its back
-         * at the origin of the Robot Coordinate System and aligned appropriately, those coordinate
-         * systems also coincide with the Robot Coordinate System. Got it?
+         * One can observe that the Camera Coord System of the front-facing camera on a phone
+         * coincides with the Phone Coord System. Further, when a phone is placed on its back
+         * at the origin of the Robot Coord System and aligned appropriately, those coordinate
+         * systems also coincide with the Robot Coord System. Got it?
          *
          * In this example here, we're going to assume that we put the camera on the right side
          * of the robot (facing outwards, of course). To determine the transformation matrix that
          * describes that location, first consider the camera as lying on its back at the origin
-         * of the Robot Coordinate System such that the Camera Coordinate System and Robot Coordinate
+         * of the Robot Coord System such that the Camera Coord System and Robot Coord
          * System coincide. Then the transformation we need is
          *      * first a rotation of the camera by +90deg along the robot X axis,
          *      * then a rotation of the camera by +90deg along the robot Z axis, and
