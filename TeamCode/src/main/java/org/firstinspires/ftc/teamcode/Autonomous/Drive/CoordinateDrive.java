@@ -1,18 +1,14 @@
 package org.firstinspires.ftc.teamcode.Autonomous.Drive;
 
-import android.graphics.Path;
-
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.Autonomous.Main.Main;
 import org.firstinspires.ftc.teamcode.Configuration.Configuration;
 
 /**
  * Created by Simon on 27/09/2018.
  */
 
-abstract public class CoordinateDrive extends Configuration {
+public class CoordinateDrive extends Configuration {
 
     public Coordinates Coords = new Coordinates(0,0,0);
     private float[] Encoders = new float[4];

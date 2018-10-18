@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.Autonomous.Drive;
 
-import org.firstinspires.ftc.teamcode.Configuration.Configuration;
-
 /**
  * Created by Simon on 27/09/2018.
  */
