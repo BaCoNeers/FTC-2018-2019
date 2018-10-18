@@ -10,7 +10,7 @@ import java.util.List;
  * Created by Simon on 5/10/2018.
  */
 
-abstract public class PathFinder extends CoordinateDrive{
+public class PathFinder extends CoordinateDrive{
 
     //Node Setup
     public int Size = 21;
@@ -21,6 +21,7 @@ abstract public class PathFinder extends CoordinateDrive{
     //Task management
     public List<Coordinates> Task = new ArrayList<Coordinates>();
     private boolean completed = false;
+
 
     //Path finding
     private Node Current;
@@ -42,6 +43,13 @@ abstract public class PathFinder extends CoordinateDrive{
         Current = Nodes[Math.round(Coords.x/NodeSpacing)][Math.round(Coords.y/NodeSpacing)];
     }
 
+    private void CalculateChildScore(Node N){
+        for(int i=0;i<N.Children.size();i++){
+            N.Children.get(i).Score = GetDistance(Current.Coord,N.Children.get(i).Coord)+
+                    GetDistance(N.Children.get(i).Coord,Goal);
+        }
+    }
+
     private void AssignChildren(){
         Current.AddChild(Nodes[Math.round(Current.Coord.x+1/NodeSpacing)]
                 [Math.round(Current.Coord.y/NodeSpacing)]);
@@ -59,11 +67,6 @@ abstract public class PathFinder extends CoordinateDrive{
                 [Math.round(Current.Coord.y-1/NodeSpacing)]);
         Current.AddChild(Nodes[Math.round(Current.Coord.x+1/NodeSpacing)]
                 [Math.round(Current.Coord.y-1/NodeSpacing)]);
-    }
-    
-    private void SetScore(Node InputNode){
-        InputNode.Score = GetDistance(InputNode.Coord,Current.Coord)+
-                GetDistance(InputNode.Coord,Goal);
     }
 
     public void Update(){
@@ -85,12 +88,17 @@ abstract public class PathFinder extends CoordinateDrive{
     }
 
     private void Getpath(){
-
+        AssignChildren();
+        CalculateChildScore(Current);
+        float score = 0;
+        for(int i=0;i<Current.Children.size();i++){
+            if(Current.Children.get(i).Score<score){
+                score = Current.Children.get(i).Score;
+            }
+        }
     }
 
     private float GetDistance(Coordinates a, Coordinates b){
-        return (b.x-a.x)+(b.y-a.y);
+        return Math.abs((b.x-a.x)+(b.y-a.y));
     }
-
-
 }

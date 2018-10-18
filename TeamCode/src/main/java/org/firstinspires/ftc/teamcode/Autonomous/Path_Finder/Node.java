@@ -15,8 +15,8 @@ public class Node {
     public boolean Walkable;
     public float Score;
 
-    private List<Node> Children = new ArrayList<>();
-    private Node Parent = null;
+    public List<Node> Children = new ArrayList<>();
+    public Node Parent = null;
 
     public Node(Coordinates coords, Boolean _walkable, float _score){
         Coord = coords;
@@ -36,7 +36,14 @@ public class Node {
     }
 
     public void SetParent(Node _parent){
-        Parent = _parent;
+        if(Parent !=null){
+            if(_parent.Score < Parent.Score){
+                Parent = _parent;
+            }
+        }
+        {
+            Parent = _parent;
+        }
     }
 
 }

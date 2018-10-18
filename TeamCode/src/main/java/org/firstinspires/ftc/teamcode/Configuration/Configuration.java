@@ -36,9 +36,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.hardware.bosch.BNO055IMU;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Autonomous.Main.Main;
+import org.firstinspires.ftc.teamcode.common.RobotConfiguration;
 
 
 /**
@@ -54,11 +59,11 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Basic: Linear OpMode", group="Iterative Opmode")
-abstract public class Configuration extends OpMode {
+
+public class Configuration extends RobotConfiguration{
 
     // Declare OpMode members.
-    private ElapsedTime runtime = new ElapsedTime();
+    public ElapsedTime runtime = new ElapsedTime();
     public DcMotor FrontLeft = null;
     public DcMotor FrontRight = null;
     public DcMotor BackLeft = null;
@@ -66,12 +71,10 @@ abstract public class Configuration extends OpMode {
 
     public BNO055IMU IMU = null;
 
+    private Main Main = new Main();
 
     @Override
-    public void init() {
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
-
+    protected void init(HardwareMap hardwareMap, Telemetry telemetry) {
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
@@ -100,6 +103,6 @@ abstract public class Configuration extends OpMode {
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
         IMU = hardwareMap.get(BNO055IMU.class, "imu");
         IMU.initialize(parameters);
-
     }
+
 }
