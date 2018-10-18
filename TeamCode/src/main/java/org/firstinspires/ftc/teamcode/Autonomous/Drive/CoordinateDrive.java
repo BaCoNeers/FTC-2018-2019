@@ -2,13 +2,14 @@ package org.firstinspires.ftc.teamcode.Autonomous.Drive;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.Configuration.Configuration;
+import org.firstinspires.ftc.teamcode.Configuration.AutoConfig;
+
 
 /**
  * Created by Simon on 27/09/2018.
  */
 
-public class CoordinateDrive extends Configuration {
+public class CoordinateDrive extends AutoConfig {
 
     public Coordinates Coords = new Coordinates(0,0,0);
     private float[] Encoders = new float[4];
