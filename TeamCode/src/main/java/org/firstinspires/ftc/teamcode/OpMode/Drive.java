@@ -56,8 +56,42 @@ public class Drive extends LinearOpMode {
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor leftDrive = null;
-    private DcMotor rightDrive = null;
+    private DcMotor front_left_motor = null;
+    private DcMotor front_right_motor = null;
+    private DcMotor rear_left_motor = null;
+    private DcMotor rear_right_motor = null;
+
+    private void updateDrive(){
+        // Setup a variable for each drive wheel to save power level for telemetry
+        double front_left_power;
+        double front_right_power;
+        double rear_left_power;
+        double rear_right_power;
+
+        // Implement Mecanum drive using drive equations from Internet:
+        double left_y = gamepad1.left_stick_y;
+        double left_x  =  gamepad1.left_stick_x;
+        double right_x = gamepad1.right_stick_x;
+        front_left_power = Range.clip(left_y + left_x + right_x, -1.0, 1.0);
+        rear_left_power = Range.clip(left_y + left_x - right_x, -1.0, 1.0);
+        front_right_power = Range.clip(left_y - left_x - right_x, -1.0, 1.0);
+        rear_right_power = Range.clip(left_y - left_x + right_x, -1.0, 1.0);
+
+        // Send calculated power to wheels
+        front_left_motor.setPower(front_left_power);
+        front_right_motor.setPower(front_right_power);
+        rear_left_motor.setPower(rear_left_power);
+        rear_right_motor.setPower(rear_right_power);
+
+        // Show the elapsed game time and wheel power.
+        telemetry.addData("Status", "Run Time: " + runtime.toString());
+        telemetry.addData("Motors", "front left (%.2f), front right (%.2f)",
+                front_left_power, front_right_power);
+        telemetry.addData("Motors", "rear left (%.2f), rear right (%.2f)",
+                rear_left_power, rear_right_power);
+        telemetry.update();
+
+    }
 
     @Override
     public void runOpMode() {
@@ -67,87 +101,27 @@ public class Drive extends LinearOpMode {
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
-        rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
+        front_left_motor  = hardwareMap.get(DcMotor.class, "front_left_drive");
+        front_right_motor = hardwareMap.get(DcMotor.class, "front_right_drive");
+        rear_left_motor  = hardwareMap.get(DcMotor.class, "rear_left_drive");
+        rear_right_motor = hardwareMap.get(DcMotor.class, "rear_right_drive");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        leftDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        front_left_motor.setDirection(DcMotor.Direction.FORWARD);
+        front_right_motor.setDirection(DcMotor.Direction.FORWARD);
+        rear_left_motor.setDirection(DcMotor.Direction.FORWARD);
+        rear_right_motor.setDirection(DcMotor.Direction.FORWARD);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
 
-        float get_power(float controller_input)
-        {
-            float controller_sign = sign(controller_input);
-            float new_input = controller_input * controller_sign;
-
-            new_input = max(0.0, new_input - 0.15) / (1.0 - 0.15);
-            return controller_sign * new_input;
-        }
-
-        float get_joystick_axis(int index)
-        {
-            float maximum_range = vexRT[index] > 0 ? 127.0 : 128.0;
-            float joy_pos = (float)vexRT[index];
-            return joy_pos / maximum_range;
-        }
-
-        void set_motor_speed(int _motor, float speed)
-        {
-            if (speed > 1.0) speed = 1.0;
-            if (speed < -1.0) speed = -1.0;
-            int maximum_speed = 127;
-            int motor_speed = maximum_speed * speed;
-            motor[_motor] = motor_speed;
-        }
-
-        void update_drive () {
-            float forward_power = get_power(get_joystick_axis(DriveForward));
-            float steer_power = get_power(get_joystick_axis(DriveSteer));
-
-            float left_power = forward_power + steer_power;
-            float right_power = forward_power - steer_power;
-
-            set_motor_speed(left_drive, left_power);
-            set_motor_speed(right_drive, right_power);
-            set_motor_speed(right_drive_2, right_power);
-            set_motor_speed(left_drive_2, left_power);
-        }
-
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            update_drive;
-            // Setup a variable for each drive wheel to save power level for telemetry
-            double leftPower;
-            double rightPower;
+            updateDrive();
 
-            // Choose to drive using either Tank Mode, or POV Mode
-            // Comment out the method that's not used.  The default below is POV.
-
-            // POV Mode uses left stick to go forward, and right stick to turn.
-            // - This uses basic math to combine motions and is easier to drive straight.
-            double drive = -gamepad1.left_stick_y;
-            double turn  =  gamepad1.right_stick_x;
-            leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
-            rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
-
-            // Tank Mode uses one stick to control each wheel.
-            // - This requires no math, but it is hard to drive forward slowly and keep straight.
-            // leftPower  = -gamepad1.left_stick_y ;
-            // rightPower = -gamepad1.right_stick_y ;
-
-            // Send calculated power to wheels
-            leftDrive.setPower(leftPower);
-            rightDrive.setPower(rightPower);
-
-            // Show the elapsed game time and wheel power.
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
-            telemetry.update();
         }
     }
 }
