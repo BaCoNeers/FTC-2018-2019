@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.OpMode;
+package org.firstinspires.ftc.teamcode.Opmode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -51,7 +51,7 @@ import com.qualcomm.robotcore.util.Range;
  */
 
 @TeleOp(name="Basic: Linear OpMode", group="Linear Opmode")
-@Disabled
+
 public class Drive extends LinearOpMode {
 
     // Declare OpMode members.
@@ -79,9 +79,48 @@ public class Drive extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
+        float get_power(float controller_input)
+        {
+            float controller_sign = sign(controller_input);
+            float new_input = controller_input * controller_sign;
+
+            new_input = max(0.0, new_input - 0.15) / (1.0 - 0.15);
+            return controller_sign * new_input;
+        }
+
+        float get_joystick_axis(int index)
+        {
+            float maximum_range = vexRT[index] > 0 ? 127.0 : 128.0;
+            float joy_pos = (float)vexRT[index];
+            return joy_pos / maximum_range;
+        }
+
+        void set_motor_speed(int _motor, float speed)
+        {
+            if (speed > 1.0) speed = 1.0;
+            if (speed < -1.0) speed = -1.0;
+            int maximum_speed = 127;
+            int motor_speed = maximum_speed * speed;
+            motor[_motor] = motor_speed;
+        }
+
+        void update_drive () {
+            float forward_power = get_power(get_joystick_axis(DriveForward));
+            float steer_power = get_power(get_joystick_axis(DriveSteer));
+
+            float left_power = forward_power + steer_power;
+            float right_power = forward_power - steer_power;
+
+            set_motor_speed(left_drive, left_power);
+            set_motor_speed(right_drive, right_power);
+            set_motor_speed(right_drive_2, right_power);
+            set_motor_speed(left_drive_2, left_power);
+        }
+
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
+            update_drive;
             // Setup a variable for each drive wheel to save power level for telemetry
             double leftPower;
             double rightPower;
