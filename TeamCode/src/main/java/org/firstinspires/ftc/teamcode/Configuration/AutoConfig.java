@@ -59,8 +59,13 @@ import org.firstinspires.ftc.teamcode.common.RobotConfiguration;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
+<<<<<<< HEAD:TeamCode/src/main/java/org/firstinspires/ftc/teamcode/Configuration/AutoConfig.java
+@Autonomous(name="Basic: Linear OpMode", group="Iterative Opmode")
+abstract public class AutoConfig extends OpMode {
+=======
 
 public class Configuration extends RobotConfiguration{
+>>>>>>> Max:TeamCode/src/main/java/org/firstinspires/ftc/teamcode/Configuration/Configuration.java
 
     // Declare OpMode members.
     public ElapsedTime runtime = new ElapsedTime();
