@@ -63,10 +63,10 @@ import java.util.ArrayList;
 public class Main extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    public DcMotor FrontLeft = null; // White
-    public DcMotor FrontRight = null; //DarkBlue
-    public DcMotor BackLeft = null;  //Blue
-    public DcMotor BackRight = null; //Green BL
+    public DcMotor FrontLeft = null; // White 0
+    public DcMotor FrontRight = null; //DarkBlue 1
+    public DcMotor BackLeft = null;  //Blue 2
+    public DcMotor BackRight = null; //Green BL 3
 
     //Task management
     private ArrayList<Coordinates> Task = new ArrayList<Coordinates>();
