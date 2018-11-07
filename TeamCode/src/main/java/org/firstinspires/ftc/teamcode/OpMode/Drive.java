@@ -93,6 +93,10 @@ public class Drive extends LinearOpMode {
 
     }
 
+    private void updateLift(){
+
+    }
+
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
@@ -121,6 +125,7 @@ public class Drive extends LinearOpMode {
         while (opModeIsActive()) {
 
             updateDrive();
+            updateLift();
 
         }
     }
