@@ -30,12 +30,12 @@ public class Drive {
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
         front_left_motor.setDirection(DcMotor.Direction.FORWARD);
-        front_right_motor.setDirection(DcMotor.Direction.FORWARD);
+        front_right_motor.setDirection(DcMotor.Direction.REVERSE);
         rear_left_motor.setDirection(DcMotor.Direction.FORWARD);
-        rear_right_motor.setDirection(DcMotor.Direction.FORWARD);
+        rear_right_motor.setDirection(DcMotor.Direction.REVERSE);
 
     }
-    private void updateDrive(){
+    public void updateDrive(){
         // Setup a variable for each drive wheel to save power level for telemetry
         double front_left_power;
         double front_right_power;
@@ -43,13 +43,13 @@ public class Drive {
         double rear_right_power;
 
         // Implement Mecanum drive using drive equations from Internet:
-        double left_y = opmode.gamepad1.left_stick_y;
+        double left_y = -opmode.gamepad1.left_stick_y;
         double left_x  =  opmode.gamepad1.left_stick_x;
         double right_x = opmode.gamepad1.right_stick_x;
         front_left_power = Range.clip(left_y + left_x + right_x, -1.0, 1.0);
-        rear_left_power = Range.clip(left_y + left_x - right_x, -1.0, 1.0);
+        rear_left_power = Range.clip(left_y - left_x + right_x, -1.0, 1.0);
         front_right_power = Range.clip(left_y - left_x - right_x, -1.0, 1.0);
-        rear_right_power = Range.clip(left_y - left_x + right_x, -1.0, 1.0);
+        rear_right_power = Range.clip(left_y + left_x - right_x, -1.0, 1.0);
 
         // Send calculated power to wheels
         front_left_motor.setPower(front_left_power);
