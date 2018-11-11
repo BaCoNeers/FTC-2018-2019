@@ -44,10 +44,6 @@ public class BaCoNTeleOp extends LinearOpMode {
     // Declare OpMode members.
     public ElapsedTime runtime = new ElapsedTime();
 
-    private void updateLift(){
-
-    }
-
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
