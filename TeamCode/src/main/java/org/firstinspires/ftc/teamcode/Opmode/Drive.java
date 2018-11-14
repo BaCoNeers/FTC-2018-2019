@@ -44,7 +44,7 @@ public class Drive {
 
         // Implement Mecanum drive using drive equations from Internet:
         double left_y = -opmode.gamepad1.left_stick_y;
-        double left_x  =  opmode.gamepad1.left_stick_x;
+        double left_x  = opmode.gamepad1.left_stick_x;
         double right_x = opmode.gamepad1.right_stick_x;
         front_left_power = Range.clip(left_y + left_x + right_x, -1.0, 1.0);
         rear_left_power = Range.clip(left_y - left_x + right_x, -1.0, 1.0);
