@@ -26,7 +26,10 @@ public class Lift {
     public void updateLift(){
         double lift_power;
 
-        double right_bumper = opmode.gamepad1.right_bumper
+        double right_bumper = opmode.gamepad1.right_trigger - opmode.gamepad1.left_trigger ;
+
+        lift_motor.setPower(right_bumper);
+
 
         //Todo: complete the method
     }
