@@ -19,12 +19,16 @@ public class Lift {
         lift_motor  = opmode.hardwareMap.get(DcMotor.class, "lift_motor");
 
         lift_motor.setDirection(DcMotor.Direction.FORWARD);
+
         //Todo: complete the constructor
     }
 
     public void updateLift(){
         double lift_power;
 
+        double right_bumper = opmode.gamepad1.right_bumper
+
         //Todo: complete the method
     }
 }
+
