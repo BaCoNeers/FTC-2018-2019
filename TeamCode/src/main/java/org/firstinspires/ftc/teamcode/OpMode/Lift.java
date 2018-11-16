@@ -26,7 +26,7 @@ public class Lift {
         prim_lift_motor  = opmode.hardwareMap.get(DcMotor.class, "prim_lift_motor");
         sec_lift_motor = opmode.hardwareMap.get(DcMotor.class, "sec_lift_motor");
 
-        prim_lift_motor.setDirection(DcMotor.Direction.FORWARD);
+        prim_lift_motor.setDirection(DcMotor.Direction.REVERSE);
         sec_lift_motor.setDirection(DcMotor.Direction.FORWARD);
 
         prim_lift_motor.setPower(0);
@@ -40,7 +40,7 @@ public class Lift {
 
 
     public void RightBumper() {
-        if (opmode.gamepad2.right_bumper) {
+        if (opmode.gamepad1.right_bumper) {
             right_bumper = 1.0;
         }
         else {
@@ -51,7 +51,7 @@ public class Lift {
 
 
     public void LeftBumper() {
-        if (opmode.gamepad2.left_bumper) {
+        if (opmode.gamepad1.left_bumper) {
             left_bumper = 1.0;
         }
         else {
@@ -68,8 +68,8 @@ public class Lift {
         double sec_lift_power;
 
 
-        double right_trigger = opmode.gamepad2.right_trigger - right_bumper ;
-        double left_trigger = opmode.gamepad2.left_trigger - left_bumper;
+        double right_trigger = opmode.gamepad1.right_trigger - right_bumper;
+        double left_trigger = opmode.gamepad1.left_trigger - left_bumper;
 
         prim_lift_motor.setPower(right_trigger);
         sec_lift_motor.setPower(left_trigger);
