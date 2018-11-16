@@ -3,16 +3,22 @@ package org.firstinspires.ftc.teamcode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 
 /**
  * Created by Baconeers on 11/11/2018.
  */
+// change gamepad to gamepad1 when testing or gamepad when competing
 
 public class Lift {
     //members:
     private OpMode opmode = null;
     private DcMotor prim_lift_motor = null;
     private DcMotor sec_lift_motor = null;
+
 
     public Lift(OpMode opmodeIn) {
         super();
@@ -22,6 +28,9 @@ public class Lift {
 
         prim_lift_motor.setDirection(DcMotor.Direction.FORWARD);
         sec_lift_motor.setDirection(DcMotor.Direction.FORWARD);
+
+        prim_lift_motor.setPower(0);
+        sec_lift_motor.setPower(0);
     }
 
     //Bumper Variables
@@ -31,7 +40,7 @@ public class Lift {
 
 
     public void RightBumper() {
-        if (opmode.gamepad1.left_bumper) {
+        if (opmode.gamepad2.right_bumper) {
             right_bumper = 1.0;
         }
         else {
@@ -42,7 +51,7 @@ public class Lift {
 
 
     public void LeftBumper() {
-        if (opmode.gamepad1.left_bumper) {
+        if (opmode.gamepad2.left_bumper) {
             left_bumper = 1.0;
         }
         else {
@@ -59,8 +68,8 @@ public class Lift {
         double sec_lift_power;
 
 
-        double right_trigger = opmode.gamepad1.right_trigger - right_bumper ;
-        double left_trigger = opmode.gamepad1.left_trigger - left_bumper;
+        double right_trigger = opmode.gamepad2.right_trigger - right_bumper ;
+        double left_trigger = opmode.gamepad2.left_trigger - left_bumper;
 
         prim_lift_motor.setPower(right_trigger);
         sec_lift_motor.setPower(left_trigger);
