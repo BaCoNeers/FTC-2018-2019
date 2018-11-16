@@ -35,27 +35,24 @@ public class Lift {
 
     //Bumper Variables
 
-    double right_bumper;
-    double left_bumper;
 
-
-    public void RightBumper() {
+    public double rightBumper() {
         if (opmode.gamepad1.right_bumper) {
-            right_bumper = 1.0;
+            return 1.0;
         }
         else {
-            right_bumper = 0.0;
+            return 0.0;
 
         }
     }
 
 
-    public void LeftBumper() {
+    public double leftBumper() {
         if (opmode.gamepad1.left_bumper) {
-            left_bumper = 1.0;
+            return 1.0;
         }
         else {
-            left_bumper = 0.0;
+            return 0.0;
 
         }
     }
@@ -68,8 +65,8 @@ public class Lift {
         double sec_lift_power;
 
 
-        double right_trigger = opmode.gamepad1.right_trigger - right_bumper;
-        double left_trigger = opmode.gamepad1.left_trigger - left_bumper;
+        double right_trigger = opmode.gamepad1.right_trigger - rightBumper();
+        double left_trigger = opmode.gamepad1.left_trigger - leftBumper();
 
         prim_lift_motor.setPower(right_trigger);
         sec_lift_motor.setPower(left_trigger);
