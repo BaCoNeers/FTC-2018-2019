@@ -50,7 +50,8 @@ public class BaCoNTeleOp extends LinearOpMode {
         telemetry.update();
 
         Drive drive = new Drive(this);
-        Lift lift = new Lift(this);
+        PrimLift primLift = new PrimLift(this);
+        SecLift secLift = new SecLift(this);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -60,7 +61,8 @@ public class BaCoNTeleOp extends LinearOpMode {
         while (opModeIsActive()) {
 
             drive.updateDrive();
-            lift.updateLift();
+            primLift.updatePrimLift();
+            secLift.updateSecLift();
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
 

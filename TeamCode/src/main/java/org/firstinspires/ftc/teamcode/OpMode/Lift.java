@@ -8,30 +8,37 @@ import com.qualcomm.robotcore.util.Range;
  * Created by Baconeers on 11/11/2018.
  */
 
-public class Lift {
+public class PrimLift {
     //members:
     private OpMode opmode = null;
-    private DcMotor lift_motor = null;
+    private DcMotor prim_lift_motor = null;
 
-    public Lift(OpMode opmodeIn) {
+    public PrimLift(OpMode opmodeIn) {
         super();
         opmode = opmodeIn;
-        lift_motor  = opmode.hardwareMap.get(DcMotor.class, "lift_motor");
+        prim_lift_motor  = opmode.hardwareMap.get(DcMotor.class, "prim_lift_motor");
 
-        lift_motor.setDirection(DcMotor.Direction.FORWARD);
-
-        //Todo: complete the constructor
+        prim_lift_motor.setDirection(DcMotor.Direction.FORWARD);
     }
 
-    public void updateLift(){
-        double lift_power;
 
-        double right_bumper = opmode.gamepad1.right_trigger - opmode.gamepad1.left_trigger ;
+    public void updatePrimLift(){
+        double prim_lift_power;
+        double right_bumper;
 
-        lift_motor.setPower(right_bumper);
+        public void RightBumper() {
+            if (opmode.gamepad1.left_bumper) {
+                right_bumper = 1.0;
+            }
+            else {
+                right_bumper = 0.0;
 
+            }
+        }
+        double right_trigger = opmode.gamepad1.left_trigger - right_bumper ;
 
-        //Todo: complete the method
+        prim_lift_motor.setPower(right_trigger);
+
     }
 }
 
