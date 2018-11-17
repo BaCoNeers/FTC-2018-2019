@@ -36,23 +36,23 @@ public class ArmLift {
     double y_button;
 
 
-    public void RightBumper() {
+    private double rightBumper() {
         if (opmode.gamepad2.right_bumper) {
-            right_bumper = 1.0;
+            return 1.0;
         }
         else {
-            right_bumper = 0.0;
+            return 0.0;
 
         }
     }
 
 
-    public void LeftBumper() {
+    private double leftBumper() {
         if (opmode.gamepad2.left_bumper) {
-            left_bumper = 1.0;
+            return 1.0;
         }
         else {
-            left_bumper = 0.0;
+            return 0.0;
 
         }
     }
@@ -65,7 +65,7 @@ public class ArmLift {
     public void updateArmLift(){
 
 
-        double arm_lift_power = right_bumper - left_bumper ;
+        double arm_lift_power = rightBumper() - leftBumper() ;
 
         arm_lift_motor.setPower(arm_lift_power);
 
