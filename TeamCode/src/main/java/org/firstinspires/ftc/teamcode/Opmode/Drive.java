@@ -30,9 +30,9 @@ public class Drive {
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        front_left_motor.setDirection(DcMotor.Direction.FORWARD);
-        front_right_motor.setDirection(DcMotor.Direction.REVERSE);
-        rear_left_motor.setDirection(DcMotor.Direction.FORWARD);
+        front_left_motor.setDirection(DcMotor.Direction.REVERSE);
+        front_right_motor.setDirection(DcMotor.Direction.FORWARD);
+        rear_left_motor.setDirection(DcMotor.Direction.REVERSE);
         rear_right_motor.setDirection(DcMotor.Direction.FORWARD);
 
     }
