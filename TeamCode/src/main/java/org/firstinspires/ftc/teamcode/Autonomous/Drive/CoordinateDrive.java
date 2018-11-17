@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Autonomous.Drive;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Configuration.Configuration;
 
 
@@ -16,46 +17,46 @@ public class CoordinateDrive{
     private float[] Encoders = new float[4];
     private float[] MotorPower = new float[4];
     private float RobotCirumfrance = 957.557f;
-    private float RobotOneDeg = RobotCirumfrance/360;
+    private float RobotOneDeg = RobotCirumfrance/360f;
     private float WheelCirumfrance = 314.159f;
-    private float WheelCount = WheelCirumfrance/1440;
+    private float WheelCount = WheelCirumfrance/1440f;
     private Coordinates Goal = null;
     private float Angle;
     private float Distence;
+    private Telemetry tel;
+    private int count = 0;
 
-    public CoordinateDrive(DcMotor FLM, DcMotor FRM, DcMotor BLM, DcMotor BRM){
+    public CoordinateDrive(DcMotor FLM, DcMotor FRM, DcMotor BLM, DcMotor BRM, Telemetry tel){
         Motors[0] = FLM;
         Motors[1] = FRM;
         Motors[2] = BLM;
         Motors[3] = BRM;
+        this.tel = tel;
     }
 
     //need work
     public boolean SetCoordinate(float x,float y, float Power){
-        for(int i=0;i<MotorPower.length;i++){
-            MotorPower[i] = 1;
-        }
-        UpdateMotor(true);
-        /*
         if(Goal == null){
             Goal = new Coordinates(x,y,0);
             SetAngle();
             SetMagnitude();
             SetUpRotation(Power);
+            tel.addData("Setup","Complete");
         }
         if(CheckRotation()){
             SetUpRotation(Power);
+            tel.addLine("Rotation");
         }
         else{
             if(CheckMovement()) {
                 SetUpMovement(Power);
+                tel.addLine("Movement");
             }
             else{
                 Goal = null;
                 return true;
             }
         }
-        */
         return false;
 
     }
@@ -70,13 +71,16 @@ public class CoordinateDrive{
         MotorPower[1] = Power * (direction * -1);
         MotorPower[2] = Power * (direction);
         MotorPower[3] = Power * (direction * -1);
+        count++;
+        tel.addLine("Set up motor "+count);
     }
     private boolean CheckRotation(){
-
-        if (GetLeftAvaragePosition()<Math.abs(Angle)){
+        UpdateEncoders();
+        tel.addLine("Avarage position"+GetLeftAvaragePosition());
+        if ((GetLeftAvaragePosition())<2000){
             UpdateEncoders();
             UpdateMotor(true);
-            UpdatePowers();
+            //UpdatePowers();
             return true;
         }
         else {
@@ -99,10 +103,11 @@ public class CoordinateDrive{
         MotorPower[3] = Power*(direction);
     }
     private boolean CheckMovement(){
+        UpdateEncoders();
         if (GetAvaragePosition()<Math.abs(Distence)){
             UpdateEncoders();
             UpdateMotor(true);
-            UpdatePowers();
+            //UpdatePowers();
             return true;
         }
         else {
@@ -115,14 +120,18 @@ public class CoordinateDrive{
 
 
     private void SetAngle() {
-        float DisiredRotation = (float)Math.atan2(Goal.y-Coords.x,Goal.x-Coords.y) / RobotOneDeg;
-        Angle = DisiredRotation / WheelCount;
+        float DisiredRotation = (float)Math.atan2(Goal.x-Coords.x,Goal.y-Coords.y);
+        Angle = (float)(DisiredRotation * (180/Math.PI));
     }
     private void SetMagnitude(){
         Distence =  (float) (Math.sqrt(Math.pow(Goal.x-Coords.x,2)+Math.pow(Goal.x-Coords.y,2)))/WheelCount;
     };
-    public float GetAvaragePosition(){ return (Math.abs(Encoders[0])+Math.abs(Encoders[1])+Math.abs(Encoders[2])+Math.abs(Encoders[3]))/4;}
-    public float GetLeftAvaragePosition(){ return (Math.abs(Encoders[0]+Encoders[2])/2);}
+    public float GetAvaragePosition(){
+        return (Math.abs(Encoders[0])+Math.abs(Encoders[1])+Math.abs(Encoders[2])+Math.abs(Encoders[3]))/4f;
+    }
+    public float GetLeftAvaragePosition(){
+        return (Math.abs(Encoders[0]+Encoders[2])*0.5f);
+    }
 
     private void UpdateMotor(boolean On){
         if(On){

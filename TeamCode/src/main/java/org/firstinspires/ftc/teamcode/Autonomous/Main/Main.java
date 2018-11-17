@@ -35,9 +35,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.CoordinateDrive;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.Coordinates;
 import org.firstinspires.ftc.teamcode.Autonomous.Path_Finder.PathFinder;
@@ -92,7 +94,12 @@ public class Main extends OpMode {
         BackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        Drive = new CoordinateDrive(FrontLeft,FrontRight,BackLeft,BackRight);
+        FrontLeft.setDirection(DcMotor.Direction.REVERSE);
+        FrontRight.setDirection(DcMotor.Direction.FORWARD);
+        BackLeft.setDirection(DcMotor.Direction.REVERSE);
+        BackRight.setDirection(DcMotor.Direction.FORWARD);
+
+        Drive = new CoordinateDrive(FrontLeft,FrontRight,BackLeft,BackRight,telemetry);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -112,6 +119,7 @@ public class Main extends OpMode {
     public void start() {
         runtime.reset();
         Task.add(new Coordinates(10,10,0));
+        telemetry.addLine("x:"+Task.get(0).x+" Y:"+Task.get(0).y);
     }
 
 
@@ -120,14 +128,22 @@ public class Main extends OpMode {
         if(Task.size()>0){
             if(completed ==false){
                 completed = Drive.SetCoordinate(Task.get(0).x,Task.get(0).y,0.5f);
+                telemetry.addLine("Looping");
             }
             else{
                 completed = false;
                 Task.remove(0);
             }
+        } else {
+            telemetry.addLine("No Tasks");
         }
 
         telemetry.update();
+    }
+
+    @Override
+    public void stop() {
+        telemetry.addLine("Stopped");
     }
 
 }
