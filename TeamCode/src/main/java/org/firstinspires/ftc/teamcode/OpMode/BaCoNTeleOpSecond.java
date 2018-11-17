@@ -29,7 +29,6 @@
 
 package org.firstinspires.ftc.teamcode.OpMode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -39,7 +38,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @TeleOp
-public class BaCoNTeleOp extends LinearOpMode {
+public class BaCoNTeleOpSecond extends LinearOpMode {
 
     // Declare OpMode members.
     public ElapsedTime runtime = new ElapsedTime();
@@ -50,7 +49,7 @@ public class BaCoNTeleOp extends LinearOpMode {
         telemetry.update();
 
         Drive drive = new Drive(this);
-        Lift lift = new Lift(this);
+        //Lift lift = new Lift(this);
         //ArmLift armLift = new ArmLift (this);
 
         // Wait for the game to start (driver presses PLAY)
@@ -61,7 +60,7 @@ public class BaCoNTeleOp extends LinearOpMode {
         while (opModeIsActive()) {
 
             drive.updateDrive();
-            lift.updateLift();
+            //lift.updateLift();
             //armLift.updateArmLift();
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
