@@ -37,7 +37,7 @@ public class ArmLift {
 
 
     public void RightBumper() {
-        if (opmode.gamepad1.right_bumper) {
+        if (opmode.gamepad2.right_bumper) {
             right_bumper = 1.0;
         }
         else {
@@ -48,7 +48,7 @@ public class ArmLift {
 
 
     public void LeftBumper() {
-        if (opmode.gamepad1.left_bumper) {
+        if (opmode.gamepad2.left_bumper) {
             left_bumper = 1.0;
         }
         else {
