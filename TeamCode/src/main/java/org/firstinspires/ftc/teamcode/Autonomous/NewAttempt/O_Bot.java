@@ -200,6 +200,8 @@ public class O_Bot extends LinearOpMode {
                 }
                 */
             }
+
+            telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addLine("Encoder "+GetAvarageEncoderValue());
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
