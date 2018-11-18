@@ -36,6 +36,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import java.util.concurrent.Semaphore;
+
 
 /**
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
@@ -57,6 +59,8 @@ public class TensorFlowCubeDetection_ExampleOpmode extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private TensorFlowCubeDetection tensorFlow = new TensorFlowCubeDetection();
 
+
+
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
@@ -70,17 +74,17 @@ public class TensorFlowCubeDetection_ExampleOpmode extends LinearOpMode {
         runtime.reset();
 
         //Start the cube detection
-        tensorFlow.Run();
+        tensorFlow.start();
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-
-
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             //print cube pos | 0 = unknown | 1 = left | 2 = center | 3 = right |
-            telemetry.addData("Motors", "cubePos (%.2f)" , tensorFlow.cubPos);
+
+
+            telemetry.addData("POS", "%d" , tensorFlow.GetCubePos());
             telemetry.update();
         }
 

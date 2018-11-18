@@ -41,6 +41,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 /**
  * This 2018-2019 OpMode illustrates the basics of using the TensorFlow Object Detection API to
@@ -52,7 +53,7 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-public class TensorFlowCubeDetection {
+public class TensorFlowCubeDetection extends Thread {
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
@@ -60,7 +61,39 @@ public class TensorFlowCubeDetection {
     public Telemetry telemetry;
     public HardwareMap hardwareMap;
     public boolean running;
-    public int cubPos;
+
+    private int _CubePos;
+    private Semaphore mySemaphore = new Semaphore(1,true);
+    public int GetCubePos()
+    {
+        int CubePos = -1;
+        try {
+            mySemaphore.acquire();
+
+            CubePos = _CubePos;
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally
+        {
+            mySemaphore.release();
+        }
+        return CubePos;
+    }
+    public void SetCubePos(int value)
+    {
+        try {
+            mySemaphore.acquire();
+
+            _CubePos = value;
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            mySemaphore.release();
+        }
+    }
+
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -89,9 +122,11 @@ public class TensorFlowCubeDetection {
     private TFObjectDetector tfod;
 
 
+
     public void Int(Telemetry telemetry2 ,HardwareMap hardwareMap2) {
         telemetry = telemetry2;
         hardwareMap = hardwareMap2;
+
 
 
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
@@ -105,7 +140,7 @@ public class TensorFlowCubeDetection {
         }
 
     }
-    public void Run() {
+    public void run() {
         running = true;
         if (running) {
             /** Activate Tensor Flow Object Detection. */
@@ -114,6 +149,7 @@ public class TensorFlowCubeDetection {
             }
 
             while (running) {
+                int _cubPos = 0;
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
@@ -136,16 +172,16 @@ public class TensorFlowCubeDetection {
                         if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
                           if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
                             telemetry.addData("Gold Mineral Position", "Left");
-                            cubPos = 1;
+                              SetCubePos(1);
                           } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
                             telemetry.addData("Gold Mineral Position", "Right");
-                            cubPos = 3;
+                              SetCubePos(3);
                           } else {
                             telemetry.addData("Gold Mineral Position", "Center");
-                            cubPos = 2;
+                              SetCubePos(2);
                           }
                         }
-                      }else { cubPos = 0;}
+                      }else { _cubPos = 0;}
                       telemetry.update();
                     }
                 }
