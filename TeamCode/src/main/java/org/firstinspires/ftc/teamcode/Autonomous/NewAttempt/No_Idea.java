@@ -40,6 +40,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.teamcode.Autonomous.ObjectIdentification.TensorFlowCubeDetection;
+import org.firstinspires.ftc.teamcode.VuforiaNavigationWebcam;
+import org.tensorflow.lite.TensorFlowLite;
 
 import java.util.ArrayList;
 
@@ -69,7 +73,7 @@ public class No_Idea extends LinearOpMode {
 
     //11.1 PPR
     private float WheelEncoder = 1120f;
-    private float RobotCirumfrance = 2500f;
+    private float RobotCirumfrance = 2300f;
     private float RobotOneDeg = RobotCirumfrance/360f;
     private float WheelCirumfrance = 314.159f;
     private float WheelCount = WheelCirumfrance/WheelEncoder;
@@ -83,7 +87,10 @@ public class No_Idea extends LinearOpMode {
     DcMotor Arm_lift_motor =null;
 
     //TouchSensor LimitSwitch = null;
-    boolean down = true;
+    boolean test = true;
+
+
+    private TensorFlowCubeDetection tensorFlow = new TensorFlowCubeDetection();
 
 
 
@@ -110,6 +117,8 @@ public class No_Idea extends LinearOpMode {
         Arm_lift_motor = hardwareMap.get(DcMotor.class, "arm_lift_motor");
         //LimitSwitch = hardwareMap.get(TouchSensor.class, "LiftSwitch");
 
+        tensorFlow.Int(telemetry,hardwareMap);
+
 
 
         Motors[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -132,20 +141,51 @@ public class No_Idea extends LinearOpMode {
 
         //Context Forward,Turning,Strafing
 
+
+        /*
         Tasks.add(new Task(200f,0.5f,"Forward"));
         Tasks.add(new Task(-200f,0.5f,"Forward"));
         Tasks.add(new Task(1000,0.5f,"Strafing"));
         Tasks.add(new Task(-1000,0.5f,"Strafing"));
         Tasks.add(new Task(90, 0.5f,"Turning"));
         Tasks.add(new Task(-90,0.5f,"Turning"));
+        */
+
+        Tasks.add(new Task(-550f,0.5f,"Forward"));
+
+
+
 
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
 
+
+        tensorFlow.start();
+
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
+
+
+
+            if(test){
+                sleep(5000);
+                if(tensorFlow.GetCubePos() == 1){
+                    Tasks.add(new Task(100f,1f,"Strafing"));
+                    Tasks.add(new Task(-20f,1f,"Turning"));
+                }
+                else if(tensorFlow.GetCubePos() == 3){
+                    Tasks.add(new Task(-100f, 1f, "Strafing"));
+                    Tasks.add(new Task(20f,1f,"Turning"));
+                }
+
+                Tasks.add(new Task(-1000f,0.5f,"Forward"));
+
+                test = false;
+            }
+
+
 //            telemetry.addLine(""+Tasks.size());
             if(Tasks.size()>0){
                 if(Tasks.get(0).Distance == 0 && Tasks.get(0).Angle == 0 ){
@@ -177,6 +217,8 @@ public class No_Idea extends LinearOpMode {
                 }
                 */
             }
+
+
             telemetry.addLine("Encoder "+GetAvarageEncoderValue());
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());

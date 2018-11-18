@@ -34,6 +34,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.Autonomous.ObjectIdentification.TensorFlowCubeDetection;
+
 import java.util.ArrayList;
 
 
@@ -78,6 +80,9 @@ public class O_Bot extends LinearOpMode {
     boolean down = true;
 
 
+    boolean test = true;
+
+    private TensorFlowCubeDetection tensorFlow = new TensorFlowCubeDetection();
 
     ArrayList<Task> Tasks = new ArrayList<>();
 
@@ -96,6 +101,8 @@ public class O_Bot extends LinearOpMode {
         Motors[1] = hardwareMap.get(DcMotor.class, "front_left_drive");
         Motors[2]  = hardwareMap.get(DcMotor.class, "rear_right_drive");
         Motors[3] = hardwareMap.get(DcMotor.class, "rear_left_drive");
+
+        tensorFlow.Int(telemetry,hardwareMap);
 
         /*
         prim_lift_motor = hardwareMap.get(DcMotor.class,"prim_lift_motor");
@@ -124,22 +131,45 @@ public class O_Bot extends LinearOpMode {
         Motors[3].setDirection(DcMotor.Direction.REVERSE);
 
         //Context Forward,Turning,Strafing
-
+        /*
         Tasks.add(new Task(200f,0.5f,"Forward"));
         Tasks.add(new Task(-200f,0.5f,"Forward"));
         Tasks.add(new Task(1000,0.5f,"Strafing"));
         Tasks.add(new Task(-1000,0.5f,"Strafing"));
         Tasks.add(new Task(90, 0.5f,"Turning"));
         Tasks.add(new Task(-90,0.5f,"Turning"));
+        */
 
+        Tasks.add(new Task(-550f,0.5f,"Forward"));
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
 
+        tensorFlow.start();
+
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 //            telemetry.addLine(""+Tasks.size());
+
+
+            if(test){
+                sleep(5000);
+                if(tensorFlow.GetCubePos() == 1){
+                    Tasks.add(new Task(100f,1f,"Strafing"));
+                    Tasks.add(new Task(-20f,1f,"Turning"));
+                }
+                else if(tensorFlow.GetCubePos() == 3){
+                    Tasks.add(new Task(-100f, 1f, "Strafing"));
+                    Tasks.add(new Task(20f,1f,"Turning"));
+                }
+
+                Tasks.add(new Task(-1000f,0.5f,"Forward"));
+
+                test = false;
+            }
+
+
             if(Tasks.size()>0){
                 if(Tasks.get(0).Distance == 0 && Tasks.get(0).Angle == 0 ){
                     if(Strafe(Tasks.get(0).Strafe,Tasks.get(0).Power)) {
