@@ -156,11 +156,11 @@ public class O_Bot extends LinearOpMode {
             if(test){
                 sleep(5000);
                 if(tensorFlow.GetCubePos() == 1){
-                    Tasks.add(new Task(100f,1f,"Strafing"));
+                    Tasks.add(new Task(2500f,1f,"Strafing"));
                     Tasks.add(new Task(-20f,1f,"Turning"));
                 }
                 else if(tensorFlow.GetCubePos() == 3){
-                    Tasks.add(new Task(-100f, 1f, "Strafing"));
+                    Tasks.add(new Task(-2500f, 1f, "Strafing"));
                     Tasks.add(new Task(20f,1f,"Turning"));
                 }
 
