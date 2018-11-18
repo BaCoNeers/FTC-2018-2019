@@ -61,9 +61,6 @@ public class Lift {
 
 
     public void updateLift(){
-        double prim_lift_power;
-        double sec_lift_power;
-
 
         double right_trigger = opmode.gamepad1.right_trigger - rightBumper();
         double left_trigger = opmode.gamepad1.left_trigger - leftBumper();
