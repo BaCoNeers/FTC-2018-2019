@@ -13,6 +13,7 @@ public class ToggleTemplate {
     private double motor_power;
     private DcMotor _motor = null;
 
+
     public ToggleTemplate(OpMode opmodeIn) {
         super();
         opmode = opmodeIn;
