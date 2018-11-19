@@ -35,7 +35,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
- * Main Teleop Class
+ * Main TeleOp Class
+ * This is TeleOp references other classes related to TeleOp.
  */
 
 @TeleOp

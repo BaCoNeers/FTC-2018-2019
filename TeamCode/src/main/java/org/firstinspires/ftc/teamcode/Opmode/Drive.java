@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.OpMode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
 
 /**
@@ -21,7 +20,6 @@ public class Drive {
         super();
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
-        // step (using the FTC Robot Controller app on the phone).
         opmode = opmodeIn;
         front_left_motor  = opmode.hardwareMap.get(DcMotor.class, "front_left_drive");
         front_right_motor = opmode.hardwareMap.get(DcMotor.class, "front_right_drive");

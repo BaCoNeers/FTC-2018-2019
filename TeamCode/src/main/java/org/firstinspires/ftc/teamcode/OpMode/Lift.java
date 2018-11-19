@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * Created by Baconeers on 11/11/2018.
+ * This class is the program for the main lift of the robot. This allows for the robot to attach itself to the launcher.
  */
 // change gamepad to gamepad1 when testing or gamepad when competing
 
