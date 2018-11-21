@@ -12,8 +12,12 @@ public class ArmLift {
     //members:
     private OpMode opmode = null;
     private DcMotor arm_lift_motor = null;
-    //private Servo prim_box_arm_servo = null;
-    //private Servo sec_box_arm_servo = null;
+    private CRServo prim_box_arm_servo = null;
+    private CRServo sec_box_arm_servo = null;
+    public boolean buttonState = false;
+    public boolean lastButtonState = false;
+    public boolean state = false;
+    private double motor_power;
 
     //public static final double MAX = 0.45;
     //public static final double STOP = 0.5;
@@ -28,8 +32,8 @@ public class ArmLift {
         super();
         opmode = opmodeIn;
         arm_lift_motor  = opmode.hardwareMap.get(DcMotor.class, "arm_lift_motor");
-        //prim_box_arm_servo = opmode.hardwareMap.get(Servo.class, "prim_box_arm_servo");
-        //sec_box_arm_servo = opmode.hardwareMap.get (Servo.class, "sec_box_arm_servo");
+        prim_box_arm_servo = opmode.hardwareMap.get(CRServo.class, "prim_box_arm_servo");
+        sec_box_arm_servo = opmode.hardwareMap.get (CRServo.class, "sec_box_arm_servo");
 
 
         arm_lift_motor.setDirection(DcMotor.Direction.FORWARD);
@@ -72,19 +76,12 @@ public class ArmLift {
 
 
         double arm_lift_power = rightBumper() - leftBumper();
-        //double arm_servo_power = right_trigger - left_trigger;
+        double arm_servo_power = opmode.gamepad2.right_trigger - opmode.gamepad2.left_trigger;
 
 
         arm_lift_motor.setPower(arm_lift_power);
-
-/*
-        if(opmode.gamepad1.a != buttonState){
-            buttonState = !buttonState;
-        }
-        else if(opmode.gamepad1.a == buttonState){
-
-        }
-*/
+        prim_box_arm_servo.setPower(arm_servo_power);
+        sec_box_arm_servo.setPower(-arm_servo_power);
 
 
     }
