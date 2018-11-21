@@ -62,7 +62,7 @@ public class TensorFlowCubeDetection extends Thread {
     public HardwareMap hardwareMap;
     public boolean running;
 
-    private int _CubePos;
+    private int _CubePos = 0;
     private Semaphore mySemaphore = new Semaphore(1,true);
     public int GetCubePos()
     {
@@ -95,18 +95,6 @@ public class TensorFlowCubeDetection extends Thread {
     }
 
 
-    /*
-     * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
-     * 'parameters.vuforiaLicenseKey' is initialized is for illustration only, and will not function.
-     * A Vuforia 'Development' license key, can be obtained free of charge from the Vuforia developer
-     * web site at https://developer.vuforia.com/license-manager.
-     *
-     * Vuforia license keys are always 380 characters long, and look as if they contain mostly
-     * random data. As an example, here is a example of a fragment of a valid key:
-     *      ... yIgIzTqZ4mWjk9wd3cZO9T1axEqzuhxoGlfOOI2dRzKS4T0hQ8kT ...
-     * Once you've obtained a license key, copy the string from the Vuforia web site
-     * and paste it in to your code on the next line, between the double quotes.
-     */
     private static final String VUFORIA_KEY = "AXt6r67/////AAABmajaCIDY6EB1it1WuQP8mhMTodXPi4GWRg8Jd+OTIjPMumYn52cup8TQiOYFiZcPhbstEm7i/lRlhc8k2xol9iSJ2rttptWBOP8PkjWU+vxVLgX6Gv8yGue1R9F7Ur2hq5Rva3g36LGoEHFq8Lc+wCyM3VcSFFJrHqKIQE0ej6hvStbyivhj3Fns5KxwMB5ZZMsYd4fJhtohOaw4LATQo5qim8Dwl7R+8tyjer5EQif5eKl55D3PVE0FF3Dn0QU3GDyn6jXKNynHFLO3U2S9Y1OTY/5Frl1Xpwle5yOoy6lZ1ZLtGv9EbIgxuL14DgD9hwIflzskbENpA6wraHbPq3FHSQ+RPzPigxmY3uwdQDAb";
 
     /**
