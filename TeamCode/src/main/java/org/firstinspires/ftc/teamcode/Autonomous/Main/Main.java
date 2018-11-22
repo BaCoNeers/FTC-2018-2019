@@ -44,6 +44,7 @@ import org.firstinspires.ftc.teamcode.Autonomous.Drive.CoordinateDrive;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.Coordinates;
 import org.firstinspires.ftc.teamcode.Autonomous.Path_Finder.PathFinder;
 import org.firstinspires.ftc.teamcode.Configuration.Configuration;
+import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
 
 import java.util.ArrayList;
 
@@ -65,10 +66,8 @@ import java.util.ArrayList;
 public class Main extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    public DcMotor FrontLeft = null; // White 0
-    public DcMotor FrontRight = null; //DarkBlue 1
-    public DcMotor BackLeft = null;  //Blue 2
-    public DcMotor BackRight = null; //Green BL 3
+
+    RoverRucusConfiguration config;
 
     //Task management
     private ArrayList<Coordinates> Task = new ArrayList<Coordinates>();
@@ -79,27 +78,10 @@ public class Main extends OpMode {
 
     @Override
     public void init() {
-        FrontLeft  = hardwareMap.get(DcMotor.class, "FrontLeft");
-        FrontRight = hardwareMap.get(DcMotor.class, "FrontRight");
-        BackLeft = hardwareMap.get(DcMotor.class,"BackLeft");
-        BackRight = hardwareMap.get(DcMotor.class,"BackRight");
 
-        FrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        FrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        BackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        BackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        config = RoverRucusConfiguration.newConfig(hardwareMap,telemetry);
 
-        FrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        FrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        BackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        BackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        FrontLeft.setDirection(DcMotor.Direction.REVERSE);
-        FrontRight.setDirection(DcMotor.Direction.FORWARD);
-        BackLeft.setDirection(DcMotor.Direction.REVERSE);
-        BackRight.setDirection(DcMotor.Direction.FORWARD);
-
-        Drive = new CoordinateDrive(FrontLeft,FrontRight,BackLeft,BackRight,telemetry);
+        Drive = new CoordinateDrive(config.FrontLeft,config.FrontRight,config.BackLeft,config.BackRight,telemetry);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -119,7 +101,6 @@ public class Main extends OpMode {
     public void start() {
         runtime.reset();
         Task.add(new Coordinates(10,10,0));
-        telemetry.addLine("x:"+Task.get(0).x+" Y:"+Task.get(0).y);
     }
 
 

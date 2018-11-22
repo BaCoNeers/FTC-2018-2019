@@ -16,15 +16,13 @@ public class CoordinateDrive{
     private DcMotor[] Motors = new DcMotor[4];
     private float[] Encoders = new float[4];
     private float[] MotorPower = new float[4];
+
     private float RobotCirumfrance = 957.557f;
     private float RobotOneDeg = RobotCirumfrance/360f;
     private float WheelCirumfrance = 314.159f;
     private float WheelCount = WheelCirumfrance/1440f;
-    private Coordinates Goal = null;
-    private float Angle;
-    private float Distence;
+
     private Telemetry tel;
-    private int count = 0;
 
     public CoordinateDrive(DcMotor FLM, DcMotor FRM, DcMotor BLM, DcMotor BRM, Telemetry tel){
         Motors[0] = FLM;
@@ -34,98 +32,17 @@ public class CoordinateDrive{
         this.tel = tel;
     }
 
-    //need work
-    public boolean SetCoordinate(float x,float y, float Power){
-        if(Goal == null){
-            Goal = new Coordinates(x,y,0);
-            SetAngle();
-            SetMagnitude();
-            SetUpRotation(Power);
-            tel.addData("Setup","Complete");
-        }
-        if(CheckRotation()){
-            SetUpRotation(Power);
-            tel.addLine("Rotation");
-        }
-        else{
-            if(CheckMovement()) {
-                SetUpMovement(Power);
-                tel.addLine("Movement");
-            }
-            else{
-                Goal = null;
-                return true;
-            }
-        }
-        return false;
 
-    }
-
-    private void SetUpRotation(float Power){
+    public boolean Forward(float distance, float power){
         int direction = 1;
-        ResestMotors();
-        if (Angle < 0) {
+        if(direction<0){
             direction = -1;
         }
-        MotorPower[0] = Power * (direction);
-        MotorPower[1] = Power * (direction * -1);
-        MotorPower[2] = Power * (direction);
-        MotorPower[3] = Power * (direction * -1);
-        count++;
-        tel.addLine("Set up motor "+count);
-    }
-    private boolean CheckRotation(){
-        UpdateEncoders();
-        tel.addLine("Avarage position"+GetLeftAvaragePosition());
-        if ((GetLeftAvaragePosition())<2000){
-            UpdateEncoders();
-            UpdateMotor(true);
-            //UpdatePowers();
-            return true;
-        }
-        else {
-            UpdateMotor(false);
-            UpdateRotation();
-            ResestMotors();
-            return false;
-        }
-    }
-
-    private void SetUpMovement(float Power){
-        ResestMotors();
-        int direction = 1;
-        if(Distence<0){
-            direction = -1;
-        }
-        MotorPower[0] = Power*(direction);
-        MotorPower[1] = Power*(direction);
-        MotorPower[2] = Power*(direction);
-        MotorPower[3] = Power*(direction);
-    }
-    private boolean CheckMovement(){
-        UpdateEncoders();
-        if (GetAvaragePosition()<Math.abs(Distence)){
-            UpdateEncoders();
-            UpdateMotor(true);
-            //UpdatePowers();
-            return true;
-        }
-        else {
-            UpdateMotor(false);
-            UpdatePosition();
-            ResestMotors();
-            return false;
-        }
+        
     }
 
 
-    private void SetAngle() {
-        float DisiredRotation = (float)Math.atan2(Goal.x-Coords.x,Goal.y-Coords.y);
-        Angle = (float)(DisiredRotation * (180/Math.PI));
-    }
-    private void SetMagnitude(){
-        Distence =  (float) (Math.sqrt(Math.pow(Goal.x-Coords.x,2)+Math.pow(Goal.x-Coords.y,2)))/WheelCount;
-    };
+
     public float GetAvaragePosition(){
         return (Math.abs(Encoders[0])+Math.abs(Encoders[1])+Math.abs(Encoders[2])+Math.abs(Encoders[3]))/4f;
     }
