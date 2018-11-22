@@ -31,11 +31,6 @@ public class AutoDrive {
 
     private float MarginOfError = 30;
 
-    private Coordinates Goal = null;
-
-    private float Angle;
-    private float Distence;
-
     private Telemetry tel;
 
     public AutoDrive(DcMotor FLM, DcMotor FRM, DcMotor BLM, DcMotor BRM, Telemetry tel){
@@ -48,27 +43,30 @@ public class AutoDrive {
 
     public void Update(ArrayList<Task> tasks){
         UpdateTelemetry();
+        UpdateEncoders();
         if(tasks.size()>0){
-            switch (tasks.get(0).Context){
-                case"Forward":
-                    if(Forward(tasks.get(0).Value,tasks.get(0).Power)){
-                        tasks.remove(0);
-                        return;
-                    }
-                    break;
-                case "Turning":
-                    if(Rotate(tasks.get(0).Value, tasks.get(0).Power)){
-                        tasks.remove(0);
-                        return;
-                    }
-                    break;
-                case "Strafing":
-                    if(Strafe(tasks.get(0).Value,tasks.get(0).Power)){
-                        tasks.remove(0);
-                        return;
-                    }
-                    break;
+            if(tasks.get(0).CheckTask()) {
+                switch (tasks.get(0).Context) {
+                    case "Forward":
+                        if (Forward(tasks.get(0).Value, tasks.get(0).Power)) {
+                            tasks.remove(0);
+                            return;
+                        }
+                        break;
+                    case "Turning":
+                        if (Rotate(tasks.get(0).Value, tasks.get(0).Power)) {
+                            tasks.remove(0);
+                            return;
+                        }
+                        break;
+                    case "Strafing":
+                        if (Strafe(tasks.get(0).Value, tasks.get(0).Power)) {
+                            tasks.remove(0);
+                            return;
+                        }
+                        break;
 
+                }
             }
         }
     }
@@ -80,7 +78,6 @@ public class AutoDrive {
             MotorPower[2] = Power;
             MotorPower[3] = -Power;
             UpdateMotor(true);
-            UpdateEncoders();
             tel.addLine("Turning Running");
             return false;
         }
@@ -99,7 +96,6 @@ public class AutoDrive {
             MotorPower[2] = Power;
             MotorPower[3] = Power;
             UpdateMotor(true);
-            UpdateEncoders();
             tel.addLine("Forward Running");
             return false;
         }
@@ -118,7 +114,6 @@ public class AutoDrive {
             MotorPower[2] = -Power;
             MotorPower[3] = Power;
             UpdateMotor(true);
-            UpdateEncoders();
             return false;
         }
         else{
