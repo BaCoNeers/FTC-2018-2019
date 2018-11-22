@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
+
 /**
  * Created by Baconeers on 8/11/2018.
  */
@@ -11,27 +13,21 @@ import com.qualcomm.robotcore.util.Range;
 public class Drive {
     // members:
     private OpMode opmode = null;
-    private DcMotor front_left_motor = null;
-    private DcMotor front_right_motor = null;
-    private DcMotor rear_left_motor = null;
-    private DcMotor rear_right_motor = null;
+    private RoverRucusConfiguration config = null;
 
-    public Drive(OpMode opmodeIn) {
+
+    public Drive(OpMode opmodeIn, RoverRucusConfiguration configIn) {
         super();
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         opmode = opmodeIn;
-        front_left_motor  = opmode.hardwareMap.get(DcMotor.class, "front_left_drive");
-        front_right_motor = opmode.hardwareMap.get(DcMotor.class, "front_right_drive");
-        rear_left_motor  = opmode.hardwareMap.get(DcMotor.class, "rear_left_drive");
-        rear_right_motor = opmode.hardwareMap.get(DcMotor.class, "rear_right_drive");
+        config = configIn;
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        front_left_motor.setDirection(DcMotor.Direction.FORWARD);
-        front_right_motor.setDirection(DcMotor.Direction.REVERSE);
-        rear_left_motor.setDirection(DcMotor.Direction.FORWARD);
-        rear_right_motor.setDirection(DcMotor.Direction.REVERSE);
+
+
+
 
     }
     public void updateDrive(){
@@ -51,10 +47,10 @@ public class Drive {
         rear_right_power = Range.clip(left_y + left_x - right_x, -1.0, 1.0);
 
         // Send calculated power to wheels
-        front_left_motor.setPower(front_left_power);
-        front_right_motor.setPower(front_right_power);
-        rear_left_motor.setPower(rear_left_power);
-        rear_right_motor.setPower(rear_right_power);
+        config.front_left_motor.setPower(front_left_power);
+        config.front_right_motor.setPower(front_right_power);
+        config.rear_left_motor.setPower(rear_left_power);
+        config.rear_right_motor.setPower(rear_right_power);
 
         // Show the elapsed game time and wheel power.
         opmode.telemetry.addData("Motors", "front left (%.2f), front right (%.2f)",

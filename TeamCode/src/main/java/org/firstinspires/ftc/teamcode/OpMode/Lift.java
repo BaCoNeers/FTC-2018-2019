@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
+
 
 /**
  * Created by Baconeers on 11/11/2018.
@@ -17,21 +19,14 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class Lift {
     //members:
     private OpMode opmode = null;
-    private DcMotor prim_lift_motor = null;
-    private DcMotor sec_lift_motor = null;
+    private RoverRucusConfiguration config = null;
 
 
-    public Lift(OpMode opmodeIn) {
+    public Lift(OpMode opmodeIn, RoverRucusConfiguration configIn) {
         super();
         opmode = opmodeIn;
-        prim_lift_motor  = opmode.hardwareMap.get(DcMotor.class, "prim_lift_motor");
-        sec_lift_motor = opmode.hardwareMap.get(DcMotor.class, "sec_lift_motor");
+        config = configIn
 
-        prim_lift_motor.setDirection(DcMotor.Direction.REVERSE);
-        sec_lift_motor.setDirection(DcMotor.Direction.FORWARD);
-
-        prim_lift_motor.setPower(0);
-        sec_lift_motor.setPower(0);
     }
 
     //Bumper Variables
@@ -66,8 +61,8 @@ public class Lift {
         double right_trigger = opmode.gamepad1.right_trigger - rightBumper();
         double left_trigger = opmode.gamepad1.left_trigger - leftBumper();
 
-        prim_lift_motor.setPower(right_trigger);
-        sec_lift_motor.setPower(left_trigger);
+        config.prim_lift_motor.setPower(right_trigger);
+        config.sec_lift_motor.setPower(left_trigger);
 
     }
 }
