@@ -67,16 +67,9 @@ import java.util.ArrayList;
 public class Main extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-<<<<<<< HEAD
+
 
     RoverRucusConfiguration config;
-=======
-    public DcMotor FrontLeft = null;
-    public DcMotor FrontRight = null;
-    public DcMotor BackLeft = null;
-    public DcMotor BackRight = null;
->>>>>>> master
-
     //Task management
     private ArrayList<Task> Tasks = new ArrayList<Task>();
     private boolean completed = false;
@@ -86,24 +79,6 @@ public class Main extends OpMode {
 
     @Override
     public void init() {
-<<<<<<< HEAD
-=======
-        FrontLeft  = hardwareMap.get(DcMotor.class, "FrontLeft");
-        FrontRight = hardwareMap.get(DcMotor.class, "FrontRight");
-        BackLeft = hardwareMap.get(DcMotor.class,"BackLeft");
-        BackRight = hardwareMap.get(DcMotor.class,"BackRight");
-
-        FrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        FrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        BackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        BackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        FrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        FrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        BackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        BackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
->>>>>>> master
-
         config = RoverRucusConfiguration.newConfig(hardwareMap,telemetry);
 
         Drive = new CoordinateDrive(config.FrontLeft,config.FrontRight,config.BackLeft,config.BackRight,telemetry);
@@ -125,12 +100,8 @@ public class Main extends OpMode {
     @Override
     public void start() {
         runtime.reset();
-<<<<<<< HEAD
-        Task.add(new Coordinates(10,10,0));
-=======
         Tasks.add(new Task(-90,0.5f,"Turning"));
         Tasks.add(new Task(-400,0.5f,"Forward"));
->>>>>>> master
     }
 
 

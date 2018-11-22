@@ -17,13 +17,6 @@ public class CoordinateDrive{
     public Coordinates Coords = new Coordinates(0,0,0);
     private DcMotor[] Motors = new DcMotor[4];
     private float[] Encoders = new float[4];
-<<<<<<< HEAD
-
-    private float RobotCirumfrance = 957.557f;
-    private float RobotOneDeg = RobotCirumfrance/360f;
-    private float WheelCirumfrance = 314.159f;
-    private float WheelCount = WheelCirumfrance/1440f;
-=======
     private float[] MotorPower = new float[4];
 
 
@@ -39,7 +32,6 @@ public class CoordinateDrive{
 
     private float Angle;
     private float Distence;
->>>>>>> master
 
     private Telemetry tel;
 
@@ -50,42 +42,6 @@ public class CoordinateDrive{
         Motors[3] = BRM;
         this.tel = tel;
     }
-
-<<<<<<< HEAD
-
-    public boolean Forward(float distance, float power){
-        int direction = 1;
-        if(direction<0){
-            direction = -1;
-        }
-        if(GetAvaragePosition() < distance){
-            Mot
-        }
-    }
-
-
-
-=======
-    /*
-    //need work
-    public boolean SetCoordinate(float x,float y, float Power){
-        UpdateTelemetry();
-        if(Goal == null){
-            Goal = new Coordinates(x,y,0);
-            SetAngle();
-            SetMagnitude();
-        }
-        if(Angle-MarginOfError < Coords.Angle && Coords.Angle < Angle+MarginOfError){
-            Rotate(Power);
-            return false;
-        }
-        else if(Distence-MarginOfError < Coords.Angle && Coords.Angle < Angle+MarginOfError){
-            Forward(Power);
-            return false;
-        }
-        return true;
-    }
-    */
 
     public void Update(ArrayList<Task> tasks){
         if(tasks.size()>0){
@@ -146,17 +102,6 @@ public class CoordinateDrive{
         }
     }
 
-
-
-
-    private void SetAngle() {
-        float DisiredRotation = (float)Math.atan2(Goal.x-Coords.x,Goal.y-Coords.y);
-        Angle = (float)(DisiredRotation * (180/Math.PI));
-    }
-    private void SetMagnitude(){
-        Distence =  (float) (Math.sqrt(Math.pow(Goal.x-Coords.x,2)+Math.pow(Goal.x-Coords.y,2)))/WheelCount;
-    }
->>>>>>> master
     public float GetAvaragePosition(){
         return (Math.abs(Encoders[0])+Math.abs(Encoders[1])+Math.abs(Encoders[2])+Math.abs(Encoders[3]))/4f;
     }
@@ -164,8 +109,6 @@ public class CoordinateDrive{
         return (Math.abs(Encoders[0]+Encoders[2])*0.5f);
     }
 
-<<<<<<< HEAD
-=======
     public float ConvertToMM(float Encoder){
         return Encoder*WheelCount;
     }
@@ -188,7 +131,6 @@ public class CoordinateDrive{
         }
     }
 
->>>>>>> master
     private void UpdateEncoders(){
         Encoders[0] = Motors[0].getCurrentPosition();
         Encoders[1] = Motors[1].getCurrentPosition();
@@ -196,19 +138,6 @@ public class CoordinateDrive{
         Encoders[3] = Motors[3].getCurrentPosition();
     }
 
-    private void UpdatePosition() {
-        Coords.x += GetAvaragePosition()*WheelCount*(float)Math.cos(Coords.Angle);
-        Coords.y += GetAvaragePosition()*WheelCount*(float)Math.sin(Coords.Angle);
-    }
-
-    private void UpdateRotation(){
-        if(Encoders[0] > 0 && Encoders[2] > 0 ){
-            Coords.Angle += Math.abs(GetLeftAvaragePosition()*WheelCount*RobotOneDeg);
-        }
-        else{
-            Coords.Angle -= Math.abs(GetLeftAvaragePosition()*WheelCount*RobotOneDeg);
-        }
-    }
 
     private void ResestMotors(){
         Motors[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -220,14 +149,11 @@ public class CoordinateDrive{
         Motors[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         Motors[2].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         Motors[3].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-<<<<<<< HEAD
-=======
 
     }
 
     private void UpdateTelemetry(){
         tel.addLine("RobotPosition  X:"+Coords.x+" Y:"+Coords.y+" Angle:"+Coords.Angle);
->>>>>>> master
     }
 
 
