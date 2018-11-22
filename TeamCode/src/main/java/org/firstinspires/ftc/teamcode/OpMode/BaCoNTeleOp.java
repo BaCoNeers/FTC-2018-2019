@@ -45,7 +45,7 @@ public class BaCoNTeleOp extends LinearOpMode {
 
     // Declare OpMode members.
     public ElapsedTime runtime = new ElapsedTime();
-   
+    public RoverRucusConfiguration config = new RoverRucusConfiguration();
 
     @Override
     public void runOpMode() {
