@@ -30,24 +30,17 @@
 package org.firstinspires.ftc.teamcode.Autonomous.Main;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Autonomous.Drive.CoordinateDrive;
-import org.firstinspires.ftc.teamcode.Autonomous.Drive.Coordinates;
+import org.firstinspires.ftc.teamcode.Autonomous.Drive.AutoDrive;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.Task;
 import org.firstinspires.ftc.teamcode.Autonomous.Path_Finder.PathFinder;
-import org.firstinspires.ftc.teamcode.Configuration.Configuration;
 import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
+import java.util.concurrent.TimeUnit;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -75,13 +68,13 @@ public class Main extends OpMode {
     private boolean completed = false;
 
     private PathFinder path;
-    private CoordinateDrive Drive;
+    private AutoDrive Drive;
 
     @Override
     public void init() {
         config = RoverRucusConfiguration.newConfig(hardwareMap,telemetry);
 
-        Drive = new CoordinateDrive(config.FrontLeft,config.FrontRight,config.BackLeft,config.BackRight,telemetry);
+        Drive = new AutoDrive(config.FrontLeft,config.FrontRight,config.BackLeft,config.BackRight,telemetry);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -100,8 +93,15 @@ public class Main extends OpMode {
     @Override
     public void start() {
         runtime.reset();
-        Tasks.add(new Task(-90,0.5f,"Turning"));
-        Tasks.add(new Task(-400,0.5f,"Forward"));
+
+        //Forward Turning Strafing
+        Tasks.add(new Task(300,0.3f,"Forward"));
+        Tasks.add(new Task(300,-0.3f,"Forward"));
+        Tasks.add(new Task(90,0.3f,"Turning"));
+        Tasks.add(new Task(90,-0.3f,"Turning"));
+        Tasks.add(new Task(300,0.3f,"Strafing"));
+        Tasks.add(new Task(300,-0.3f,"Strafing"));
+
     }
 
 

@@ -8,19 +8,14 @@ public class Task {
 
 
     public float Power;
-    public float Angle = 0;
-    public float Forward = 0;
+    public float Value = 0;
+    public String Context;
 
 
     public Task(float value, float Power, String Context){
-        if(Context == "Forward"){
-            this.Forward = value;
-            this.Power = Power;
-        }
-        if(Context == "Turning"){
-            this.Angle = value;
-            this.Power = Power;
-        }
+        this.Context = Context;
+        this.Power = Power;
+        this.Value = value;
 
     }
 

@@ -1,18 +1,21 @@
 package org.firstinspires.ftc.teamcode.Autonomous.Drive;
 
+import android.graphics.Path;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Configuration.Configuration;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 
 /**
  * Created by Simon on 27/09/2018.
  */
 
-public class CoordinateDrive{
+public class AutoDrive {
 
     public Coordinates Coords = new Coordinates(0,0,0);
     private DcMotor[] Motors = new DcMotor[4];
@@ -21,9 +24,9 @@ public class CoordinateDrive{
 
 
     private float Encoder = 1120f;
-    private float RobotCirumfrance = 2500f;
+    private float RobotCirumfrance = 1517.39f;
     private float RobotOneDeg = RobotCirumfrance/360f;
-    private float WheelCirumfrance = 314.159f;
+    private float WheelCirumfrance = 320;
     private float WheelCount = WheelCirumfrance/Encoder;
 
     private float MarginOfError = 30;
@@ -35,7 +38,7 @@ public class CoordinateDrive{
 
     private Telemetry tel;
 
-    public CoordinateDrive(DcMotor FLM, DcMotor FRM, DcMotor BLM, DcMotor BRM, Telemetry tel){
+    public AutoDrive(DcMotor FLM, DcMotor FRM, DcMotor BLM, DcMotor BRM, Telemetry tel){
         Motors[0] = FLM;
         Motors[1] = FRM;
         Motors[2] = BLM;
@@ -44,32 +47,41 @@ public class CoordinateDrive{
     }
 
     public void Update(ArrayList<Task> tasks){
+        UpdateTelemetry();
         if(tasks.size()>0){
-            if(tasks.get(0).Angle == 0){
-                if(Forward(tasks.get(0).Forward,tasks.get(0).Power)){
-                    tasks.remove(0);
-                }
-            }
-            if(tasks.get(0).Forward == 0){
-                if(Rotate(tasks.get(0).Angle, tasks.get(0).Power)){
-                    tasks.remove(0);
-                }
+            switch (tasks.get(0).Context){
+                case"Forward":
+                    if(Forward(tasks.get(0).Value,tasks.get(0).Power)){
+                        tasks.remove(0);
+                        return;
+                    }
+                    break;
+                case "Turning":
+                    if(Rotate(tasks.get(0).Value, tasks.get(0).Power)){
+                        tasks.remove(0);
+                        return;
+                    }
+                    break;
+                case "Strafing":
+                    if(Strafe(tasks.get(0).Value,tasks.get(0).Power)){
+                        tasks.remove(0);
+                        return;
+                    }
+                    break;
+
             }
         }
     }
 
     public boolean Rotate(float Angle,float Power){
-        int direction = 1;
-        if(Distence <0){
-            direction = -1;
-        }
-        if(Math.abs(ConvertToAngle(GetLeftAvaragePosition()))< Math.abs(Angle)){
-            MotorPower[0] = Power * (direction);
-            MotorPower[1] = Power * (direction * -1);
-            MotorPower[2] = Power * (direction);
-            MotorPower[3] = Power * (direction * -1);
+        if(Math.abs(ConvertToAngle(GetAvarage()))< Math.abs(Angle)){
+            MotorPower[0] = Power;
+            MotorPower[1] = -Power;
+            MotorPower[2] = Power;
+            MotorPower[3] = -Power;
             UpdateMotor(true);
             UpdateEncoders();
+            tel.addLine("Turning Running");
             return false;
         }
         else{
@@ -81,15 +93,30 @@ public class CoordinateDrive{
     }
 
     public boolean Forward(float Distance,float Power){
-        int direction = 1;
-        if(Distence<0){
-            direction = -1;
+        if(Math.abs(ConvertToMM(GetAvarage())) < Math.abs(Distance)){
+            MotorPower[0] = Power;
+            MotorPower[1] = Power;
+            MotorPower[2] = Power;
+            MotorPower[3] = Power;
+            UpdateMotor(true);
+            UpdateEncoders();
+            tel.addLine("Forward Running");
+            return false;
         }
-        if(Math.abs(ConvertToMM(GetAvaragePosition())) < Math.abs(Distance)){
-            MotorPower[0] = Power*(direction);
-            MotorPower[1] = Power*(direction);
-            MotorPower[2] = Power*(direction);
-            MotorPower[3] = Power*(direction);
+        else{
+            UpdateMotor(false);
+            ResestMotors();
+            UpdateEncoders();
+            return true;
+        }
+    }
+
+    public boolean Strafe(float Distance, float Power){
+        if(Math.abs(ConvertToMM(GetAvarage()))<Distance){
+            MotorPower[0] = Power;
+            MotorPower[1] = -Power;
+            MotorPower[2] = -Power;
+            MotorPower[3] = Power;
             UpdateMotor(true);
             UpdateEncoders();
             return false;
@@ -102,11 +129,12 @@ public class CoordinateDrive{
         }
     }
 
-    public float GetAvaragePosition(){
-        return (Math.abs(Encoders[0])+Math.abs(Encoders[1])+Math.abs(Encoders[2])+Math.abs(Encoders[3]))/4f;
-    }
-    public float GetLeftAvaragePosition(){
-        return (Math.abs(Encoders[0]+Encoders[2])*0.5f);
+    public float GetAvarage(){
+        float value = 0;
+        for(int i=0;i<Encoders.length;i++){
+            value+= Math.abs(Encoders[i]);
+        }
+        return value/Encoders.length;
     }
 
     public float ConvertToMM(float Encoder){
@@ -153,8 +181,9 @@ public class CoordinateDrive{
     }
 
     private void UpdateTelemetry(){
-        tel.addLine("RobotPosition  X:"+Coords.x+" Y:"+Coords.y+" Angle:"+Coords.Angle);
+        tel.addLine("Avg Encoder: "+GetAvarage());
     }
+
 
 
 }
