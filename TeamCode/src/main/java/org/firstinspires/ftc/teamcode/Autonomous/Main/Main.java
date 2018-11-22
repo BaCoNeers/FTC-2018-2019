@@ -42,6 +42,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.CoordinateDrive;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.Coordinates;
+import org.firstinspires.ftc.teamcode.Autonomous.Drive.Task;
 import org.firstinspires.ftc.teamcode.Autonomous.Path_Finder.PathFinder;
 import org.firstinspires.ftc.teamcode.Configuration.Configuration;
 import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
@@ -62,15 +63,22 @@ import java.util.ArrayList;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Auto", group="Linear Opmode")
+@Autonomous(name="Auto", group="SimonsPlayGround")
 public class Main extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
+<<<<<<< HEAD
 
     RoverRucusConfiguration config;
+=======
+    public DcMotor FrontLeft = null;
+    public DcMotor FrontRight = null;
+    public DcMotor BackLeft = null;
+    public DcMotor BackRight = null;
+>>>>>>> master
 
     //Task management
-    private ArrayList<Coordinates> Task = new ArrayList<Coordinates>();
+    private ArrayList<Task> Tasks = new ArrayList<Task>();
     private boolean completed = false;
 
     private PathFinder path;
@@ -78,6 +86,23 @@ public class Main extends OpMode {
 
     @Override
     public void init() {
+<<<<<<< HEAD
+=======
+        FrontLeft  = hardwareMap.get(DcMotor.class, "FrontLeft");
+        FrontRight = hardwareMap.get(DcMotor.class, "FrontRight");
+        BackLeft = hardwareMap.get(DcMotor.class,"BackLeft");
+        BackRight = hardwareMap.get(DcMotor.class,"BackRight");
+
+        FrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        FrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        BackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        BackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        FrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        FrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        BackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        BackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+>>>>>>> master
 
         config = RoverRucusConfiguration.newConfig(hardwareMap,telemetry);
 
@@ -100,25 +125,18 @@ public class Main extends OpMode {
     @Override
     public void start() {
         runtime.reset();
+<<<<<<< HEAD
         Task.add(new Coordinates(10,10,0));
+=======
+        Tasks.add(new Task(-90,0.5f,"Turning"));
+        Tasks.add(new Task(-400,0.5f,"Forward"));
+>>>>>>> master
     }
 
 
     @Override
     public void loop() {
-        if(Task.size()>0){
-            if(completed ==false){
-                completed = Drive.SetCoordinate(Task.get(0).x,Task.get(0).y,0.5f);
-                telemetry.addLine("Looping");
-            }
-            else{
-                completed = false;
-                Task.remove(0);
-            }
-        } else {
-            telemetry.addLine("No Tasks");
-        }
-
+        Drive.Update(Tasks);
         telemetry.update();
     }
 
