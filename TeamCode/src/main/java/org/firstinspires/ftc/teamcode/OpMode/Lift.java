@@ -25,7 +25,7 @@ public class Lift {
     public Lift(OpMode opmodeIn, RoverRucusConfiguration configIn) {
         super();
         opmode = opmodeIn;
-        config = configIn
+        config = configIn;
 
     }
 
