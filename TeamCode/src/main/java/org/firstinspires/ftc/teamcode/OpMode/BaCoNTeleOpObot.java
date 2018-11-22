@@ -34,40 +34,33 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
+import org.firstinspires.ftc.teamcode.common.BaconOpMode;
 
 /**
  * Main Teleop Class
+ * This teleop is for Obot that does not have a lift or armlift
  */
 
 @TeleOp
-public class BaCoNTeleOpSecond extends LinearOpMode {
+public class BaCoNTeleOpObot extends BaconOpMode {
 
     // Declare OpMode members.
     public ElapsedTime runtime = new ElapsedTime();
-    public RoverRucusConfiguration config = new RoverRucusConfiguration();
+    public RoverRucusConfiguration config = RoverRucusConfiguration.newConfig(hardwareMap,
+            telemetry);
+    public Drive drive = new Drive(this, config);
 
     @Override
-    public void runOpMode() {
+    protected void onInit(){
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-
-        Drive drive = new Drive(this);
-        //Lift lift = new Lift(this);
-        //ArmLift armLift = new ArmLift (this);
-
-        // Wait for the game to start (driver presses PLAY)
-        waitForStart();
-        runtime.reset();
-
-        // run until the end of the match (driver presses STOP)
-        while (opModeIsActive()) {
-
-            drive.updateDrive();
-            //lift.updateLift();
-            //armLift.updateArmLift();
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.update();
-
-        }
     }
+
+    @Override
+    protected void activeLoop(){
+        drive.updateDrive();
+        telemetry.addData("Status", "Run Time: " + runtime.toString());
+        telemetry.update();
+    }
+
 }
