@@ -7,9 +7,11 @@ package org.firstinspires.ftc.teamcode.Autonomous.Drive;
 public class Task {
 
 
-    public float Power;
-    public float Value = 0;
-    public String Context;
+    public final float Power;
+    public final float Value;
+    public final String Context;
+
+    private int maxLoop = 20000;
 
 
     public Task(float value, float Power, String Context){
@@ -17,6 +19,14 @@ public class Task {
         this.Power = Power;
         this.Value = value;
 
+    }
+
+    public boolean CheckTask(){
+        maxLoop-=1;
+        if(maxLoop<0){
+            return false;
+        }
+        return true;
     }
 
 

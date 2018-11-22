@@ -23,11 +23,11 @@ public class AutoDrive {
     private float[] MotorPower = new float[4];
 
 
-    private float Encoder = 1120f;
-    private float RobotCirumfrance = 1517.39f;
-    private float RobotOneDeg = RobotCirumfrance/360f;
-    private float WheelCirumfrance = 320;
-    private float WheelCount = WheelCirumfrance/Encoder;
+    private static float Encoder = 1120f;
+    private static float RobotCirumfrance = 1517.39f;
+    private static float RobotOneDeg = RobotCirumfrance/360f;
+    private static float WheelCirumfrance = 320;
+    private static float WheelCount = WheelCirumfrance/Encoder;
 
     private float MarginOfError = 30;
 
