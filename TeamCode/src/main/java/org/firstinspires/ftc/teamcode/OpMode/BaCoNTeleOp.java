@@ -47,14 +47,17 @@ public class BaCoNTeleOp extends BaconOpMode {
 
     // Declare OpMode members.
     public ElapsedTime runtime = new ElapsedTime();
-    public RoverRucusConfiguration config = RoverRucusConfiguration.newConfig(hardwareMap,
-            telemetry);
-    public Drive drive = new Drive(this, config);
-    public Lift lift = new Lift(this, config);
-    public ArmLift armLift = new ArmLift (this, config);
+    public RoverRucusConfiguration config;
+    public Drive drive;
+    //public Lift lift;
+    //public ArmLift armLift;
 
     @Override
     protected void onInit(){
+        config = RoverRucusConfiguration.newConfig(hardwareMap, telemetry);
+        drive = new Drive(this, config);
+        //lift = new Lift(this, config);
+        //armLift = new ArmLift(this, config);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
     }
@@ -62,8 +65,8 @@ public class BaCoNTeleOp extends BaconOpMode {
     @Override
     protected void activeLoop(){
         drive.updateDrive();
-        lift.updateLift();
-        armLift.updateArmLift();
+        //lift.updateLift();
+        //armLift.updateArmLift();
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.update();
     }
