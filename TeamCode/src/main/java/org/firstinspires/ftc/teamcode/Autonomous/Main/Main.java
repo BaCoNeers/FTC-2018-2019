@@ -42,6 +42,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.CoordinateDrive;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.Coordinates;
+import org.firstinspires.ftc.teamcode.Autonomous.Drive.Task;
 import org.firstinspires.ftc.teamcode.Autonomous.Path_Finder.PathFinder;
 import org.firstinspires.ftc.teamcode.Configuration.Configuration;
 
@@ -61,17 +62,17 @@ import java.util.ArrayList;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Auto", group="Linear Opmode")
+@Autonomous(name="Auto", group="SimonsPlayGround")
 public class Main extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    public DcMotor FrontLeft = null; // White 0
-    public DcMotor FrontRight = null; //DarkBlue 1
-    public DcMotor BackLeft = null;  //Blue 2
-    public DcMotor BackRight = null; //Green BL 3
+    public DcMotor FrontLeft = null;
+    public DcMotor FrontRight = null;
+    public DcMotor BackLeft = null;
+    public DcMotor BackRight = null;
 
     //Task management
-    private ArrayList<Coordinates> Task = new ArrayList<Coordinates>();
+    private ArrayList<Task> Tasks = new ArrayList<Task>();
     private boolean completed = false;
 
     private PathFinder path;
@@ -89,10 +90,10 @@ public class Main extends OpMode {
         BackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         BackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        FrontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        FrontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        BackLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        BackRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        FrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        BackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        BackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         FrontLeft.setDirection(DcMotor.Direction.REVERSE);
         FrontRight.setDirection(DcMotor.Direction.FORWARD);
@@ -118,26 +119,14 @@ public class Main extends OpMode {
     @Override
     public void start() {
         runtime.reset();
-        Task.add(new Coordinates(10,10,0));
-        telemetry.addLine("x:"+Task.get(0).x+" Y:"+Task.get(0).y);
+        Tasks.add(new Task(-90,0.5f,"Turning"));
+        Tasks.add(new Task(-400,0.5f,"Forward"));
     }
 
 
     @Override
     public void loop() {
-        if(Task.size()>0){
-            if(completed ==false){
-                completed = Drive.SetCoordinate(Task.get(0).x,Task.get(0).y,0.5f);
-                telemetry.addLine("Looping");
-            }
-            else{
-                completed = false;
-                Task.remove(0);
-            }
-        } else {
-            telemetry.addLine("No Tasks");
-        }
-
+        Drive.Update(Tasks);
         telemetry.update();
     }
 
