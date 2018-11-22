@@ -15,7 +15,6 @@ public class CoordinateDrive{
     public Coordinates Coords = new Coordinates(0,0,0);
     private DcMotor[] Motors = new DcMotor[4];
     private float[] Encoders = new float[4];
-    private float[] MotorPower = new float[4];
 
     private float RobotCirumfrance = 957.557f;
     private float RobotOneDeg = RobotCirumfrance/360f;
@@ -38,7 +37,9 @@ public class CoordinateDrive{
         if(direction<0){
             direction = -1;
         }
-        
+        if(GetAvaragePosition() < distance){
+            Mot
+        }
     }
 
 
@@ -50,21 +51,6 @@ public class CoordinateDrive{
         return (Math.abs(Encoders[0]+Encoders[2])*0.5f);
     }
 
-    private void UpdateMotor(boolean On){
-        if(On){
-            Motors[0].setPower(MotorPower[0]);
-            Motors[1].setPower(MotorPower[1]);
-            Motors[2].setPower(MotorPower[2]);
-            Motors[3].setPower(MotorPower[3]);
-        }
-        else {
-            Motors[0].setPower(0);
-            Motors[1].setPower(0);
-            Motors[2].setPower(0);
-            Motors[3].setPower(0);
-        }
-    }
-
     private void UpdateEncoders(){
         Encoders[0] = Motors[0].getCurrentPosition();
         Encoders[1] = Motors[1].getCurrentPosition();
@@ -72,17 +58,11 @@ public class CoordinateDrive{
         Encoders[3] = Motors[3].getCurrentPosition();
     }
 
-    private void UpdatePowers() {
-        MotorPower[0] = MotorPower[0]*(((MotorPower[1]+MotorPower[2]+MotorPower[3])/3)/MotorPower[0]);
-        MotorPower[1] = MotorPower[1]*(((MotorPower[0]+MotorPower[2]+MotorPower[3])/3)/MotorPower[1]);
-        MotorPower[2] = MotorPower[2]*(((MotorPower[0]+MotorPower[1]+MotorPower[3])/3)/MotorPower[2]);
-        MotorPower[3] = MotorPower[3]*(((MotorPower[0]+MotorPower[1]+MotorPower[2])/3)/MotorPower[3]);
-    }
-
     private void UpdatePosition() {
         Coords.x += GetAvaragePosition()*WheelCount*(float)Math.cos(Coords.Angle);
         Coords.y += GetAvaragePosition()*WheelCount*(float)Math.sin(Coords.Angle);
     }
+
     private void UpdateRotation(){
         if(Encoders[0] > 0 && Encoders[2] > 0 ){
             Coords.Angle += GetAvaragePosition()*WheelCount*RobotOneDeg;
@@ -97,6 +77,11 @@ public class CoordinateDrive{
         Motors[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Motors[2].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Motors[3].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        Motors[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        Motors[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        Motors[2].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        Motors[3].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
 
