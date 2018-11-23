@@ -5,6 +5,7 @@ import android.graphics.Path;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Autonomous.ObjectIdentification.TensorFlowCubeDetection;
 import org.firstinspires.ftc.teamcode.Configuration.Configuration;
 
 import java.util.ArrayList;
@@ -24,12 +25,10 @@ public class AutoDrive {
 
 
     private static float Encoder = 1120f;
-    private static float RobotCirumfrance = 1517.39f;
+    private static float RobotCirumfrance = 1757.39f;
     private static float RobotOneDeg = RobotCirumfrance/360f;
     private static float WheelCirumfrance = 320;
     private static float WheelCount = WheelCirumfrance/Encoder;
-
-    private float MarginOfError = 30;
 
     private Telemetry tel;
 
@@ -65,8 +64,22 @@ public class AutoDrive {
                             return;
                         }
                         break;
-
+                    case "sleep":
+                        if(sleep(tasks.get(0).disiredTime)){
+                            tasks.remove(0);
+                            return;
+                        }
+                        break;
+                    case "CubeDetection":
+                        if(TensorFlow(tasks.get(0).tensorFlow,tasks,tasks.get(0).disiredTime)){
+                            tasks.remove(0);
+                            return;
+                        }
+                        break;
                 }
+            }
+            else {
+                tasks.remove(0);
             }
         }
     }
@@ -78,7 +91,7 @@ public class AutoDrive {
             MotorPower[2] = Power;
             MotorPower[3] = -Power;
             UpdateMotor(true);
-            tel.addLine("Turning Running");
+            tel.addLine("Turning Running....");
             return false;
         }
         else{
@@ -90,13 +103,13 @@ public class AutoDrive {
     }
 
     public boolean Forward(float Distance,float Power){
-        if(Math.abs(ConvertToMM(GetAvarage())) < Math.abs(Distance)){
+        if(Math.abs(ConvertToMM(GetAvarage())) < Math.abs(Distance*0.932)){
             MotorPower[0] = Power;
             MotorPower[1] = Power;
             MotorPower[2] = Power;
             MotorPower[3] = Power;
             UpdateMotor(true);
-            tel.addLine("Forward Running");
+            tel.addLine("Forward Running....");
             return false;
         }
         else{
@@ -108,11 +121,12 @@ public class AutoDrive {
     }
 
     public boolean Strafe(float Distance, float Power){
-        if(Math.abs(ConvertToMM(GetAvarage()))<Distance){
+        if(Math.abs(ConverForStrafe(GetAvarage()))<Distance){
             MotorPower[0] = Power;
             MotorPower[1] = -Power;
             MotorPower[2] = -Power;
             MotorPower[3] = Power;
+            tel.addLine("Strafing running...");
             UpdateMotor(true);
             return false;
         }
@@ -123,6 +137,36 @@ public class AutoDrive {
             return true;
         }
     }
+    private boolean sleep(float disiredTime){
+        if(System.currentTimeMillis()/1000 < disiredTime){
+            tel.addLine("Sleeping....");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean TensorFlow(TensorFlowCubeDetection tensorFlow, ArrayList<Task> tasks,long time){
+        if(System.currentTimeMillis()/1000 > time){
+            tasks.add(1,new Task(300,0.3f,"Forward"));
+            return true;
+        }
+        else {
+            if (tensorFlow.GetCubePos() != 0) {
+                if (tensorFlow.GetCubePos() == 1) {
+                    tasks.add(1,new Task(300,0.3f,"Forward"));
+                    tasks.add(2,new Task(400, 0.3f, "Strafing"));
+                    return true;
+                }
+                if (tensorFlow.GetCubePos() == 3) {
+                    tasks.add(1,new Task(300,0.3f,"Forward"));
+                    tasks.add(2,new Task(400, -0.3f, "Strafing"));
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 
     public float GetAvarage(){
         float value = 0;
@@ -137,6 +181,9 @@ public class AutoDrive {
     }
     public float ConvertToAngle(float Encoder){
         return (Encoder*WheelCount)/RobotOneDeg;
+    }
+    public float ConverForStrafe(float Encoder){
+        return Encoder*1.143f;
     }
 
     private void UpdateMotor(boolean On){

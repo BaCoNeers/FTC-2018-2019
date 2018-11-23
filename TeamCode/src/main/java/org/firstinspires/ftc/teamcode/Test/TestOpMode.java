@@ -27,21 +27,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.Autonomous.Main;
+package org.firstinspires.ftc.teamcode.Test;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.teamcode.Autonomous.Drive.AutoDrive;
-import org.firstinspires.ftc.teamcode.Autonomous.Drive.Task;
-import org.firstinspires.ftc.teamcode.Autonomous.ObjectIdentification.TensorFlowCubeDetection;
-import org.firstinspires.ftc.teamcode.Autonomous.Path_Finder.PathFinder;
-import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
-import java.util.concurrent.TimeUnit;
-
-import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
+import com.qualcomm.robotcore.util.Range;
 
 
 /**
@@ -57,65 +52,40 @@ import java.util.concurrent.TimeUnit;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Auto", group="SimonsPlayGround")
-public class Main extends OpMode {
+@TeleOp(name="Testing", group="Linear Opmode")
+public class TestOpMode extends LinearOpMode {
+
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
+    private DcMotor LiftMotor = null;
 
+    private DigitalChannel LimitSwitch = null;
 
-    RoverRucusConfiguration config;
-    //Task management
-    private ArrayList<Task> Tasks = new ArrayList<Task>();
-
-    private AutoDrive Drive;
-
-    private TensorFlowCubeDetection tensorFlow = new TensorFlowCubeDetection();
-    Boolean TensorFlowTest = false;
 
     @Override
-    public void init() {
-        config = RoverRucusConfiguration.newConfig(hardwareMap,telemetry);
-
-        Drive = new AutoDrive(config.FrontLeft,config.FrontRight,config.BackLeft,config.BackRight,telemetry);
-        tensorFlow.Int(telemetry,hardwareMap);
-
+    public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-    }
 
-    /*
-     * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
-     */
-    @Override
-    public void init_loop() {
-    }
+        // Initialize the hardware variables. Note that the strings used here as parameters
+        // to 'get' must correspond to the names assigned during the robot configuration
+        // step (using the FTC Robot Controller app on the phone).
+        //LiftMotor  = hardwareMap.get(DcMotor.class, "LiftMotor");
+        LimitSwitch = hardwareMap.get(DigitalChannel.class,"LimtiSwitch");
 
-    /*
-     * Code to run ONCE when the driver hits PLAY
-     */
-    @Override
-    public void start() {
+
+        // Wait for the game to start (driver presses PLAY)
+        waitForStart();
         runtime.reset();
 
-        //Context Forward Turning Strafing
-        tensorFlow.start();
-        Tasks.add(new Task(2));
-        Tasks.add(new Task(tensorFlow));
-        Tasks.add(new Task(300,0.3f,"Forward"));
+        // run until the end of the match (driver presses STOP)
+        while (opModeIsActive()) {
 
+
+            //LiftMotor.setPower(gamepad1.left_stick_y);
+            telemetry.addLine("Switch State: "+LimitSwitch.getState());
+
+            telemetry.update();
+        }
     }
-
-
-    @Override
-    public void loop() {
-        Drive.Update(Tasks);
-
-        telemetry.update();
-    }
-
-    @Override
-    public void stop() {
-        telemetry.addLine("Stopped");
-    }
-
 }

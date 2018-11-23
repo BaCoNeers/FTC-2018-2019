@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Autonomous.Drive;
 
+import org.firstinspires.ftc.teamcode.Autonomous.ObjectIdentification.TensorFlowCubeDetection;
+
 /**
  * Created by Simon on 21/11/2018.
  */
@@ -11,14 +13,31 @@ public class Task {
     public final float Value;
     public final String Context;
 
-    private int maxLoop = 20000;
+    public final long disiredTime;
+
+    public TensorFlowCubeDetection tensorFlow;
+
+    private int maxLoop = 10000;
 
 
     public Task(float value, float Power, String Context){
         this.Context = Context;
         this.Power = Power;
         this.Value = value;
-
+        disiredTime = 0;
+    }
+    public Task(float sleep){
+        this.Context = "sleep";
+        this.Power = 0;
+        this.Value = 0;
+        disiredTime = (System.currentTimeMillis()/1000)+(long)sleep;
+    }
+    public Task(TensorFlowCubeDetection tensorFlow){
+        this.Context = "CubeDetection";
+        this.Power = 0;
+        this.Value = 0;
+        disiredTime = (System.currentTimeMillis()/1000) + 5;
+        this.tensorFlow = tensorFlow;
     }
 
     public boolean CheckTask(){
@@ -28,6 +47,4 @@ public class Task {
         }
         return true;
     }
-
-
 }
