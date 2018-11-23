@@ -37,7 +37,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
 
 /**
- * Main Teleop Class
+ * Crater Teleop Class
  */
 
 @TeleOp

@@ -25,10 +25,13 @@ public class AutoDrive {
 
 
     private static float Encoder = 1120f;
-    private static float RobotCirumfrance = 1757.39f;
+    private static float RobotCirumfrance = 1957.39f;
     private static float RobotOneDeg = RobotCirumfrance/360f;
     private static float WheelCirumfrance = 320;
     private static float WheelCount = WheelCirumfrance/Encoder;
+
+    public boolean BoxCheck = false;
+    public int BoxPosition = 0;
 
     private Telemetry tel;
 
@@ -147,21 +150,13 @@ public class AutoDrive {
 
     private boolean TensorFlow(TensorFlowCubeDetection tensorFlow, ArrayList<Task> tasks,long time){
         if(System.currentTimeMillis()/1000 > time){
-            tasks.add(1,new Task(300,0.3f,"Forward"));
             return true;
         }
         else {
             if (tensorFlow.GetCubePos() != 0) {
-                if (tensorFlow.GetCubePos() == 1) {
-                    tasks.add(1,new Task(300,0.3f,"Forward"));
-                    tasks.add(2,new Task(400, 0.3f, "Strafing"));
-                    return true;
-                }
-                if (tensorFlow.GetCubePos() == 3) {
-                    tasks.add(1,new Task(300,0.3f,"Forward"));
-                    tasks.add(2,new Task(400, -0.3f, "Strafing"));
-                    return true;
-                }
+                BoxCheck = true;
+                BoxPosition = tensorFlow.GetCubePos();
+                return true;
             }
         }
         return false;
@@ -182,9 +177,7 @@ public class AutoDrive {
     public float ConvertToAngle(float Encoder){
         return (Encoder*WheelCount)/RobotOneDeg;
     }
-    public float ConverForStrafe(float Encoder){
-        return Encoder*1.143f;
-    }
+    public float ConverForStrafe(float Encoder){return (Encoder*WheelCount)*0.86f;}
 
     private void UpdateMotor(boolean On){
         if(On){

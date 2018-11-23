@@ -57,8 +57,8 @@ import java.util.concurrent.TimeUnit;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Auto", group="SimonsPlayGround")
-public class Main extends OpMode {
+@Autonomous(name="CraterAuto", group="SimonsPlayGround")
+public class Crater extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -76,7 +76,7 @@ public class Main extends OpMode {
     public void init() {
         config = RoverRucusConfiguration.newConfig(hardwareMap,telemetry);
 
-        Drive = new AutoDrive(config.FrontLeft,config.FrontRight,config.BackLeft,config.BackRight,telemetry);
+        Drive = new AutoDrive(config.front_left_motor,config.front_right_motor,config.rear_left_motor,config.rear_right_motor,telemetry);
         tensorFlow.Int(telemetry,hardwareMap);
 
         telemetry.addData("Status", "Initialized");
@@ -99,9 +99,9 @@ public class Main extends OpMode {
 
         //Context Forward Turning Strafing
         tensorFlow.start();
-        Tasks.add(new Task(2));
         Tasks.add(new Task(tensorFlow));
-        Tasks.add(new Task(300,0.3f,"Forward"));
+        Tasks.add(new Task(500,0.3f,"Forward"));
+        Tasks.add(new Task(550,0.5f,"Forward"));
 
     }
 
@@ -109,6 +109,23 @@ public class Main extends OpMode {
     @Override
     public void loop() {
         Drive.Update(Tasks);
+
+        if(Drive.BoxCheck){
+            switch (Drive.BoxPosition){
+                case 1:
+                    Tasks.add(1,new Task(380, -0.3f, "Strafing"));
+                    Drive.BoxCheck = false;
+                    break;
+                case 2:
+
+                    Drive.BoxCheck = false;
+                    break;
+                case 3:
+                    Tasks.add(1,new Task(340, 0.3f, "Strafing"));
+                    Drive.BoxCheck = false;
+                    break;
+            }
+        }
 
         telemetry.update();
     }
