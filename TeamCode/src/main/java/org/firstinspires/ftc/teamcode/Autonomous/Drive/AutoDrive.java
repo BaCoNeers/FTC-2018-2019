@@ -188,7 +188,7 @@ public class AutoDrive {
     public boolean turn() {
         tel.addLine("turning....");
         if (turnDirection) {
-            if (heading + offset < targetangle) {
+            if (heading + offset < targetangle - 5) {
                 angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
                 heading = angles.firstAngle;
                 if (Math.abs(previousheading - heading) < 90) {
@@ -197,10 +197,10 @@ public class AutoDrive {
                 }
                 previousheading = heading;
                 if (targetangle - (heading + offset) < 45) {
-                    MotorPower[0] = (float) (0.5 * ((targetangle - (heading + offset)) / 180 / 8));
-                    MotorPower[1] = (float) (-0.5 * ((targetangle - (heading + offset)) / 180 / 8));
-                    MotorPower[2] = (float) (0.5 * ((targetangle - (heading + offset)) / 180 / 8));
-                    MotorPower[3] = (float) (-0.5 * ((targetangle - (heading + offset)) / 180 / 8));
+                    MotorPower[0] = (float) (0.5 * ((targetangle - (heading + offset)) / 360));
+                    MotorPower[1] = (float) (-0.5 * ((targetangle - (heading + offset)) / 360));
+                    MotorPower[2] = (float) (0.5 * ((targetangle - (heading + offset)) / 360));
+                    MotorPower[3] = (float) (-0.5 * ((targetangle - (heading + offset)) / 360));
                     UpdateMotor(true);
 
                 } else {
@@ -215,7 +215,7 @@ public class AutoDrive {
             else { UpdateMotor(false);
             return true;}
         } else if (!turnDirection) {
-            if (heading + offset > targetangle) {
+            if (heading + offset > targetangle - 5) {
                 angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
                 heading = angles.firstAngle;
                 if (Math.abs(previousheading - heading) < 90) {
