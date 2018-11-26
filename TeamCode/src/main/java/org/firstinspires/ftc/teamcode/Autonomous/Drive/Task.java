@@ -17,7 +17,7 @@ public class Task {
 
     public TensorFlowCubeDetection tensorFlow;
 
-    public int maxLoop = 350;
+    public int maxLoop = 250;
 
 
     public Task(float value, float Power, String Context){
