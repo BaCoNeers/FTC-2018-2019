@@ -198,10 +198,10 @@ public class AutoDrive {
                 }
                 previousheading = heading;
                 if (targetangle - (heading + offset) < 45) {
-                    MotorPower[0] = (float) (0.25 * ((targetangle - (heading + offset)) / 180 / 8));
-                    MotorPower[1] = (float) (-0.25 * ((targetangle - (heading + offset)) / 180 / 8));
-                    MotorPower[2] = (float) (0.25 * ((targetangle - (heading + offset)) / 180 / 8));
-                    MotorPower[3] = (float) (-0.25 * ((targetangle - (heading + offset)) / 180 / 8));
+                    MotorPower[0] = (float) (0.5 * ((targetangle - (heading + offset)) / 180 / 8));
+                    MotorPower[1] = (float) (-0.5 * ((targetangle - (heading + offset)) / 180 / 8));
+                    MotorPower[2] = (float) (0.5 * ((targetangle - (heading + offset)) / 180 / 8));
+                    MotorPower[3] = (float) (-0.5 * ((targetangle - (heading + offset)) / 180 / 8));
                     UpdateMotor(true);
 
                 } else {
@@ -224,11 +224,11 @@ public class AutoDrive {
                     offset -= 360;
                 }
                 previousheading = heading;
-                if (targetangle - (heading + offset) < 180) {
-                    MotorPower[0] = (float) (-0.25 * ((targetangle - (heading + offset)) / 180 / 8));
-                    MotorPower[1] = (float) (0.25 * ((targetangle - (heading + offset)) / 180 / 8));
-                    MotorPower[2] = (float) (-0.25 * ((targetangle - (heading + offset)) / 180 / 8));
-                    MotorPower[3] = (float) (0.25 * ((targetangle - (heading + offset)) / 180 / 8));
+                if (targetangle - (heading + offset) < 45) {
+                    MotorPower[0] = (float) (-0.5 * ((targetangle - (heading + offset)) / 180 / 8));
+                    MotorPower[1] = (float) (0.5 * ((targetangle - (heading + offset)) / 180 / 8));
+                    MotorPower[2] = (float) (-0.5 * ((targetangle - (heading + offset)) / 180 / 8));
+                    MotorPower[3] = (float) (0.5 * ((targetangle - (heading + offset)) / 180 / 8));
                     UpdateMotor(true);
                 } else {
                     MotorPower[0] = (float) -0.5;
