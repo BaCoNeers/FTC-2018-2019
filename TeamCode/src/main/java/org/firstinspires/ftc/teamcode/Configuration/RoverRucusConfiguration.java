@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Configuration;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -25,6 +27,7 @@ public class RoverRucusConfiguration extends RobotConfiguration {
     public DcMotor arm_lift_motor = null;
     public CRServo prim_box_arm_servo = null;
     public CRServo sec_box_arm_servo = null;
+    public BNO055IMU imu = null;
 
     /**
      * Assign your class instance variables to the saved device names in the hardware map
@@ -73,7 +76,16 @@ public class RoverRucusConfiguration extends RobotConfiguration {
 
         arm_lift_motor.setDirection(DcMotor.Direction.FORWARD);
 
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+//        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
+        imu = hwMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
 
         telemetry.addData("Initialized","True");
         telemetry.update();
