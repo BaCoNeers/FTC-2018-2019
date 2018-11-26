@@ -34,6 +34,9 @@ public class AutoDrive {
     public boolean BoxCheck = false;
     public int BoxPosition = 2;
 
+    //initialization
+    boolean RotateInit = false;
+
     private Telemetry tel;
 
     public AutoDrive(DcMotor FLM, DcMotor FRM, DcMotor BLM, DcMotor BRM, Telemetry tel){
@@ -57,8 +60,10 @@ public class AutoDrive {
                         }
                         break;
                     case "Turning":
+                        InitRotate();
                         if (Rotate(tasks.get(0).Value, tasks.get(0).Power)) {
                             tasks.remove(0);
+                            RotateInit = false;
                             return;
                         }
                         break;
@@ -86,6 +91,16 @@ public class AutoDrive {
                 tasks.remove(0);
             }
         }
+    }
+
+    public void InitRotate(){
+        if(!RotateInit){
+            //Put Init
+
+
+            RotateInit = true;
+        }
+
     }
 
     public boolean Rotate(float Angle,float Power){
