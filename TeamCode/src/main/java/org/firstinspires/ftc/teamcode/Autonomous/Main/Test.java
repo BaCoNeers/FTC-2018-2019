@@ -54,8 +54,8 @@ import java.util.ArrayList;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="BoxAuto", group="SimonsPlayGround")
-public class Box extends OpMode {
+@Autonomous(name="Test", group="SimonsPlayGround")
+public class Test extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -96,13 +96,7 @@ public class Box extends OpMode {
 
         //Context Forward Turning Strafing
         tensorFlow.start();
-        Tasks.add(new Task(tensorFlow));
-        Tasks.add(new Task(500,0.3f,"Forward"));
-        Tasks.add(new Task(150,-0.4f,"Strafing"));
-        Tasks.add(new Task(100,0.3f,"Strafing"));
-        Tasks.add(new Task(1700,0.5f,"Forward"));
-        Tasks.add(new Task(200,-0.4f,"Strafing"));
-        Tasks.add(new Task(200,0.3f,"Forward"));
+        Tasks.add(new Task(90,0.3f,"Turning"));
     }
 
 

@@ -54,8 +54,8 @@ import java.util.ArrayList;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="BoxAuto", group="SimonsPlayGround")
-public class Box extends OpMode {
+@Autonomous(name="BoxDuoAuto", group="SimonsPlayGround")
+public class BoxDuo extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -100,9 +100,15 @@ public class Box extends OpMode {
         Tasks.add(new Task(500,0.3f,"Forward"));
         Tasks.add(new Task(150,-0.4f,"Strafing"));
         Tasks.add(new Task(100,0.3f,"Strafing"));
-        Tasks.add(new Task(1700,0.5f,"Forward"));
-        Tasks.add(new Task(200,-0.4f,"Strafing"));
-        Tasks.add(new Task(200,0.3f,"Forward"));
+
+
+        //Other cube run
+        Tasks.add(new Task(1000,0.5f,"Forward"));
+        Tasks.add(new Task(300,-0.4f,"Strafing"));
+        Tasks.add(new Task(200,0.3f,"Strafing"));
+        Tasks.add(new Task(45,0.3f,"Turning"));
+        Tasks.add(new Task(1100,0.3f,"Forward"));
+        Tasks.add(new Task(90,-0.3f,"Turning"));
     }
 
 
@@ -118,11 +124,16 @@ public class Box extends OpMode {
                     Tasks.add(3,new Task(45,0.3f,"Turning"));
                     Tasks.add(4,new Task(580,0.3f,"Forward"));
                     Tasks.add(5,new Task(90,0.3f,"Turning"));
+
+                    //Cube run
+                    Tasks.add(new Task(380, -0.3f, "Strafing"));
+                    Tasks.add(new Task(550,0.5f,"Forward"));
+
                     Drive.BoxCheck = false;
                     break;
                 case 2:
-                    Tasks.add(1,new Task(1300,0.3f,"Forward"));
-                    Tasks.add(2,new Task(135,0.3f,"Turning"));
+                    Tasks.add(1,new Task(1000,0.3f,"Forward"));
+                    Tasks.add(2,new Task(270,0.3f,"Forward"));
                     Drive.BoxCheck = false;
                     break;
                 case 3:
@@ -131,6 +142,11 @@ public class Box extends OpMode {
                     Tasks.add(3,new Task(45,-0.3f,"Turning"));
                     Tasks.add(4,new Task(620,0.3f,"Forward"));
                     Tasks.add(5,new Task(180,0.3f,"Turning"));
+
+                    //cube run
+                    Tasks.add(new Task(380, -0.3f, "Strafing"));
+                    Tasks.add(new Task(550,0.5f,"Forward"));
+
                     Drive.BoxCheck = false;
                     break;
             }

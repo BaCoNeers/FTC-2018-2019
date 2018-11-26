@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Autonomous.Drive;
 import android.graphics.Path;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Autonomous.ObjectIdentification.TensorFlowCubeDetection;
@@ -31,7 +32,7 @@ public class AutoDrive {
     private static float WheelCount = WheelCirumfrance/Encoder;
 
     public boolean BoxCheck = false;
-    public int BoxPosition = 0;
+    public int BoxPosition = 2;
 
     private Telemetry tel;
 
@@ -106,11 +107,12 @@ public class AutoDrive {
     }
 
     public boolean Forward(float Distance,float Power){
-        if(Math.abs(ConvertToMM(GetAvarage())) < Math.abs(Distance*0.932)){
-            MotorPower[0] = Power;
-            MotorPower[1] = Power;
-            MotorPower[2] = Power;
-            MotorPower[3] = Power;
+        MotorPower[0] = Power;
+        MotorPower[1] = Power;
+        MotorPower[2] = Power;
+        MotorPower[3] = Power;
+        ForwardScale(Distance);
+        if(GetAvaragePower()>0.1){
             UpdateMotor(true);
             tel.addLine("Forward Running....");
             return false;
@@ -162,6 +164,27 @@ public class AutoDrive {
         return false;
     }
 
+    public void ForwardScale(float Distance){
+        float value = Math.abs(ConvertToMM(GetAvarage()))/Distance;
+        value = 1-value;
+        if(Distance-200>0) {
+            value = value * (Distance / 200);
+        }
+        if(!(value>1)){
+            MotorPower[0] = MotorPower[0]*value;
+            MotorPower[1] = MotorPower[1]*value;
+            MotorPower[2] = MotorPower[2]*value;
+            MotorPower[3] = MotorPower[3]*value;
+        }
+    }
+
+    public float GetAvaragePower(){
+        float value = 0;
+        for(int i=0;i<MotorPower.length;i++){
+            value += Math.abs(MotorPower[i]);
+        }
+        return value/MotorPower.length;
+    }
 
     public float GetAvarage(){
         float value = 0;
