@@ -17,12 +17,12 @@ public class Task {
 
     public TensorFlowCubeDetection tensorFlow;
 
-    private int maxLoop = 10000;
+    private int maxLoop = 1000;
 
 
     public Task(float value, float Power, String Context){
         this.Context = Context;
-        this.Power = Power;
+        this.Power = Math.abs(Power);
         this.Value = value;
         disiredTime = 0;
     }

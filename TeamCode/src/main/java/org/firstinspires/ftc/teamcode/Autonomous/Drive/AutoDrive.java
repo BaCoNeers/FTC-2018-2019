@@ -3,8 +3,10 @@ package org.firstinspires.ftc.teamcode.Autonomous.Drive;
 import android.graphics.Path;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -52,8 +54,41 @@ public class AutoDrive {
         Motors[2] = BLM;
         Motors[3] = BRM;
         imu = imu2;
-
         this.tel = tel;
+    }
+
+    public AutoDrive(HardwareMap hardwaremap , Telemetry tel){
+        this.tel = tel;
+        Motors[0]  = hardwaremap.get(DcMotor.class, "front_left_drive");
+        Motors[1] = hardwaremap.get(DcMotor.class, "front_right_drive");
+        Motors[2] = hardwaremap.get(DcMotor.class,"rear_left_drive");
+        Motors[3] = hardwaremap.get(DcMotor.class,"rear_right_drive");
+
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+//        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+
+        imu = hardwaremap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+
+        Motors[0].setDirection(DcMotor.Direction.FORWARD);
+        Motors[1].setDirection(DcMotor.Direction.REVERSE);
+        Motors[2].setDirection(DcMotor.Direction.FORWARD);
+        Motors[3].setDirection(DcMotor.Direction.REVERSE);
+
+        Motors[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Motors[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Motors[2].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        Motors[3].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        Motors[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        Motors[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        Motors[2].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        Motors[3].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void Update(ArrayList<Task> tasks) {
@@ -97,10 +132,13 @@ public class AutoDrive {
                 }
             } else {
                 tasks.remove(0);
+                return;
             }
         }
     }
 
+
+    //Rotation Varables
     private Orientation angles = null;
     private float heading = 0;
     private float previousheading = heading;
@@ -148,7 +186,7 @@ public class AutoDrive {
 
     //turning function
     public boolean turn() {
-
+        tel.addLine("turning....");
         if (turnDirection) {
             if (heading + offset < targetangle) {
                 angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
@@ -199,24 +237,32 @@ public class AutoDrive {
                     UpdateMotor(true);
                 }
                 return false;
-            }else { UpdateMotor(false);
+            }else {
+                UpdateMotor(false);
+                ResestMotors();
                 return true;
             }
 
         }
+        return false;
     }
 
 
 
     public boolean Forward(float Distance, float Power) {
-        MotorPower[0] = Power;
-        MotorPower[1] = Power;
-        MotorPower[2] = Power;
-        MotorPower[3] = Power;
+        tel.addLine("Forward Running....");
+        int direction = 1;
+        if(Distance<0){
+            direction = -1;
+        }
+        MotorPower[0] = Power*direction;
+        MotorPower[1] = Power*direction;
+        MotorPower[2] = Power*direction;
+        MotorPower[3] = Power*direction;
         ForwardScale(Distance);
         if (GetAvaragePower() > 0.1) {
             UpdateMotor(true);
-            tel.addLine("Forward Running....");
+            UpdateEncoders();
             return false;
         } else {
             UpdateMotor(false);
@@ -227,13 +273,18 @@ public class AutoDrive {
     }
 
     public boolean Strafe(float Distance, float Power) {
-        if (Math.abs(ConverForStrafe(GetAvarage())) < Distance) {
-            MotorPower[0] = Power;
-            MotorPower[1] = -Power;
-            MotorPower[2] = -Power;
-            MotorPower[3] = Power;
+        int direction = 1;
+        if(Distance<0){
+            direction = -1;
+        }
+        if (Math.abs(ConverForStrafe(GetAvarage())) < Math.abs(Distance)) {
+            MotorPower[0] = Power*direction;
+            MotorPower[1] = -Power*direction;
+            MotorPower[2] = -Power*direction;
+            MotorPower[3] = Power*direction;
             tel.addLine("Strafing running...");
             UpdateMotor(true);
+            UpdateEncoders();
             return false;
         } else {
             UpdateMotor(false);
@@ -266,7 +317,7 @@ public class AutoDrive {
     }
 
     public void ForwardScale(float Distance) {
-        float value = Math.abs(ConvertToMM(GetAvarage())) / Distance;
+        float value = Math.abs(ConvertToMM(GetAvarage())) / Math.abs(Distance);
         value = 1 - value;
         if (Distance - 200 > 0) {
             value = value * (Distance / 200);

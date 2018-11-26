@@ -73,7 +73,7 @@ public class Test extends OpMode {
     public void init() {
         config = RoverRucusConfiguration.newConfig(hardwareMap,telemetry);
 
-        Drive = new AutoDrive(config.front_left_motor,config.front_right_motor,config.rear_left_motor,config.rear_right_motor,telemetry,config.imu);
+        Drive = new AutoDrive(hardwareMap,telemetry);
         tensorFlow.Int(telemetry,hardwareMap);
 
         telemetry.addData("Status", "Initialized");
@@ -96,7 +96,12 @@ public class Test extends OpMode {
 
         //Context Forward Turning Strafing
         tensorFlow.start();
+        Tasks.add(new Task(300,0.3f,"Forward"));
+        Tasks.add(new Task(-300,0.3f,"Forward"));
         Tasks.add(new Task(90,0.3f,"Turning"));
+        Tasks.add(new Task(-90,0.3f,"Turning"));
+        Tasks.add(new Task(300,0.3f,"Strafing"));
+        Tasks.add(new Task(-300,0.3f,"Strafing"));
     }
 
 

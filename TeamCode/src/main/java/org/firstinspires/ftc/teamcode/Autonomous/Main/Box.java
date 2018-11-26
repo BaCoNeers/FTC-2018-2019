@@ -73,7 +73,7 @@ public class Box extends OpMode {
     public void init() {
         config = RoverRucusConfiguration.newConfig(hardwareMap,telemetry);
 
-        Drive = new AutoDrive(config.front_left_motor,config.front_right_motor,config.rear_left_motor,config.rear_right_motor,telemetry);
+        Drive = new AutoDrive(hardwareMap,telemetry);
         tensorFlow.Int(telemetry,hardwareMap);
 
         telemetry.addData("Status", "Initialized");
