@@ -96,6 +96,7 @@ public class AutoDrive {
         UpdateEncoders();
         if (tasks.size() > 0) {
             if (tasks.get(0).CheckTask()) {
+                tel.addLine("Max loop count: "+tasks.get(0).maxLoop);
                 switch (tasks.get(0).Context) {
                     case "Forward":
                         if (Forward(tasks.get(0).Value, tasks.get(0).Power)) {
