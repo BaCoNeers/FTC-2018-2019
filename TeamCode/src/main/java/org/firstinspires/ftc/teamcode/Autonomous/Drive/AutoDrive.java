@@ -164,6 +164,7 @@ public class AutoDrive {
                     MotorPower[2] = (float) (0.25 * ((targetangle - (heading + offset)) / 180 / 8));
                     MotorPower[3] = (float) (-0.25 * ((targetangle - (heading + offset)) / 180 / 8));
                     UpdateMotor(true);
+
                 } else {
                     MotorPower[0] = (float) 0.5;
                     MotorPower[1] = (float) -0.5;
@@ -171,6 +172,7 @@ public class AutoDrive {
                     MotorPower[3] = (float) -0.5;
                     UpdateMotor(true);
                 }
+                return false;
             }
             else { UpdateMotor(false);
             return true;}
@@ -196,6 +198,7 @@ public class AutoDrive {
                     MotorPower[3] = (float) 0.5;
                     UpdateMotor(true);
                 }
+                return false;
             }else { UpdateMotor(false);
                 return true;
             }
