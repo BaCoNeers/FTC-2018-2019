@@ -196,7 +196,7 @@ public class AutoDrive {
                     offset += 360;
                 }
                 previousheading = heading;
-                if (targetangle - (heading + offset) < 180) {
+                if (targetangle - (heading + offset) < 45) {
                     MotorPower[0] = (float) (0.25 * ((targetangle - (heading + offset)) / 180 / 8));
                     MotorPower[1] = (float) (-0.25 * ((targetangle - (heading + offset)) / 180 / 8));
                     MotorPower[2] = (float) (0.25 * ((targetangle - (heading + offset)) / 180 / 8));
