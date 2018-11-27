@@ -103,7 +103,7 @@ public class CraterDuo extends OpMode {
         Tasks.add(new Task(-90,0.3f,"Turning"));//4
         Tasks.add(new Task(-45,0.3f,"Turning"));//6
         Tasks.add(new Task(-200,0.4f,"Strafing"));//7
-        Tasks.add(new Task(100,0.3f,"Strafing"));//8  
+        Tasks.add(new Task(100,0.3f,"Strafing"));//8
     }
 
 

@@ -11,6 +11,7 @@ public class Task {
 
     public final float Power;
     public final float Value;
+    public final boolean LiftState;
     public final String Context;
 
     public final long disiredTime;
@@ -24,18 +25,28 @@ public class Task {
         this.Context = Context;
         this.Power = Math.abs(Power);
         this.Value = value;
+        this.LiftState = false;
         disiredTime = 0;
+    }
+    public Task(boolean LiftState, float Power){
+        this.LiftState = LiftState;
+        this.Context = "Lift";
+        this.Power = Power;
+        this.Value = 0;
+        this.disiredTime = 0;
     }
     public Task(float sleep){
         this.Context = "sleep";
         this.Power = 0;
         this.Value = 0;
+        this.LiftState = false;
         disiredTime = (System.currentTimeMillis()/1000)+(long)sleep;
     }
     public Task(TensorFlowCubeDetection tensorFlow){
         this.Context = "CubeDetection";
         this.Power = 0;
         this.Value = 0;
+        this.LiftState = false;
         disiredTime = (System.currentTimeMillis()/1000) + 5;
         this.tensorFlow = tensorFlow;
     }

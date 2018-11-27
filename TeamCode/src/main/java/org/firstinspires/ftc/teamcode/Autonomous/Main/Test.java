@@ -96,12 +96,16 @@ public class Test extends OpMode {
 
         //Context Forward Turning Strafing
         tensorFlow.start();
+        /*
         Tasks.add(new Task(300,0.3f,"Forward"));
         Tasks.add(new Task(-300,0.3f,"Forward"));
         Tasks.add(new Task(90,0.3f,"Turning"));
         Tasks.add(new Task(-90,0.3f,"Turning"));
         Tasks.add(new Task(300,0.3f,"Strafing"));
         Tasks.add(new Task(-300,0.3f,"Strafing"));
+        */
+        Tasks.add(new Task(true,0.5f));
+        Tasks.add(new Task(false, 0.5f));
     }
 
 

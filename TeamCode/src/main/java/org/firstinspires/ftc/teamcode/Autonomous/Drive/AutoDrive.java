@@ -6,7 +6,9 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -33,6 +35,15 @@ public class AutoDrive {
 
     private BNO055IMU imu = null;
 
+    DigitalChannel PrimLimitSwitch = null;
+    DigitalChannel SecLimitSwitch = null;
+    DcMotor PrimLiftMotor = null;
+    DcMotor SecLiftMotor = null;
+
+    boolean PrimLiftState = true;
+    boolean SecLiftState = false;
+    boolean PrevPrimState = false;
+    boolean PrevSecState = false;
 
     private static float Encoder = 1120f;
     private static float RobotCirumfrance = 1957.39f;
@@ -89,6 +100,12 @@ public class AutoDrive {
         Motors[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         Motors[2].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         Motors[3].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+
+        PrimLimitSwitch = hardwaremap.get(DigitalChannel.class,"PrimLimitSwitch");
+        SecLimitSwitch = hardwaremap.get(DigitalChannel.class,"SecLimitSwitch");
+        PrimLiftMotor  = hardwaremap.get(DcMotor.class, "prim_lift_motor");
+        SecLiftMotor = hardwaremap.get(DcMotor.class, "sec_lift_motor");
     }
 
     public void Update(ArrayList<Task> tasks) {
@@ -126,6 +143,12 @@ public class AutoDrive {
                         break;
                     case "CubeDetection":
                         if (TensorFlow(tasks.get(0).tensorFlow, tasks, tasks.get(0).disiredTime)) {
+                            tasks.remove(0);
+                            return;
+                        }
+                        break;
+                    case "Lift":
+                        if(Lift(tasks.get(0).LiftState,tasks.get(0).Power )){
                             tasks.remove(0);
                             return;
                         }
@@ -253,8 +276,6 @@ public class AutoDrive {
         return false;
     }
 
-
-
     public boolean Forward(float Distance, float Power) {
         tel.addLine("Forward Running....");
         int direction = 1;
@@ -317,6 +338,56 @@ public class AutoDrive {
                 BoxCheck = true;
                 BoxPosition = tensorFlow.GetCubePos();
                 return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean Lift(boolean state, float Power){
+        if(state){
+            if(PrimLiftState && SecLiftState && !PrimLimitSwitch.getState() && !SecLimitSwitch.getState()){
+                PrimLiftMotor.setPower(0);
+                SecLiftMotor.setPower(0);
+                return true;
+            }
+            else {
+                if(PrimLimitSwitch.getState() || !PrimLiftState){
+                    PrimLiftMotor.setPower(-Power);
+                    if(PrimLimitSwitch.getState() != PrevPrimState){
+                        PrimLiftState=!PrimLiftState;
+                    }
+                    PrevPrimState = PrimLimitSwitch.getState();
+                }
+                if(SecLimitSwitch.getState() || !SecLiftState){
+                    SecLiftMotor.setPower(Power);
+                    if (SecLimitSwitch.getState() !=PrevSecState) {
+                        SecLiftState = !SecLiftState;
+                    }
+                    PrevSecState = SecLimitSwitch.getState();
+                }
+            }
+        }
+        else{
+            if(!PrimLiftState && !SecLiftState && !PrimLimitSwitch.getState() && !SecLimitSwitch.getState()){
+                PrimLiftMotor.setPower(0);
+                SecLiftMotor.setPower(0);
+                return true;
+            }
+            else {
+                if(PrimLimitSwitch.getState() || PrimLiftState){
+                    PrimLiftMotor.setPower(Power);
+                    if(PrimLimitSwitch.getState() != PrevPrimState){
+                        PrimLiftState=!PrimLiftState;
+                    }
+                    PrevPrimState = PrimLimitSwitch.getState();
+                }
+                if(SecLimitSwitch.getState() || SecLiftState){
+                    SecLiftMotor.setPower(-Power);
+                    if (SecLimitSwitch.getState() !=PrevSecState) {
+                        SecLiftState = !SecLiftState;
+                    }  
+                    PrevSecState = PrevSecState;
+                }
             }
         }
         return false;
