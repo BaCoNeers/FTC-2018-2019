@@ -101,7 +101,20 @@ public class Crater extends OpMode {
         tensorFlow.start();
         Tasks.add(new Task(tensorFlow));
         Tasks.add(new Task(500,0.3f,"Forward"));
-        Tasks.add(new Task(550,0.5f,"Forward"));
+        //new direction
+        Tasks.add(new Task(500,0.3f,"Forward"));
+        Tasks.add(new Task(-500,0.3f,"Forward"));
+        Tasks.add(new Task(-90,0.3f,"Turning"));
+        //new direction
+        Tasks.add(new Task(-45,0.3f,"Turning"));
+        Tasks.add(new Task(800,0.4f,"Forward"));
+        Tasks.add(new Task(180,0.3f,"Turning"));
+        Tasks.add(new Task(-200,0.4f,"Strafing"));
+        Tasks.add(new Task(100,0.3f,"Strafing"));
+        Tasks.add(new Task(1300,0.5f,"Forward"));
+        Tasks.add(new Task(-200,0.4f,"Strafing"));
+        Tasks.add(new Task(200,0.3f,"Forward"));
+
 
     }
 
@@ -113,15 +126,17 @@ public class Crater extends OpMode {
         if(Drive.BoxCheck){
             switch (Drive.BoxPosition){
                 case 1:
-                    Tasks.add(1,new Task(380, -0.3f, "Strafing"));
+                    Tasks.add(1,new Task(-380, 0.3f, "Strafing"));
+                    Tasks.add(5,new Task(800,0.3f,"Forward"));
                     Drive.BoxCheck = false;
                     break;
                 case 2:
-
+                    Tasks.add(4,new Task(1200,0.3f,"Forward"));
                     Drive.BoxCheck = false;
                     break;
                 case 3:
                     Tasks.add(1,new Task(340, 0.3f, "Strafing"));
+                    Tasks.add(5,new Task(1600,0.3f,"Forward"));
                     Drive.BoxCheck = false;
                     break;
             }

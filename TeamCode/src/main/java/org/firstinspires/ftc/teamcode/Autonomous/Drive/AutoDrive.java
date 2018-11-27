@@ -106,7 +106,7 @@ public class AutoDrive {
                         break;
                     case "Turning":
                         InitRotate(tasks.get(0).Value);
-                        if (turn()){
+                        if (Rotate(tasks.get(0).Value,tasks.get(0).Power)){
                             tasks.remove(0);
                             RotateInit = false;
                             return;
@@ -169,12 +169,17 @@ public class AutoDrive {
     }
 
     public boolean Rotate(float Angle, float Power) {
+        int direction = 1;
+        if(Angle<0){
+            direction = -1;
+        }
         if (Math.abs(ConvertToAngle(GetAvarage())) < Math.abs(Angle)) {
-            MotorPower[0] = Power;
-            MotorPower[1] = -Power;
-            MotorPower[2] = Power;
-            MotorPower[3] = -Power;
+            MotorPower[0] = Power*direction;
+            MotorPower[1] = -Power*direction;
+            MotorPower[2] = Power*direction;
+            MotorPower[3] = -Power*direction;
             UpdateMotor(true);
+            UpdateEncoders();
             tel.addLine("Turning Running....");
             return false;
         } else {

@@ -97,11 +97,11 @@ public class Box extends OpMode {
         //Context Forward Turning Strafing
         tensorFlow.start();
         Tasks.add(new Task(tensorFlow));
-        Tasks.add(new Task(500,0.3f,"Forward"));
-        Tasks.add(new Task(150,-0.4f,"Strafing"));
+        Tasks.add(new Task(600,0.3f,"Forward"));
+        Tasks.add(new Task(-300,0.4f,"Strafing"));
         Tasks.add(new Task(100,0.3f,"Strafing"));
         Tasks.add(new Task(1700,0.5f,"Forward"));
-        Tasks.add(new Task(200,-0.4f,"Strafing"));
+        Tasks.add(new Task(-200,0.4f,"Strafing"));
         Tasks.add(new Task(200,0.3f,"Forward"));
     }
 
@@ -113,7 +113,7 @@ public class Box extends OpMode {
         if(Drive.BoxCheck){
             switch (Drive.BoxPosition){
                 case 1:
-                    Tasks.add(1,new Task(380, -0.3f, "Strafing"));
+                    Tasks.add(1,new Task(-380, 0.3f, "Strafing"));
                     Tasks.add(2,new Task(700,0.3f,"Forward"));
                     Tasks.add(3,new Task(45,0.3f,"Turning"));
                     Tasks.add(4,new Task(580,0.3f,"Forward"));
@@ -128,8 +128,8 @@ public class Box extends OpMode {
                 case 3:
                     Tasks.add(1,new Task(380, 0.3f, "Strafing"));
                     Tasks.add(2,new Task(700,0.3f,"Forward"));
-                    Tasks.add(3,new Task(45,-0.3f,"Turning"));
-                    Tasks.add(4,new Task(620,0.3f,"Forward"));
+                    Tasks.add(3,new Task(-45,0.3f,"Turning"));
+                    Tasks.add(4,new Task(500,0.3f,"Forward"));
                     Tasks.add(5,new Task(180,0.3f,"Turning"));
                     Drive.BoxCheck = false;
                     break;
