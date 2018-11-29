@@ -14,6 +14,7 @@ public class ArmLift {
     //members:
     private OpMode opmode = null;
     private RoverRucusConfiguration config = null;
+    // add members below to engineering notebook if used in code
     public boolean buttonState = false;
     public boolean lastButtonState = false;
     public boolean state = false;

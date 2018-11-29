@@ -26,7 +26,6 @@ public class Lift {
         super();
         opmode = opmodeIn;
         config = configIn;
-
     }
 
     //Bumper Variables
