@@ -62,6 +62,7 @@ import java.util.ArrayList;
  */
 
 @Autonomous(name="No_Idea", group="Linear Opmode")
+        @Disabled
 public class No_Idea extends LinearOpMode {
 
     // Declare OpMode members.

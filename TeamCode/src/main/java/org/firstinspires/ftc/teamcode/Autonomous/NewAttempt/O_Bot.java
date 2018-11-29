@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode.Autonomous.NewAttempt;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -53,6 +54,7 @@ import java.util.ArrayList;
  */
 
 @Autonomous(name="O_Bot", group="Linear Opmode")
+@Disabled
 public class O_Bot extends LinearOpMode {
 
     // Declare OpMode members.
@@ -214,7 +216,7 @@ public class O_Bot extends LinearOpMode {
         if(mm < 0){
             direction = -1;
         }
-        if(Math.abs(ConvertTomm(GetAvarageEncoderValue())) <= Math.abs(mm))  {
+        if(Math.abs(GetAvarageEncoderValue()) <= Math.abs(mm))  {
             Power[0] = (power * direction);
             Power[1] = (power * direction);
             Power[2] = (power * direction);

@@ -27,52 +27,60 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.OpMode;
+package org.firstinspires.ftc.teamcode.Testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
-import org.firstinspires.ftc.teamcode.common.BaconOpMode;
 
 /**
-<<<<<<< HEAD
- * Main TeleOp Class
- * This is TeleOp references other classes related to TeleOp.
-=======
- * Crater Teleop Class
->>>>>>> autonomous
+ * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
+ * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
+ * of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
+ * class is instantiated on the Robot Controller and executed.
+ *
+ * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
+ * It includes all the skeletal structure that all linear OpModes contain.
+ *
+ * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
+ * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp
-public class BaCoNTeleOp extends BaconOpMode {
+@TeleOp(name="LiftTest", group="Linear Opmode")
+public class Lift_Test extends LinearOpMode {
 
     // Declare OpMode members.
-    public ElapsedTime runtime = new ElapsedTime();
-    public RoverRucusConfiguration config;
-    public Drive drive;
-    public Lift lift;
-    public ArmLift armLift;
+    private ElapsedTime runtime = new ElapsedTime();
+
+    DcMotor PrimLiftMotor = null;
+    DcMotor SecLiftMotor = null;
 
     @Override
-    protected void onInit(){
-        config = RoverRucusConfiguration.newConfig(hardwareMap, telemetry);
-        drive = new Drive(this, config);
-        lift = new Lift(this, config);
-        armLift = new ArmLift(this, config);
+    public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-    }
 
-    @Override
-    protected void activeLoop(){
-        drive.updateDrive();
-        lift.updateLift();
-        armLift.updateArmLift();
-        telemetry.addData("Status", "Run Time: " + runtime.toString());
-        telemetry.update();
-    }
+        PrimLiftMotor = hardwareMap.get(DcMotor.class,"PrimLift");
+        SecLiftMotor = hardwareMap.get(DcMotor.class,"SecLift");
 
+        // Wait for the game to start (driver presses PLAY)
+        waitForStart();
+        runtime.reset();
+
+        // run until the end of the match (driver presses STOP)
+        while (opModeIsActive()) {
+
+            // Setup a variable for each drive wheel to save power level for telemetry
+            PrimLiftMotor.setPower(gamepad1.left_stick_y);
+            SecLiftMotor.setPower(gamepad1.right_stick_y);
+            
+            telemetry.update();
+        }
+    }
 }

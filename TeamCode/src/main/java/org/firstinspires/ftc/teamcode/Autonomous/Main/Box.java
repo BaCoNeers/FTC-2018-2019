@@ -30,21 +30,13 @@
 package org.firstinspires.ftc.teamcode.Autonomous.Main;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Autonomous.Drive.CoordinateDrive;
-import org.firstinspires.ftc.teamcode.Autonomous.Drive.Coordinates;
+import org.firstinspires.ftc.teamcode.Autonomous.Drive.AutoDrive;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.Task;
-import org.firstinspires.ftc.teamcode.Autonomous.Path_Finder.PathFinder;
-import org.firstinspires.ftc.teamcode.Configuration.Configuration;
+import org.firstinspires.ftc.teamcode.Autonomous.ObjectIdentification.TensorFlowCubeDetection;
+import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
 
 import java.util.ArrayList;
 
@@ -62,45 +54,27 @@ import java.util.ArrayList;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Auto", group="SimonsPlayGround")
-public class Main extends OpMode {
+@Autonomous(name="BoxAuto", group="SimonsPlayGround")
+public class Box extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    public DcMotor FrontLeft = null;
-    public DcMotor FrontRight = null;
-    public DcMotor BackLeft = null;
-    public DcMotor BackRight = null;
 
+
+    RoverRucusConfiguration config;
     //Task management
     private ArrayList<Task> Tasks = new ArrayList<Task>();
-    private boolean completed = false;
 
-    private PathFinder path;
-    private CoordinateDrive Drive;
+    private AutoDrive Drive;
+
+    private TensorFlowCubeDetection tensorFlow = new TensorFlowCubeDetection();
+    Boolean TensorFlowTest = false;
 
     @Override
     public void init() {
-        FrontLeft  = hardwareMap.get(DcMotor.class, "FrontLeft");
-        FrontRight = hardwareMap.get(DcMotor.class, "FrontRight");
-        BackLeft = hardwareMap.get(DcMotor.class,"BackLeft");
-        BackRight = hardwareMap.get(DcMotor.class,"BackRight");
+        config = RoverRucusConfiguration.newConfig(hardwareMap,telemetry);
 
-        FrontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        FrontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        BackLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        BackRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        FrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        FrontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        BackLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        BackRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        FrontLeft.setDirection(DcMotor.Direction.REVERSE);
-        FrontRight.setDirection(DcMotor.Direction.FORWARD);
-        BackLeft.setDirection(DcMotor.Direction.REVERSE);
-        BackRight.setDirection(DcMotor.Direction.FORWARD);
-
-        Drive = new CoordinateDrive(FrontLeft,FrontRight,BackLeft,BackRight,telemetry);
+        Drive = new AutoDrive(config);
+        tensorFlow.Int(telemetry,hardwareMap);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -119,14 +93,49 @@ public class Main extends OpMode {
     @Override
     public void start() {
         runtime.reset();
-        Tasks.add(new Task(-90,0.5f,"Turning"));
-        Tasks.add(new Task(-400,0.5f,"Forward"));
+
+        //Context Forward Turning Strafing
+        tensorFlow.start();
+        Tasks.add(new Task(tensorFlow));
+        Tasks.add(new Task(600,0.3f,"Forward"));
+        Tasks.add(new Task(-300,0.4f,"Strafing"));
+        Tasks.add(new Task(100,0.3f,"Strafing"));
+        Tasks.add(new Task(1700,0.5f,"Forward"));
+        Tasks.add(new Task(-200,0.4f,"Strafing"));
+        Tasks.add(new Task(200,0.3f,"Forward"));
     }
 
 
     @Override
     public void loop() {
         Drive.Update(Tasks);
+
+        if(Drive.BoxCheck){
+            switch (Drive.BoxPosition){
+                case 1:
+                    Tasks.add(1,new Task(-380, 0.3f, "Strafing"));
+                    Tasks.add(2,new Task(700,0.3f,"Forward"));
+                    Tasks.add(3,new Task(45,0.3f,"Turning"));
+                    Tasks.add(4,new Task(580,0.3f,"Forward"));
+                    Tasks.add(5,new Task(90,0.3f,"Turning"));
+                    Drive.BoxCheck = false;
+                    break;
+                case 2:
+                    Tasks.add(1,new Task(1300,0.3f,"Forward"));
+                    Tasks.add(2,new Task(135,0.3f,"Turning"));
+                    Drive.BoxCheck = false;
+                    break;
+                case 3:
+                    Tasks.add(1,new Task(380, 0.3f, "Strafing"));
+                    Tasks.add(2,new Task(700,0.3f,"Forward"));
+                    Tasks.add(3,new Task(-45,0.3f,"Turning"));
+                    Tasks.add(4,new Task(500,0.3f,"Forward"));
+                    Tasks.add(5,new Task(180,0.3f,"Turning"));
+                    Drive.BoxCheck = false;
+                    break;
+            }
+        }
+
         telemetry.update();
     }
 

@@ -37,8 +37,12 @@ import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
 import org.firstinspires.ftc.teamcode.common.BaconOpMode;
 
 /**
+<<<<<<< HEAD:TeamCode/src/main/java/org/firstinspires/ftc/teamcode/OpMode/BaCoNTeleOpObot.java
  * Main Teleop Class
  * This teleop is for Obot that does not have a lift or armlift
+=======
+ * Crater Teleop Class
+>>>>>>> autonomous:TeamCode/src/main/java/org/firstinspires/ftc/teamcode/OpMode/BaCoNTeleOpSecond.java
  */
 
 @TeleOp
