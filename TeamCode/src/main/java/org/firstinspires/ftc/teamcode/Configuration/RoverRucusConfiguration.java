@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Configuration;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -25,6 +26,7 @@ public class RoverRucusConfiguration extends RobotConfiguration {
     public DcMotor arm_lift_motor = null;
     public CRServo prim_box_arm_servo = null;
     public CRServo sec_box_arm_servo = null;
+    public AnalogInput arm_potentiometer = null;
 
     /**
      * Assign your class instance variables to the saved device names in the hardware map
@@ -68,12 +70,12 @@ public class RoverRucusConfiguration extends RobotConfiguration {
 
         arm_lift_motor  = hardwareMap.get(DcMotor.class, "arm_lift_motor");
         prim_box_arm_servo = hardwareMap.get(CRServo.class, "prim_box_arm_servo");
-        sec_box_arm_servo = hardwareMap.get (CRServo.class, "sec_box_arm_servo");
+        sec_box_arm_servo = hardwareMap.get(CRServo.class, "sec_box_arm_servo");
 
 
         arm_lift_motor.setDirection(DcMotor.Direction.FORWARD);
 
-
+        arm_potentiometer = hardwareMap.get(AnalogInput.class, "armPotentiometer");
 
         telemetry.addData("Initialized","True");
         telemetry.update();
