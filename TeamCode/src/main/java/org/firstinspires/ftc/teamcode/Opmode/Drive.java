@@ -25,11 +25,8 @@ public class Drive {
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-
-
-
-
     }
+
     public void updateDrive(){
         // Setup a variable for each drive wheel to save power level for telemetry
         double front_left_power;
