@@ -73,7 +73,7 @@ public class BoxDuo extends OpMode {
     public void init() {
         config = RoverRucusConfiguration.newConfig(hardwareMap,telemetry);
 
-        Drive = new AutoDrive(hardwareMap,telemetry);
+        Drive = new AutoDrive(config);
         tensorFlow.Int(telemetry,hardwareMap);
 
         telemetry.addData("Status", "Initialized");

@@ -1,25 +1,13 @@
 package org.firstinspires.ftc.teamcode.Autonomous.Drive;
 
-import android.graphics.Path;
-
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Autonomous.ObjectIdentification.TensorFlowCubeDetection;
-import org.firstinspires.ftc.teamcode.Configuration.Configuration;
+import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
 
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -33,80 +21,43 @@ public class AutoDrive {
     private float[] Encoders = new float[4];
     private float[] MotorPower = new float[4];
 
-    private BNO055IMU imu = null;
-
-    DigitalChannel PrimLimitSwitch = null;
-    DigitalChannel SecLimitSwitch = null;
-    DcMotor PrimLiftMotor = null;
-    DcMotor SecLiftMotor = null;
-
-    boolean PrimLiftState = true;
-    boolean SecLiftState = false;
-    boolean PrevPrimState = false;
-    boolean PrevSecState = false;
-
     private static float Encoder = 1120f;
     private static float RobotCirumfrance = 1957.39f;
     private static float RobotOneDeg = RobotCirumfrance / 360f;
     private static float WheelCirumfrance = 320;
     private static float WheelCount = WheelCirumfrance / Encoder;
 
+
+    //Mineral Varables
     public boolean BoxCheck = false;
     public int BoxPosition = 2;
+
+    //Lift Varables
+    enum LiftState {LiftBottom,LiftMiddle,LiftTop};
+    LiftState PrimliftState = LiftState.LiftBottom;
+    LiftState SecliftState = LiftState.LiftBottom;
+
+    boolean PrevPrimState = false;
+    long PrevPrimStateTime = 0;
+    boolean PrevSecState = false;
+    long PrevSecStateTime = 0;
 
     //initialization
     boolean RotateInit = false;
 
     private Telemetry tel;
 
-    public AutoDrive(DcMotor FLM, DcMotor FRM, DcMotor BLM, DcMotor BRM, Telemetry tel, BNO055IMU imu2) {
-        Motors[0] = FLM;
-        Motors[1] = FRM;
-        Motors[2] = BLM;
-        Motors[3] = BRM;
-        imu = imu2;
+    RoverRucusConfiguration config;
+
+    public AutoDrive(RoverRucusConfiguration config) {
+        this.config = config;
+        Motors[0] = this.config.front_left_motor;
+        Motors[1] = this.config.front_right_motor;
+        Motors[2] = this.config.rear_left_motor;
+        Motors[3] = this.config.rear_right_motor;
         this.tel = tel;
     }
 
-    public AutoDrive(HardwareMap hardwaremap , Telemetry tel){
-        this.tel = tel;
-        Motors[0]  = hardwaremap.get(DcMotor.class, "front_left_drive");
-        Motors[1] = hardwaremap.get(DcMotor.class, "front_right_drive");
-        Motors[2] = hardwaremap.get(DcMotor.class,"rear_left_drive");
-        Motors[3] = hardwaremap.get(DcMotor.class,"rear_right_drive");
-
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-//        parameters.loggingEnabled = true;
-        parameters.loggingTag = "IMU";
-        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
-
-        imu = hardwaremap.get(BNO055IMU.class, "imu");
-        imu.initialize(parameters);
-
-        Motors[0].setDirection(DcMotor.Direction.FORWARD);
-        Motors[1].setDirection(DcMotor.Direction.REVERSE);
-        Motors[2].setDirection(DcMotor.Direction.FORWARD);
-        Motors[3].setDirection(DcMotor.Direction.REVERSE);
-
-        Motors[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Motors[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Motors[2].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        Motors[3].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        Motors[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        Motors[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        Motors[2].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        Motors[3].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-
-        PrimLimitSwitch = hardwaremap.get(DigitalChannel.class,"PrimLimitSwitch");
-        SecLimitSwitch = hardwaremap.get(DigitalChannel.class,"SecLimitSwitch");
-        PrimLiftMotor  = hardwaremap.get(DcMotor.class, "prim_lift_motor");
-        SecLiftMotor = hardwaremap.get(DcMotor.class, "sec_lift_motor");
-    }
 
     public void Update(ArrayList<Task> tasks) {
         UpdateTelemetry();
@@ -122,7 +73,7 @@ public class AutoDrive {
                         }
                         break;
                     case "Turning":
-                        InitRotate(tasks.get(0).Value);
+                        //InitRotate(tasks.get(0).Value);
                         if (Rotate(tasks.get(0).Value,tasks.get(0).Power)){
                             tasks.remove(0);
                             RotateInit = false;
@@ -135,7 +86,7 @@ public class AutoDrive {
                             return;
                         }
                         break;
-                    case "sleep":
+                    case "Sleep":
                         if (sleep(tasks.get(0).disiredTime)) {
                             tasks.remove(0);
                             return;
@@ -149,6 +100,12 @@ public class AutoDrive {
                         break;
                     case "Lift":
                         if(Lift(tasks.get(0).LiftState,tasks.get(0).Power )){
+                            tasks.remove(0);
+                            return;
+                        }
+                        break;
+                    case "SetPosition":
+                        if(SetPosition(tasks.get(0).disiredTime)){
                             tasks.remove(0);
                             return;
                         }
@@ -169,7 +126,7 @@ public class AutoDrive {
     private float offset = 0;
     private float targetangle = 0;
     private boolean turnDirection = true;
-
+/*
     public void InitRotate(float degrestoturn) {
         if (!RotateInit) {
             //Put Init
@@ -190,7 +147,7 @@ public class AutoDrive {
         }
 
     }
-
+*/
     public boolean Rotate(float Angle, float Power) {
         int direction = 1;
         if(Angle<0){
@@ -212,7 +169,7 @@ public class AutoDrive {
             return true;
         }
     }
-
+/*
     //turning function
     public boolean turn() {
         tel.addLine("turning....");
@@ -275,7 +232,7 @@ public class AutoDrive {
         }
         return false;
     }
-
+*/
     public boolean Forward(float Distance, float Power) {
         tel.addLine("Forward Running....");
         int direction = 1;
@@ -321,10 +278,29 @@ public class AutoDrive {
         }
     }
 
+
     private boolean sleep(float disiredTime) {
-        if (System.currentTimeMillis() / 1000 < disiredTime) {
+        if (System.nanoTime() < disiredTime) {
             tel.addLine("Sleeping....");
             return false;
+        }
+        return true;
+    }
+
+    private boolean SetPosition(float disiredTime) {
+        if (System.nanoTime() < disiredTime) {
+            config.prim_box_arm_servo.setPower(-0.3f);
+            config.sec_box_arm_servo.setPower(0.3f);
+            config.PrimHavServo.setPower(0.3f);
+            config.SecHavServo.setPower(-0.3f);
+            tel.addLine("Setting Position.....");
+            return false;
+        }
+        else{
+            config.prim_box_arm_servo.setPower(0);
+            config.sec_box_arm_servo.setPower(0);
+            config.PrimHavServo.setPower(0);
+            config.SecHavServo.setPower(0);
         }
         return true;
     }
@@ -343,56 +319,157 @@ public class AutoDrive {
         return false;
     }
 
-    private boolean Lift(boolean state, float Power){
-        if(state){
-            if(PrimLiftState && SecLiftState && !PrimLimitSwitch.getState() && !SecLimitSwitch.getState()){
-                PrimLiftMotor.setPower(0);
-                SecLiftMotor.setPower(0);
-                return true;
-            }
-            else {
-                if(PrimLimitSwitch.getState() || !PrimLiftState){
-                    PrimLiftMotor.setPower(-Power);
-                    if(PrimLimitSwitch.getState() != PrevPrimState){
-                        PrimLiftState=!PrimLiftState;
-                    }
-                    PrevPrimState = PrimLimitSwitch.getState();
-                }
-                if(SecLimitSwitch.getState() || !SecLiftState){
-                    SecLiftMotor.setPower(Power);
-                    if (SecLimitSwitch.getState() !=PrevSecState) {
-                        SecLiftState = !SecLiftState;
-                    }
-                    PrevSecState = SecLimitSwitch.getState();
-                }
-            }
+
+    private boolean Lift(Boolean state, float Power){
+        long CurrentTime = System.nanoTime();
+
+        boolean PrimTimeElapsed = (PrevPrimStateTime + 200000000) > CurrentTime;
+        boolean SecTImeElapsed = (PrevSecStateTime + 200000000) > CurrentTime;
+
+        if(state && PrimliftState.equals(LiftState.LiftTop)){
+            config.prim_lift_motor.setPower(0);
+            return true;
         }
-        else{
-            if(!PrimLiftState && !SecLiftState && !PrimLimitSwitch.getState() && !SecLimitSwitch.getState()){
-                PrimLiftMotor.setPower(0);
-                SecLiftMotor.setPower(0);
-                return true;
-            }
-            else {
-                if(PrimLimitSwitch.getState() || PrimLiftState){
-                    PrimLiftMotor.setPower(Power);
-                    if(PrimLimitSwitch.getState() != PrevPrimState){
-                        PrimLiftState=!PrimLiftState;
+        if(!state && PrimliftState.equals(LiftState.LiftBottom)){
+            config.prim_lift_motor.setPower(0);
+            return true;
+        }
+
+        boolean PrimStateLowToHigh = PrimTimeElapsed && !PrevPrimState && config.PrimLimitSwitch.getState();
+        boolean PrimStateHighToLow = PrimTimeElapsed && PrevPrimState && !config.PrimLimitSwitch.getState();
+
+        boolean SecStateLowToHigh = SecTImeElapsed && !PrevSecState && config.SecLimitSwitch.getState();
+        boolean SecStateHighToLow = SecTImeElapsed && PrevSecState && !config.SecLimitSwitch.getState();
+
+        if(PrimTimeElapsed) {
+            PrevPrimState = config.PrimLimitSwitch.getState();
+            PrevPrimStateTime = CurrentTime;
+        }
+        if(SecTImeElapsed){
+            PrevSecState = config.SecLimitSwitch.getState();
+            PrevSecStateTime = CurrentTime;
+        }
+
+
+        if (state) {
+            // Going up to top
+            switch (PrimliftState) {
+                case LiftBottom:
+                    config.prim_lift_motor.setPower(-Power);
+                    if (PrimStateLowToHigh) {
+                        PrimliftState = LiftState.LiftMiddle;
                     }
-                    PrevPrimState = PrimLimitSwitch.getState();
-                }
-                if(SecLimitSwitch.getState() || SecLiftState){
-                    SecLiftMotor.setPower(-Power);
-                    if (SecLimitSwitch.getState() !=PrevSecState) {
-                        SecLiftState = !SecLiftState;
-                    }  
-                    PrevSecState = PrevSecState;
-                }
+                    break;
+                case LiftMiddle:
+                    config.prim_lift_motor.setPower(-Power);
+                    if (PrimStateHighToLow) {
+                        PrimliftState = LiftState.LiftTop;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            switch (SecliftState){
+                case LiftBottom:
+                    config.sec_lift_motor.setPower(Power);
+                    if (SecStateLowToHigh) {
+                        SecliftState = LiftState.LiftMiddle;
+                    }
+                    break;
+                case LiftMiddle:
+                    config.prim_lift_motor.setPower(Power);
+                    if (SecStateHighToLow) {
+                        SecliftState = LiftState.LiftTop;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            //Going Down
+            switch (PrimliftState){
+                case LiftTop:
+                    config.prim_lift_motor.setPower(Power);
+                    if(PrimStateLowToHigh){
+                        PrimliftState = LiftState.LiftMiddle;
+                    }
+                    break;
+                case LiftMiddle:
+                    config.prim_lift_motor.setPower(Power);
+                    if(PrimStateHighToLow){
+                        PrimliftState = LiftState.LiftBottom;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            switch (SecliftState){
+                case LiftTop:
+                    config.sec_lift_motor.setPower(-Power);
+                    if (SecStateLowToHigh) {
+                        SecliftState = LiftState.LiftMiddle;
+                    }
+                    break;
+                case LiftMiddle:
+                    config.prim_lift_motor.setPower(-Power);
+                    if (SecStateHighToLow) {
+                        SecliftState = LiftState.LiftBottom;
+                    }
+                    break;
+                default:
+                    break;
             }
         }
         return false;
     }
 
+/*
+    private boolean Lift(boolean state, float Power){
+        float CurrentTime = System.nanoTime();
+        if(config.PrimLimitSwitch.getState() != PrevPrimState){
+
+        }
+        boolean PrimSwitch = config.PrimLimitSwitch.getState();
+        boolean SecSwitch = config.SecLimitSwitch.getState();
+        if(state){
+            if(LiftState && SecLiftState && !config.PrimLimitSwitch.getState() && !config.SecLimitSwitch.getState()){
+                config.prim_lift_motor.setPower(0);
+                config.sec_lift_motor.setPower(0);
+                return true;
+            }
+            else {
+                if(PrimSwitch || PrimliftState.equals(LiftState.LiftBottom)){
+                    tel.addLine("PrimSwitch: "+ config.PrimLimitSwitch.getState()+" PrimLiftMotor: "+config.prim_lift_motor.getPower());
+                    config.prim_lift_motor.setPower(-Power);
+                    if(config.PrimLimitSwitch.getState() != PrevPrimState && PrimLastChange+(200000000)<CurrentTime) {
+                        if (PrimliftState.equals(LiftState.LiftBottom)) {
+                            PrimliftState = LiftState.LiftMiddle;
+                        }
+                        if (PrimliftState.equals(LiftState.LiftMiddle)) {
+                            PrimliftState = LiftState.LiftTop;
+                        }
+                        PrimLastChange = CurrentTime;
+                    }
+                    PrevPrimState = config.PrimLimitSwitch.getState();
+                }
+                else {
+                    config.prim_lift_motor.setPower(0);
+                }
+                if(config.SecLimitSwitch.getState() || SecliftState.equals(LiftState.LiftTop)){
+                    tel.addLine("SecSwitch: "+config.SecLimitSwitch.getState()+" SecLiftMotor: "+config.sec_lift_motor.getPower());
+                    config.sec_lift_motor.setPower(Power);
+                    if (config.SecLimitSwitch.getState() !=PrevSecState) {
+                        SecliftState = LiftState.LiftMiddle;
+                    }
+                    PrevSecState = config.SecLimitSwitch.getState();
+                }
+                else {
+                    config.sec_lift_motor.setPower(0);
+                }
+            }
+        }
+    }
+*/
     public void ForwardScale(float Distance) {
         float value = Math.abs(ConvertToMM(GetAvarage())) / Math.abs(Distance);
         value = 1 - value;

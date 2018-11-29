@@ -35,12 +35,12 @@ public class Task {
         this.Value = 0;
         this.disiredTime = 0;
     }
-    public Task(float sleep){
-        this.Context = "sleep";
+    public Task(float sleep,String Context){
+        this.Context = Context;
         this.Power = 0;
         this.Value = 0;
         this.LiftState = false;
-        disiredTime = (System.currentTimeMillis()/1000)+(long)sleep;
+        disiredTime = System.nanoTime()+((long)sleep*1000000000);
     }
     public Task(TensorFlowCubeDetection tensorFlow){
         this.Context = "CubeDetection";

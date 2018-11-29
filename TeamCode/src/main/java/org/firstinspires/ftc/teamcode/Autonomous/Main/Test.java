@@ -73,7 +73,7 @@ public class Test extends OpMode {
     public void init() {
         config = RoverRucusConfiguration.newConfig(hardwareMap,telemetry);
 
-        Drive = new AutoDrive(hardwareMap,telemetry);
+        Drive = new AutoDrive(config);
         tensorFlow.Int(telemetry,hardwareMap);
 
         telemetry.addData("Status", "Initialized");
@@ -106,6 +106,8 @@ public class Test extends OpMode {
         */
         Tasks.add(new Task(true,0.5f));
         Tasks.add(new Task(false, 0.5f));
+
+
     }
 
 
@@ -139,6 +141,8 @@ public class Test extends OpMode {
             }
         }
 
+
+        telemetry.addLine("Tasks: "+Tasks.size());
         telemetry.update();
     }
 
