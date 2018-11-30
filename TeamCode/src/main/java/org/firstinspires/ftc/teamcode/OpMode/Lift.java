@@ -1,11 +1,6 @@
 package org.firstinspires.ftc.teamcode.OpMode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.Range;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
 
@@ -23,13 +18,13 @@ public class Lift {
 
     //lift variables
     enum LiftState {LiftBottom,LiftMiddle,LiftTop};
-    LiftState PrimliftState = LiftState.LiftBottom;
-    LiftState SecliftState = LiftState.LiftBottom;
+    private LiftState PrimliftState = LiftState.LiftBottom;
+    private LiftState SecliftState = LiftState.LiftBottom;
 
-    boolean PrevPrimState = false;
-    long PrevPrimStateTime = 0;
-    boolean PrevSecState = false;
-    long PrevSecStateTime = 0;
+    private boolean PrevPrimState = false;
+    private long PrevPrimStateTime = 0;
+    private boolean PrevSecState = false;
+    private long PrevSecStateTime = 0;
 
 
     public Lift(OpMode opmodeIn, RoverRucusConfiguration configIn) {
@@ -67,12 +62,12 @@ public class Lift {
                     if (PrimStateLowToHigh) {
                         PrimliftState = LiftState.LiftMiddle;
                     }
-                    return -value;
+                    return value;
                 case LiftMiddle:
                     if (PrimStateHighToLow) {
                         PrimliftState = LiftState.LiftTop;
                     }
-                    return -value;
+                    return value;
                 case LiftTop:
                     return 0;
             }
@@ -93,62 +88,60 @@ public class Lift {
                     return 0;
             }
         }
-        return -value;
+        return value;
     }
 
     public double liftSec(double value) {
 
         long CurrentTime = System.nanoTime();
 
-        boolean PrimTimeElapsed = (PrevPrimStateTime + 200000000) < CurrentTime;
+        boolean SecTimeElapsed = (PrevSecStateTime + 200000000) < CurrentTime;
 
-        boolean PrimStateLowToHigh = PrimTimeElapsed && !PrevPrimState && config.PrimLimitSwitch.getState();
-        boolean PrimStateHighToLow = PrimTimeElapsed && PrevPrimState && !config.PrimLimitSwitch.getState();
+        boolean SecStateLowToHigh = SecTimeElapsed && !PrevSecState && config.SecLimitSwitch.getState();
+        boolean SecStateHighToLow = SecTimeElapsed && PrevSecState && !config.SecLimitSwitch.getState();
 
         boolean state = value > 0;
 
-
-
-        if(PrimStateHighToLow || PrimStateLowToHigh) {
-            PrevPrimState = config.PrimLimitSwitch.getState();
-            PrevPrimStateTime = CurrentTime;
+        if(SecStateHighToLow || SecStateLowToHigh) {
+            PrevSecState = config.SecLimitSwitch.getState();
+            PrevSecStateTime = CurrentTime;
         }
 
 
         if (state) {
             // Going up to top
-            switch (PrimliftState) {
+            switch (SecliftState) {
                 case LiftBottom:
-                    if (PrimStateLowToHigh) {
-                        PrimliftState = LiftState.LiftMiddle;
+                    if (SecStateLowToHigh) {
+                        SecliftState = LiftState.LiftMiddle;
                     }
-                    return -value;
+                    return value;
                 case LiftMiddle:
-                    if (PrimStateHighToLow) {
-                        PrimliftState = LiftState.LiftTop;
+                    if (SecStateHighToLow) {
+                        SecliftState = LiftState.LiftTop;
                     }
-                    return -value;
+                    return value;
                 case LiftTop:
                     return 0;
             }
         } else {
             //Going Down
-            switch (PrimliftState){
+            switch (SecliftState){
                 case LiftTop:
-                    if(PrimStateLowToHigh){
-                        PrimliftState = LiftState.LiftMiddle;
+                    if(SecStateLowToHigh){
+                        SecliftState = LiftState.LiftMiddle;
                     }
                     return value;
                 case LiftMiddle:
-                    if(PrimStateHighToLow){
-                        PrimliftState = LiftState.LiftBottom;
+                    if(SecStateHighToLow){
+                        SecliftState = LiftState.LiftBottom;
                     }
                     return value;
                 case LiftBottom:
                     return 0;
             }
         }
-        return -value;
+        return value;
     }
 
     public double rightBumper() {
@@ -177,11 +170,13 @@ public class Lift {
 
     public void updateLift(){
 
-        double right_trigger = opmode.gamepad1.right_trigger - rightBumper();
+        double right_trigger = opmode.gamepad1.right_trigger - opmode.gamepad1.left_trigger;
         double left_trigger = opmode.gamepad1.left_trigger - leftBumper();
 
-        config.prim_lift_motor.setPower(liftPrim(-right_trigger));
-        config.sec_lift_motor.setPower(liftSec(left_trigger));
+        config.prim_lift_motor.setPower(-liftPrim(right_trigger));
+        config.sec_lift_motor.setPower(liftSec(right_trigger));
+
+
 
     }
 }
