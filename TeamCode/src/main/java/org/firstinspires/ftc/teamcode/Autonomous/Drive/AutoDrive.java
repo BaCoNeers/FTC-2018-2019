@@ -324,7 +324,8 @@ public class AutoDrive {
 
     private boolean TensorFlow(TensorFlowCubeDetection tensorFlow, ArrayList<Task> tasks,
                                long time) {
-        if (System.currentTimeMillis() / 1000 > time) {
+        if (System.nanoTime() > time) {
+            BoxCheck = true;
             return true;
         } else {
             if (tensorFlow.GetCubePos() != 0) {
