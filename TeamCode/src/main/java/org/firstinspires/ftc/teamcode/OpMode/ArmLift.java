@@ -19,13 +19,15 @@ public class ArmLift {
     public boolean lastButtonState = false;
     public boolean state = false;
     private double motor_power;
+    private static double maximum_pos = 1.35;
+    private static double minimum_pos = 0.23;
 
     //public static final double MAX = 0.45;
     //public static final double STOP = 0.5;
     //public static final double MIN = -0.45;
 
-    // private boolean buttonState = false;
-   // private boolean lastButtonState = false;
+    //private boolean buttonState = false;
+    //private boolean lastButtonState = false;
 
 
 
@@ -65,7 +67,28 @@ public class ArmLift {
 
 
     // End of Bumper & X/Y Variables
+    public double armLiftClip(double value){
+        boolean state = value < 0;
 
+
+        if(config.ArmPotentiometer.getVoltage() > maximum_pos){
+            if(state){
+                return 0;
+            }
+            else{
+                return value;
+            }
+        }
+        else if(config.ArmPotentiometer.getVoltage() < minimum_pos) {
+            if(!state) {
+                return 0;
+            }
+            else{
+                return value;
+            }
+        }
+        return value;
+    }
 
     public void updateArmLift(){
 
@@ -74,10 +97,13 @@ public class ArmLift {
         double arm_servo_power = opmode.gamepad2.right_trigger - opmode.gamepad2.left_trigger;
 
 
-        config.arm_lift_motor.setPower(arm_lift_power);
+        config.arm_lift_motor.setPower(armLiftClip(arm_lift_power));
+
         config.prim_box_arm_servo.setPower(arm_servo_power);
         config.sec_box_arm_servo.setPower(-arm_servo_power);
 
+        //down 1.35
+        //up 0.8
 
     }
 }

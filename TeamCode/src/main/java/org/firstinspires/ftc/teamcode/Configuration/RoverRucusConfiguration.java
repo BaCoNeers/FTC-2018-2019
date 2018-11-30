@@ -102,7 +102,8 @@ public class RoverRucusConfiguration extends RobotConfiguration {
         telemetry.addData("Initialized","True");
         telemetry.update();
     }
-
+    //down 1.35
+    //up 0.8
 
     /**
      * Factory method for this class
