@@ -324,7 +324,7 @@ public class AutoDrive {
 
     private boolean TensorFlow(TensorFlowCubeDetection tensorFlow, ArrayList<Task> tasks,
                                long time) {
-        if (System.nanoTime() > time) {
+        if (System.nanoTime() < time) {
             BoxCheck = true;
             return true;
         } else {
