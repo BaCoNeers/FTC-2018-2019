@@ -44,10 +44,10 @@ public class Drive {
         rear_right_power = Range.clip(left_y + left_x - right_x, -1.0, 1.0);
 
         // Send calculated power to wheels
-        config.front_left_motor.setPower(front_left_power);
-        config.front_right_motor.setPower(front_right_power);
-        config.rear_left_motor.setPower(rear_left_power);
-        config.rear_right_motor.setPower(rear_right_power);
+        config.front_left_motor.setPower(-front_left_power);
+        config.front_right_motor.setPower(-front_right_power);
+        config.rear_left_motor.setPower(-rear_left_power);
+        config.rear_right_motor.setPower(-rear_right_power);
 
         // Show the elapsed game time and wheel power.
         opmode.telemetry.addData("Motors", "front left (%.2f), front right (%.2f)",
