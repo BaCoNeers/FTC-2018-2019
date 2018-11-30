@@ -47,7 +47,7 @@ public class Task {
         this.Power = 0;
         this.Value = 0;
         this.LiftState = false;
-        disiredTime = (System.currentTimeMillis()/1000) + 5;
+        disiredTime = System.nanoTime()+((long)3*1000000000);
         this.tensorFlow = tensorFlow;
     }
 
