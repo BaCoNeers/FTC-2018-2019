@@ -171,7 +171,6 @@ public class Lift {
     public void updateLift(){
 
         double right_trigger = opmode.gamepad1.right_trigger - opmode.gamepad1.left_trigger;
-        double left_trigger = opmode.gamepad1.left_trigger - leftBumper();
 
         config.prim_lift_motor.setPower(-liftPrim(right_trigger));
         config.sec_lift_motor.setPower(liftSec(right_trigger));
