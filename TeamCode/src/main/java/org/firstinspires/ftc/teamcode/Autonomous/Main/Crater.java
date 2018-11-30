@@ -99,6 +99,9 @@ public class Crater extends OpMode {
 
         //Context Forward Turning Strafing
         tensorFlow.start();
+        Tasks.add(new Task(true,1f));
+        Tasks.add(new Task(100f,0.3f,"Forward"));
+        Tasks.add(new Task(false,1f));
         Tasks.add(new Task(tensorFlow));
         Tasks.add(new Task(500,0.3f,"Forward"));
         //new direction

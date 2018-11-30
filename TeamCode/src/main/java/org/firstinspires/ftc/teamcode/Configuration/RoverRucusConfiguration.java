@@ -98,7 +98,7 @@ public class RoverRucusConfiguration extends RobotConfiguration {
 
         PrimHavServo = hardwareMap.get(CRServo.class,"PrimHavServo");
         SecHavServo = hardwareMap.get(CRServo.class,"SecHavServo");
-        
+
         MarkerDrop = hardwareMap.get(CRServo.class,"MarkDrop");
 
         ArmPotentiometer = hardwareMap.get(AnalogInput.class,"ArmPot");

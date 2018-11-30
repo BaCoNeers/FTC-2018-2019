@@ -96,8 +96,11 @@ public class BoxDuo extends OpMode {
 
         //Context Forward Turning Strafing
         tensorFlow.start();
+        Tasks.add(new Task(true,1f));
+        Tasks.add(new Task(100f,0.3f,"Forward"));
+        Tasks.add(new Task(false,1f));
         Tasks.add(new Task(tensorFlow));
-        Tasks.add(new Task(600,0.5f,"Forward"));
+        Tasks.add(new Task(500,0.5f,"Forward"));
         Tasks.add(new Task(-300,0.4f,"Strafing"));
         Tasks.add(new Task(100,0.3f,"Strafing"));
 
