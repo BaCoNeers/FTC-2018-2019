@@ -341,6 +341,9 @@ public class AutoDrive {
         if(state && PrimliftState.equals(LiftState.LiftTop) && SecliftState.equals(LiftState.LiftTop)) {
             return true;
         }
+        if(!state && PrimliftState.equals(LiftState.LiftBottom) && SecliftState.equals(LiftState.LiftBottom)) {
+            return true;
+        }
 
         boolean PrimStateLowToHigh = PrimTimeElapsed && !PrevPrimState && config.PrimLimitSwitch.getState();
         boolean PrimStateHighToLow = PrimTimeElapsed && PrevPrimState && !config.PrimLimitSwitch.getState();

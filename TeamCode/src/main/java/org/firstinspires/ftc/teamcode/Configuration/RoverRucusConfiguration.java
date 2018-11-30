@@ -37,9 +37,10 @@ public class RoverRucusConfiguration extends RobotConfiguration {
     public DigitalChannel PrimLimitSwitch = null;
     public DigitalChannel SecLimitSwitch = null;
 
-
     public CRServo PrimHavServo = null;
     public CRServo SecHavServo = null;
+
+    public CRServo MarkerDrop = null;
 
 
     /**
@@ -94,6 +95,8 @@ public class RoverRucusConfiguration extends RobotConfiguration {
 
         PrimHavServo = hardwareMap.get(CRServo.class,"PrimHavServo");
         SecHavServo = hardwareMap.get(CRServo.class,"SecHavServo");
+
+        MarkerDrop = hardwareMap.get(CRServo.class,"MarkDrop");
 
         telemetry.addData("Initialized","True");
         telemetry.update();
