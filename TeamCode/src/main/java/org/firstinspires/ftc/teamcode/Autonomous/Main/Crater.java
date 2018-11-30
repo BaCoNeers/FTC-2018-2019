@@ -111,6 +111,7 @@ public class Crater extends OpMode {
         //new direction
         Tasks.add(new Task(-45,0.3f,"Turning"));
         Tasks.add(new Task(800,0.4f,"Forward"));
+        Tasks.add(new Task(3f,"Marker"));
         Tasks.add(new Task(180,0.3f,"Turning"));
         Tasks.add(new Task(-200,0.4f,"Strafing"));
         Tasks.add(new Task(100,0.3f,"Strafing"));
@@ -134,6 +135,10 @@ public class Crater extends OpMode {
                     Drive.BoxCheck = false;
                     break;
                 case 2:
+                    Tasks.add(4,new Task(1200,0.3f,"Forward"));
+                    Drive.BoxCheck = false;
+                    break;
+                case 0:
                     Tasks.add(4,new Task(1200,0.3f,"Forward"));
                     Drive.BoxCheck = false;
                     break;

@@ -139,6 +139,11 @@ public class BoxDuo extends OpMode {
                     Tasks.add(2,new Task(270,0.3f,"Forward"));
                     Drive.BoxCheck = false;
                     break;
+                case 0:
+                    Tasks.add(1,new Task(1000,0.3f,"Forward"));
+                    Tasks.add(2,new Task(270,0.3f,"Forward"));
+                    Drive.BoxCheck = false;
+                    break;
                 case 3:
                     Tasks.add(1,new Task(380, 0.3f, "Strafing"));
                     Tasks.add(2,new Task(700,0.3f,"Forward"));

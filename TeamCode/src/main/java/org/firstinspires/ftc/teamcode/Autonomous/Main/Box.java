@@ -117,15 +117,24 @@ public class Box extends OpMode {
             switch (Drive.BoxPosition){
                 case 1:
                     Tasks.add(1,new Task(-380, 0.3f, "Strafing"));
+
                     Tasks.add(2,new Task(700,0.3f,"Forward"));
                     Tasks.add(3,new Task(45,0.3f,"Turning"));
                     Tasks.add(4,new Task(580,0.3f,"Forward"));
-                    Tasks.add(5,new Task(90,0.3f,"Turning"));
+                    Tasks.add(5,new Task(3f,"Marker"));
+                    Tasks.add(6,new Task(90,0.3f,"Turning"));
                     Drive.BoxCheck = false;
                     break;
                 case 2:
                     Tasks.add(1,new Task(1300,0.3f,"Forward"));
-                    Tasks.add(2,new Task(135,0.3f,"Turning"));
+                    Tasks.add(2,new Task(3f,"Marker"));
+                    Tasks.add(3,new Task(135,0.3f,"Turning"));
+                    Drive.BoxCheck = false;
+                    break;
+                case 0:
+                    Tasks.add(1,new Task(1300,0.3f,"Forward"));
+                    Tasks.add(2,new Task(3f,"Marker"));
+                    Tasks.add(3,new Task(135,0.3f,"Turning"));
                     Drive.BoxCheck = false;
                     break;
                 case 3:
@@ -133,7 +142,8 @@ public class Box extends OpMode {
                     Tasks.add(2,new Task(700,0.3f,"Forward"));
                     Tasks.add(3,new Task(-45,0.3f,"Turning"));
                     Tasks.add(4,new Task(500,0.3f,"Forward"));
-                    Tasks.add(5,new Task(180,0.3f,"Turning"));
+                    Tasks.add(5,new Task(3f,"Marker"));
+                    Tasks.add(6,new Task(180,0.3f,"Turning"));
                     Drive.BoxCheck = false;
                     break;
             }

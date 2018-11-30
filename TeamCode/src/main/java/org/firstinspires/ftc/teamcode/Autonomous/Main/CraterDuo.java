@@ -134,6 +134,10 @@ public class CraterDuo extends OpMode {
                     Drive.BoxCheck = false;
                     break;
                     //right
+                case 0:
+                    Tasks.add(4,new Task(1200,0.3f,"Forward"));
+                    Drive.BoxCheck = false;
+                    break;
                 case 3:
                     Tasks.add(1,new Task(340, 0.3f, "Strafing"));
                     Tasks.add(5,new Task(1000,0.3f,"Forward"));

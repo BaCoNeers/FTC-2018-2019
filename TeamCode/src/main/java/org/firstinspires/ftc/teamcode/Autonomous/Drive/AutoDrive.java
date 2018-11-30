@@ -110,6 +110,12 @@ public class AutoDrive {
                             return;
                         }
                         break;
+                    case "Marker":
+                        if(Marker(tasks.get(0).disiredTime)){
+                            tasks.remove(0);
+                            return;
+                        }
+                        break;
                 }
             } else {
                 tasks.remove(0);
@@ -303,6 +309,17 @@ public class AutoDrive {
             config.SecHavServo.setPower(0);
         }
         return true;
+    }
+
+    private boolean Marker(float disiredTime){
+        if(System.nanoTime() < disiredTime){
+            config.MarkerDrop.setPower(.3f);
+            return false;
+        }
+        else {
+            config.MarkerDrop.setPower(0);
+            return true;
+        }
     }
 
     private boolean TensorFlow(TensorFlowCubeDetection tensorFlow, ArrayList<Task> tasks,
