@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Configuration;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -37,10 +38,11 @@ public class RoverRucusConfiguration extends RobotConfiguration {
     public DigitalChannel PrimLimitSwitch = null;
     public DigitalChannel SecLimitSwitch = null;
 
-
     public CRServo PrimHavServo = null;
     public CRServo SecHavServo = null;
 
+
+    public AnalogInput ArmPotentiometer = null;
 
     /**
      * Assign your class instance variables to the saved device names in the hardware map
@@ -94,6 +96,8 @@ public class RoverRucusConfiguration extends RobotConfiguration {
 
         PrimHavServo = hardwareMap.get(CRServo.class,"PrimHavServo");
         SecHavServo = hardwareMap.get(CRServo.class,"SecHavServo");
+
+        ArmPotentiometer = hardwareMap.get(AnalogInput.class,"ArmPot");
 
         telemetry.addData("Initialized","True");
         telemetry.update();
