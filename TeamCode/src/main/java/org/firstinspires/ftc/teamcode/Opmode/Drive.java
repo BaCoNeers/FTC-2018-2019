@@ -34,7 +34,7 @@ public class Drive {
             //On state
 
 
-            return 0.5;
+            return 0.2;
         }
 
         else{
