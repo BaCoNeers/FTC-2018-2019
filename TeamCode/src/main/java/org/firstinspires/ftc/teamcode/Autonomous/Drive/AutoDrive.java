@@ -360,7 +360,6 @@ public class AutoDrive {
             PrevSecStateTime = CurrentTime;
         }
 
-
         if (state) {
             // Going up to top
             switch (PrimliftState) {

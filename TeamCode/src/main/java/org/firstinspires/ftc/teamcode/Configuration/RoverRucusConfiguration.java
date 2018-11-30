@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Configuration;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -42,6 +43,8 @@ public class RoverRucusConfiguration extends RobotConfiguration {
 
     public CRServo MarkerDrop = null;
 
+
+    public AnalogInput ArmPotentiometer = null;
 
     /**
      * Assign your class instance variables to the saved device names in the hardware map
@@ -96,12 +99,17 @@ public class RoverRucusConfiguration extends RobotConfiguration {
         PrimHavServo = hardwareMap.get(CRServo.class,"PrimHavServo");
         SecHavServo = hardwareMap.get(CRServo.class,"SecHavServo");
 
+<<<<<<< HEAD
         MarkerDrop = hardwareMap.get(CRServo.class,"MarkDrop");
+=======
+        ArmPotentiometer = hardwareMap.get(AnalogInput.class,"ArmPot");
+>>>>>>> d2e23fbce5fd808e6b9b5ff0574020b5c75efc16
 
         telemetry.addData("Initialized","True");
         telemetry.update();
     }
-
+    //down 1.35
+    //up 0.8
 
     /**
      * Factory method for this class

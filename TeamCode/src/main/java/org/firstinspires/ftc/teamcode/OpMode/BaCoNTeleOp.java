@@ -71,6 +71,7 @@ public class BaCoNTeleOp extends BaconOpMode {
         drive.updateDrive();
         lift.updateLift();
         armLift.updateArmLift();
+        telemetry.addLine("Pot: "+config.ArmPotentiometer.getVoltage());
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.update();
     }
