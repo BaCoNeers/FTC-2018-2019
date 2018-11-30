@@ -98,12 +98,10 @@ public class RoverRucusConfiguration extends RobotConfiguration {
 
         PrimHavServo = hardwareMap.get(CRServo.class,"PrimHavServo");
         SecHavServo = hardwareMap.get(CRServo.class,"SecHavServo");
-
-<<<<<<< HEAD
+        
         MarkerDrop = hardwareMap.get(CRServo.class,"MarkDrop");
-=======
+
         ArmPotentiometer = hardwareMap.get(AnalogInput.class,"ArmPot");
->>>>>>> d2e23fbce5fd808e6b9b5ff0574020b5c75efc16
 
         telemetry.addData("Initialized","True");
         telemetry.update();
