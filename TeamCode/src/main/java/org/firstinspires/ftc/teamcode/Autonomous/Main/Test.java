@@ -63,17 +63,14 @@ public class Test extends OpMode {
     RoverRucusConfiguration config;
     //Task management
     private ArrayList<Task> Tasks = new ArrayList<Task>();
-
     private AutoDrive Drive;
-
     private TensorFlowCubeDetection tensorFlow = new TensorFlowCubeDetection();
-    Boolean TensorFlowTest = false;
 
     @Override
     public void init() {
         config = RoverRucusConfiguration.newConfig(hardwareMap,telemetry);
 
-        Drive = new AutoDrive(config);
+        Drive = new AutoDrive(config,telemetry);
         tensorFlow.Int(telemetry,hardwareMap);
 
         telemetry.addData("Status", "Initialized");

@@ -49,7 +49,7 @@ public class AutoDrive {
 
     RoverRucusConfiguration config;
 
-    public AutoDrive(RoverRucusConfiguration config) {
+    public AutoDrive(RoverRucusConfiguration config,Telemetry tel) {
         this.config = config;
         Motors[0] = this.config.front_left_motor;
         Motors[1] = this.config.front_right_motor;
@@ -323,15 +323,22 @@ public class AutoDrive {
     private boolean Lift(Boolean state, float Power){
         long CurrentTime = System.nanoTime();
 
-        boolean PrimTimeElapsed = (PrevPrimStateTime + 200000000) > CurrentTime;
-        boolean SecTImeElapsed = (PrevSecStateTime + 200000000) > CurrentTime;
+        boolean PrimTimeElapsed = (PrevPrimStateTime + 200000000) < CurrentTime;
+        boolean SecTImeElapsed = (PrevSecStateTime + 200000000) < CurrentTime;
 
         if(state && PrimliftState.equals(LiftState.LiftTop)){
             config.prim_lift_motor.setPower(0);
-            return true;
+        }
+        if(state && SecliftState.equals(LiftState.LiftTop)){
+            config.sec_lift_motor.setPower(0);
         }
         if(!state && PrimliftState.equals(LiftState.LiftBottom)){
             config.prim_lift_motor.setPower(0);
+        }
+        if(!state && SecliftState.equals(LiftState.LiftBottom)){
+            config.sec_lift_motor.setPower(0);
+        }
+        if(state && PrimliftState.equals(LiftState.LiftTop) && SecliftState.equals(LiftState.LiftTop)) {
             return true;
         }
 
@@ -341,11 +348,11 @@ public class AutoDrive {
         boolean SecStateLowToHigh = SecTImeElapsed && !PrevSecState && config.SecLimitSwitch.getState();
         boolean SecStateHighToLow = SecTImeElapsed && PrevSecState && !config.SecLimitSwitch.getState();
 
-        if(PrimTimeElapsed) {
+        if(PrimStateHighToLow || PrimStateLowToHigh) {
             PrevPrimState = config.PrimLimitSwitch.getState();
             PrevPrimStateTime = CurrentTime;
         }
-        if(SecTImeElapsed){
+        if(SecStateHighToLow || SecStateLowToHigh){
             PrevSecState = config.SecLimitSwitch.getState();
             PrevSecStateTime = CurrentTime;
         }
@@ -377,7 +384,7 @@ public class AutoDrive {
                     }
                     break;
                 case LiftMiddle:
-                    config.prim_lift_motor.setPower(Power);
+                    config.sec_lift_motor.setPower(Power);
                     if (SecStateHighToLow) {
                         SecliftState = LiftState.LiftTop;
                     }
@@ -411,7 +418,7 @@ public class AutoDrive {
                     }
                     break;
                 case LiftMiddle:
-                    config.prim_lift_motor.setPower(-Power);
+                    config.sec_lift_motor.setPower(-Power);
                     if (SecStateHighToLow) {
                         SecliftState = LiftState.LiftBottom;
                     }
