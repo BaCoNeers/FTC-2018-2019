@@ -109,8 +109,8 @@ public class ArmLift {
 
         config.arm_lift_motor.setPower(armLiftClip(arm_lift_power));
 
-        config.prim_box_arm_servo.setPower(arm_servo_power);
-        config.sec_box_arm_servo.setPower(-arm_servo_power);
+        config.prim_box_arm_servo.setPower(arm_servo_power*0.5);
+        config.sec_box_arm_servo.setPower(-arm_servo_power*0.5);
 
         //down 1.35
         //up 0.8
