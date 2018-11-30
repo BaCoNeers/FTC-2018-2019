@@ -20,6 +20,16 @@ public class ArmLift {
     public boolean state = false;
     private double motor_power;
 
+    //lift variables
+    enum LiftState {LiftBottom,LiftMiddle,LiftTop};
+    LiftState PrimliftState = LiftState.LiftBottom;
+    LiftState SecliftState = LiftState.LiftBottom;
+
+    boolean PrevPrimState = false;
+    long PrevPrimStateTime = 0;
+    boolean PrevSecState = false;
+    long PrevSecStateTime = 0;
+
     //public static final double MAX = 0.45;
     //public static final double STOP = 0.5;
     //public static final double MIN = -0.45;

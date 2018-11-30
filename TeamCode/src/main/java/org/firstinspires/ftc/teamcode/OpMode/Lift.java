@@ -21,6 +21,16 @@ public class Lift {
     private OpMode opmode = null;
     private RoverRucusConfiguration config = null;
 
+    //lift variables
+    enum LiftState {LiftBottom,LiftMiddle,LiftTop};
+    LiftState PrimliftState = LiftState.LiftBottom;
+    LiftState SecliftState = LiftState.LiftBottom;
+
+    boolean PrevPrimState = false;
+    long PrevPrimStateTime = 0;
+    boolean PrevSecState = false;
+    long PrevSecStateTime = 0;
+
 
     public Lift(OpMode opmodeIn, RoverRucusConfiguration configIn) {
         super();
@@ -30,6 +40,116 @@ public class Lift {
 
     //Bumper Variables
 
+
+    public double liftPrim(double value) {
+
+        long CurrentTime = System.nanoTime();
+
+        boolean PrimTimeElapsed = (PrevPrimStateTime + 200000000) < CurrentTime;
+
+        boolean PrimStateLowToHigh = PrimTimeElapsed && !PrevPrimState && config.PrimLimitSwitch.getState();
+        boolean PrimStateHighToLow = PrimTimeElapsed && PrevPrimState && !config.PrimLimitSwitch.getState();
+
+        boolean state = value > 0;
+
+
+
+        if(PrimStateHighToLow || PrimStateLowToHigh) {
+            PrevPrimState = config.PrimLimitSwitch.getState();
+            PrevPrimStateTime = CurrentTime;
+        }
+
+
+        if (state) {
+            // Going up to top
+            switch (PrimliftState) {
+                case LiftBottom:
+                    if (PrimStateLowToHigh) {
+                        PrimliftState = LiftState.LiftMiddle;
+                    }
+                    return -value;
+                case LiftMiddle:
+                    if (PrimStateHighToLow) {
+                        PrimliftState = LiftState.LiftTop;
+                    }
+                    return -value;
+                case LiftTop:
+                    return 0;
+            }
+        } else {
+            //Going Down
+            switch (PrimliftState){
+                case LiftTop:
+                    if(PrimStateLowToHigh){
+                        PrimliftState = LiftState.LiftMiddle;
+                    }
+                    return value;
+                case LiftMiddle:
+                    if(PrimStateHighToLow){
+                        PrimliftState = LiftState.LiftBottom;
+                    }
+                    return value;
+                case LiftBottom:
+                    return 0;
+            }
+        }
+        return -value;
+    }
+
+    public double liftSec(double value) {
+
+        long CurrentTime = System.nanoTime();
+
+        boolean PrimTimeElapsed = (PrevPrimStateTime + 200000000) < CurrentTime;
+
+        boolean PrimStateLowToHigh = PrimTimeElapsed && !PrevPrimState && config.PrimLimitSwitch.getState();
+        boolean PrimStateHighToLow = PrimTimeElapsed && PrevPrimState && !config.PrimLimitSwitch.getState();
+
+        boolean state = value > 0;
+
+
+
+        if(PrimStateHighToLow || PrimStateLowToHigh) {
+            PrevPrimState = config.PrimLimitSwitch.getState();
+            PrevPrimStateTime = CurrentTime;
+        }
+
+
+        if (state) {
+            // Going up to top
+            switch (PrimliftState) {
+                case LiftBottom:
+                    if (PrimStateLowToHigh) {
+                        PrimliftState = LiftState.LiftMiddle;
+                    }
+                    return -value;
+                case LiftMiddle:
+                    if (PrimStateHighToLow) {
+                        PrimliftState = LiftState.LiftTop;
+                    }
+                    return -value;
+                case LiftTop:
+                    return 0;
+            }
+        } else {
+            //Going Down
+            switch (PrimliftState){
+                case LiftTop:
+                    if(PrimStateLowToHigh){
+                        PrimliftState = LiftState.LiftMiddle;
+                    }
+                    return value;
+                case LiftMiddle:
+                    if(PrimStateHighToLow){
+                        PrimliftState = LiftState.LiftBottom;
+                    }
+                    return value;
+                case LiftBottom:
+                    return 0;
+            }
+        }
+        return -value;
+    }
 
     public double rightBumper() {
         if (opmode.gamepad1.right_bumper) {
@@ -60,8 +180,8 @@ public class Lift {
         double right_trigger = opmode.gamepad1.right_trigger - rightBumper();
         double left_trigger = opmode.gamepad1.left_trigger - leftBumper();
 
-        config.prim_lift_motor.setPower(right_trigger);
-        config.sec_lift_motor.setPower(left_trigger);
+        config.prim_lift_motor.setPower(liftPrim(-right_trigger));
+        config.sec_lift_motor.setPower(liftSec(left_trigger));
 
     }
 }
