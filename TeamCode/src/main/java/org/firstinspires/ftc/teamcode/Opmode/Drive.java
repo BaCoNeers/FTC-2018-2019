@@ -14,6 +14,36 @@ public class Drive {
     // members:
     private OpMode opmode = null;
     private RoverRucusConfiguration config = null;
+    public boolean buttonState = false;
+    public boolean lastButtonState = false;
+    public boolean state = false;
+
+    public double Toggle() {
+        buttonState = opmode.gamepad1.y;
+        if (buttonState && !lastButtonState){
+            state = !state;
+
+        }
+
+        if (buttonState != lastButtonState){
+            lastButtonState = buttonState;
+
+        }
+
+        if (state){
+            //On state
+
+
+            return 0.5;
+        }
+
+        else{
+            //Off state
+
+            return 1.0;
+
+        }
+    }
 
 
     public Drive(OpMode opmodeIn, RoverRucusConfiguration configIn) {
@@ -44,10 +74,10 @@ public class Drive {
         rear_right_power = Range.clip(left_y + left_x - right_x, -1.0, 1.0);
 
         // Send calculated power to wheels
-        config.front_left_motor.setPower(-front_left_power);
-        config.front_right_motor.setPower(-front_right_power);
-        config.rear_left_motor.setPower(-rear_left_power);
-        config.rear_right_motor.setPower(-rear_right_power);
+        config.front_left_motor.setPower(-front_left_power*Toggle());
+        config.front_right_motor.setPower(-front_right_power*Toggle());
+        config.rear_left_motor.setPower(-rear_left_power*Toggle());
+        config.rear_right_motor.setPower(-rear_right_power*Toggle());
 
         // Show the elapsed game time and wheel power.
         opmode.telemetry.addData("Motors", "front left (%.2f), front right (%.2f)",
