@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
 
+import static com.sun.tools.doclint.Entity.or;
+
 /**
  * Created by Baconeers on 8/11/2018.
  */
@@ -17,34 +19,47 @@ public class Drive {
     public boolean buttonState = false;
     public boolean lastButtonState = false;
     public boolean state = false;
+    public boolean toggleFunction = false;
 
     public double Toggle() {
         buttonState = opmode.gamepad1.y;
-        if (buttonState && !lastButtonState){
+        if (buttonState && !lastButtonState) {
             state = !state;
-
         }
 
-        if (buttonState != lastButtonState){
+        if (buttonState != lastButtonState) {
             lastButtonState = buttonState;
-
         }
 
-        if (state){
+        if (state) {
             //On state
+            toggleFunction = true;
 
-
-            return 0.2;
         }
-
-        else{
+        else {
             //Off state
 
             return 1.0;
 
         }
-    }
 
+        if (toggleFunction) {
+
+            if (opmode.gamepad1.left_stick_x > 0.3) {
+                return 0.5;
+            }
+
+            if (opmode.gamepad1.left_stick_x < -0.3) {
+                return 0.5;
+            }
+
+            else {
+                return 0.2;
+            }
+
+        }
+     return 1.0;
+    }
 
     public Drive(OpMode opmodeIn, RoverRucusConfiguration configIn) {
         super();

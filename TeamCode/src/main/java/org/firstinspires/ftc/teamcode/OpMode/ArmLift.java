@@ -83,7 +83,7 @@ public class ArmLift {
 
         if(config.ArmPotentiometer.getVoltage() > maximum_pos){
             if(state){
-                return 0;
+                return 0.0;
             }
             else{
                 return value;
@@ -91,7 +91,7 @@ public class ArmLift {
         }
         else if(config.ArmPotentiometer.getVoltage() < minimum_pos) {
             if(!state) {
-                return 0;
+                return 0.0;
             }
             else{
                 return value;
@@ -111,9 +111,6 @@ public class ArmLift {
 
         config.prim_box_arm_servo.setPower(arm_servo_power*0.5);
         config.sec_box_arm_servo.setPower(-arm_servo_power*0.5);
-
-        //down 1.35
-        //up 0.8
 
     }
 }
