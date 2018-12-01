@@ -36,7 +36,7 @@ public class Lift {
     //Bumper Variables
 
 
-    public double liftPrim(double value) {
+    /* public double liftPrim(double value) {
 
         long CurrentTime = System.nanoTime();
 
@@ -143,6 +143,7 @@ public class Lift {
         }
         return value;
     }
+    */
 
     public double rightBumper() {
         if (opmode.gamepad1.right_bumper) {
@@ -170,10 +171,11 @@ public class Lift {
 
     public void updateLift(){
 
-        double right_trigger = opmode.gamepad1.right_trigger - opmode.gamepad1.left_trigger;
+        double right_control = -opmode.gamepad2.right_stick_y;
+        double left_control = - opmode.gamepad2.left_stick_y;
 
-        config.prim_lift_motor.setPower(-liftPrim(right_trigger));
-        config.sec_lift_motor.setPower(liftSec(right_trigger));
+        config.prim_lift_motor.setPower(left_control);
+        config.sec_lift_motor.setPower(right_control);
 
 
 
