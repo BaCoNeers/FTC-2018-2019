@@ -66,8 +66,8 @@ public class Lift_Test extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        PrimLiftMotor = hardwareMap.get(DcMotor.class,"PrimLift");
-        SecLiftMotor = hardwareMap.get(DcMotor.class,"SecLift");
+        PrimLiftMotor = hardwareMap.get(DcMotor.class,"PrimLiftMotor");
+        SecLiftMotor = hardwareMap.get(DcMotor.class,"SecLiftMotor");
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();

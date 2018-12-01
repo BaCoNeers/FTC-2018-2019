@@ -111,7 +111,7 @@ public class AutoDrive {
                         }
                         break;
                     case "Marker":
-                        if(Marker(tasks.get(0).disiredTime)){
+                        if(Marker(tasks.get(0).Value)){
                             tasks.remove(0);
                             return;
                         }
@@ -311,8 +311,18 @@ public class AutoDrive {
         return true;
     }
 
-    private boolean Marker(float disiredTime){
-        if(System.nanoTime() < disiredTime){
+
+    boolean start = true;
+    float count;
+    private boolean Marker(float value){
+        if(start){
+            count = value;
+            start = false;
+        }
+        else {
+            count -= 1;
+        }
+        if(count>0){
             config.MarkerDrop.setPower(.3f);
             return false;
         }
@@ -324,7 +334,7 @@ public class AutoDrive {
 
     private boolean TensorFlow(TensorFlowCubeDetection tensorFlow, ArrayList<Task> tasks,
                                long time) {
-        if (System.nanoTime() > time) {
+        if (System.nanoTime() < time) {
             BoxCheck = true;
             return true;
         } else {
@@ -450,53 +460,6 @@ public class AutoDrive {
         return false;
     }
 
-/*
-    private boolean Lift(boolean state, float Power){
-        float CurrentTime = System.nanoTime();
-        if(config.PrimLimitSwitch.getState() != PrevPrimState){
-
-        }
-        boolean PrimSwitch = config.PrimLimitSwitch.getState();
-        boolean SecSwitch = config.SecLimitSwitch.getState();
-        if(state){
-            if(LiftState && SecLiftState && !config.PrimLimitSwitch.getState() && !config.SecLimitSwitch.getState()){
-                config.prim_lift_motor.setPower(0);
-                config.sec_lift_motor.setPower(0);
-                return true;
-            }
-            else {
-                if(PrimSwitch || PrimliftState.equals(LiftState.LiftBottom)){
-                    tel.addLine("PrimSwitch: "+ config.PrimLimitSwitch.getState()+" PrimLiftMotor: "+config.prim_lift_motor.getPower());
-                    config.prim_lift_motor.setPower(-Power);
-                    if(config.PrimLimitSwitch.getState() != PrevPrimState && PrimLastChange+(200000000)<CurrentTime) {
-                        if (PrimliftState.equals(LiftState.LiftBottom)) {
-                            PrimliftState = LiftState.LiftMiddle;
-                        }
-                        if (PrimliftState.equals(LiftState.LiftMiddle)) {
-                            PrimliftState = LiftState.LiftTop;
-                        }
-                        PrimLastChange = CurrentTime;
-                    }
-                    PrevPrimState = config.PrimLimitSwitch.getState();
-                }
-                else {
-                    config.prim_lift_motor.setPower(0);
-                }
-                if(config.SecLimitSwitch.getState() || SecliftState.equals(LiftState.LiftTop)){
-                    tel.addLine("SecSwitch: "+config.SecLimitSwitch.getState()+" SecLiftMotor: "+config.sec_lift_motor.getPower());
-                    config.sec_lift_motor.setPower(Power);
-                    if (config.SecLimitSwitch.getState() !=PrevSecState) {
-                        SecliftState = LiftState.LiftMiddle;
-                    }
-                    PrevSecState = config.SecLimitSwitch.getState();
-                }
-                else {
-                    config.sec_lift_motor.setPower(0);
-                }
-            }
-        }
-    }
-*/
     public void ForwardScale(float Distance) {
         float value = Math.abs(ConvertToMM(GetAvarage())) / Math.abs(Distance);
         value = 1 - value;
