@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode.Autonomous.Main;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -55,6 +56,7 @@ import java.util.ArrayList;
  */
 
 @Autonomous(name="BoxAuto", group="SimonsPlayGround")
+@Disabled
 public class Box extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();

@@ -100,8 +100,8 @@ public class NewCrater extends OpMode {
         Tasks.add(new Task(50f,0.4f,"Forward"));
         Tasks.add(new Task(false,1f));
         Tasks.add(new Task(tensorFlow));
-        Tasks.add(new Task(450,0.4f,"Forward"));
         Tasks.add(new Task(500,0.4f,"Forward"));
+        Tasks.add(new Task(700,1f,"Forward"));
 
 
     }
@@ -114,14 +114,18 @@ public class NewCrater extends OpMode {
         if(Drive.BoxCheck){
             switch (Drive.BoxPosition){
                 case 1:
-                    Tasks.add(1,new Task(-380, 0.4f, "Strafing"));
+                    //Tasks.add(1,new Task(-400, 0.5f, "Strafing"));
+                    Tasks.add(0,new Task(-30,0.3f,"Turning"));
+                    Tasks.add(3,new Task(30,0.3f,"Turning"));
                     Drive.BoxCheck = false;
                     break;
                 case 2:
                     Drive.BoxCheck = false;
                     break;
                 case 3:
-                    Tasks.add(1,new Task(340, 0.4f, "Strafing"));
+                    //Tasks.add(1,new Task(400, 0.5f, "Strafing"));
+                    Tasks.add(0,new Task(30,0.3f,"Turning"));
+                    Tasks.add(3,new Task(-30,0.3f,"Turning"));
                     Drive.BoxCheck = false;
                     break;
             }

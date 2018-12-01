@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode.Autonomous.Main;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -58,6 +59,7 @@ import java.util.concurrent.TimeUnit;
  */
 
 @Autonomous(name="CraterAuto", group="SimonsPlayGround")
+@Disabled
 public class Crater extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -100,24 +102,24 @@ public class Crater extends OpMode {
         //Context Forward Turning Strafing
         tensorFlow.start();
         Tasks.add(new Task(true,1f));
-        Tasks.add(new Task(100f,0.4f,"Forward"));
+        Tasks.add(new Task(100f,0.3f,"Forward"));
         Tasks.add(new Task(false,1f));
         Tasks.add(new Task(tensorFlow));
-        Tasks.add(new Task(500,0.4f,"Forward"));
+        Tasks.add(new Task(500,0.3f,"Forward"));
         //new direction
-        Tasks.add(new Task(500,0.4f,"Forward"));
-        Tasks.add(new Task(-500,0.4f,"Forward"));
-        Tasks.add(new Task(-90,0.4f,"Turning"));
+        Tasks.add(new Task(500,0.3f,"Forward"));
+        Tasks.add(new Task(-500,0.3f,"Forward"));
+        Tasks.add(new Task(-90,0.3f,"Turning"));
         //new direction
-        Tasks.add(new Task(-45,0.4f,"Turning"));
-        Tasks.add(new Task(800,0.4f,"Forward"));
+        Tasks.add(new Task(-45,0.3f,"Turning"));
+        Tasks.add(new Task(800,0.3f,"Forward"));
         Tasks.add(new Task(3f,"Marker"));
-        Tasks.add(new Task(180,0.4f,"Turning"));
-        Tasks.add(new Task(-200,0.4f,"Strafing"));
-        Tasks.add(new Task(100,0.4f,"Strafing"));
+        Tasks.add(new Task(180,0.3f,"Turning"));
+        Tasks.add(new Task(-200,0.3f,"Strafing"));
+        Tasks.add(new Task(100,0.3f,"Strafing"));
         Tasks.add(new Task(1300,0.5f,"Forward"));
-        Tasks.add(new Task(-200,0.4f,"Strafing"));
-        Tasks.add(new Task(200,0.4f,"Forward"));
+        Tasks.add(new Task(-200,0.5f,"Strafing"));
+        Tasks.add(new Task(200,0.3f,"Forward"));
 
 
     }
@@ -130,21 +132,17 @@ public class Crater extends OpMode {
         if(Drive.BoxCheck){
             switch (Drive.BoxPosition){
                 case 1:
-                    Tasks.add(1,new Task(-380, 0.4f, "Strafing"));
-                    Tasks.add(5,new Task(800,0.4f,"Forward"));
+                    Tasks.add(1,new Task(-380, 0.5f, "Strafing"));
+                    Tasks.add(5,new Task(800,0.3f,"Forward"));
                     Drive.BoxCheck = false;
                     break;
                 case 2:
-                    Tasks.add(4,new Task(1200,0.4f,"Forward"));
-                    Drive.BoxCheck = false;
-                    break;
-                case 0:
-                    Tasks.add(4,new Task(1200,0.4f,"Forward"));
+                    Tasks.add(4,new Task(1200,0.3f,"Forward"));
                     Drive.BoxCheck = false;
                     break;
                 case 3:
-                    Tasks.add(1,new Task(340, 0.4f, "Strafing"));
-                    Tasks.add(5,new Task(1600,0.4f,"Forward"));
+                    Tasks.add(1,new Task(340, 0.5f, "Strafing"));
+                    Tasks.add(5,new Task(1600,0.3f,"Forward"));
                     Drive.BoxCheck = false;
                     break;
             }

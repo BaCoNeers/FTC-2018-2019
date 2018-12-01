@@ -97,10 +97,10 @@ public class NewBox extends OpMode {
         //Context Forward Turning Strafing
         tensorFlow.start();
         Tasks.add(new Task(true,1f));
-        Tasks.add(new Task(50f,0.3f,"Forward"));
+        Tasks.add(new Task(50f,0.4f,"Forward"));
         Tasks.add(new Task(false,1f));
         Tasks.add(new Task(tensorFlow));
-        Tasks.add(new Task(350,0.3f,"Forward"));
+        Tasks.add(new Task(350,0.4f,"Forward"));
     }
 
 
@@ -111,22 +111,22 @@ public class NewBox extends OpMode {
         if(Drive.BoxCheck){
             switch (Drive.BoxPosition){
                 case 1:
-                    Tasks.add(1,new Task(-380, 0.3f, "Strafing"));
-                    Tasks.add(2,new Task(700,0.3f,"Forward"));
-                    Tasks.add(3,new Task(45,0.3f,"Turning"));
-                    Tasks.add(4,new Task(400,0.3f,"Forward"));
+                    Tasks.add(1,new Task(-380, 0.4f, "Strafing"));
+                    Tasks.add(2,new Task(700,0.4f,"Forward"));
+                    Tasks.add(3,new Task(45,0.4f,"Turning"));
+                    Tasks.add(4,new Task(400,0.4f,"Forward"));
                     Tasks.add(5,new Task(300,"Marker"));
                     break;
                 case 2:
-                    Tasks.add(1,new Task(500,0.3f,"Forward"));
+                    Tasks.add(1,new Task(500,0.4f,"Forward"));
                     Tasks.add(2,new Task(300,"Marker"));
                     Drive.BoxCheck = false;
                     break;
                 case 3:
-                    Tasks.add(1,new Task(380, 0.3f, "Strafing"));
-                    Tasks.add(2,new Task(700,0.3f,"Forward"));
-                    Tasks.add(3,new Task(-45,0.3f,"Turning"));
-                    Tasks.add(4,new Task(400,0.3f,"Forward"));
+                    Tasks.add(1,new Task(380, 0.4f, "Strafing"));
+                    Tasks.add(2,new Task(700,0.4f,"Forward"));
+                    Tasks.add(3,new Task(-45,0.4f,"Turning"));
+                    Tasks.add(4,new Task(400,0.4f,"Forward"));
                     Tasks.add(5,new Task(300,"Marker"));
                     Drive.BoxCheck = false;
                     break;
