@@ -42,6 +42,13 @@ public class Task {
         this.LiftState = false;
         disiredTime = System.nanoTime()+((long)sleep*(10^9));
     }
+    public Task(int count, String Context){
+        this.Context = Context;
+        this.Power = 0;
+        this.Value = count;
+        this.LiftState = false;
+        disiredTime = 0;
+    }
     public Task(TensorFlowCubeDetection tensorFlow){
         this.Context = "CubeDetection";
         this.Power = 0;

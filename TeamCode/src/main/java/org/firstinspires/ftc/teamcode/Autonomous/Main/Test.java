@@ -101,8 +101,7 @@ public class Test extends OpMode {
         Tasks.add(new Task(300,0.3f,"Strafing"));
         Tasks.add(new Task(-300,0.3f,"Strafing"));
         */
-        Tasks.add(new Task(3f,"Marker"));
-
+        Tasks.add(new Task(200,"Marker"));
 
     }
 
