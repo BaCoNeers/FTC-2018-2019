@@ -21,7 +21,7 @@ public class Drive {
     public boolean state = false;
     public boolean toggleFunction = false;
 
-    public double Toggle() {
+    private double Toggle() {
         buttonState = opmode.gamepad1.y;
         if (buttonState && !lastButtonState) {
             state = !state;

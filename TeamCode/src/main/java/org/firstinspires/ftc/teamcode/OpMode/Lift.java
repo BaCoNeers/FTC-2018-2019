@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
 
+import static org.firstinspires.ftc.teamcode.OpMode.Lift.LiftState.LiftBottom;
+
 
 /**
  * Created by Baconeers on 11/11/2018.
@@ -17,14 +19,117 @@ public class Lift {
     private RoverRucusConfiguration config = null;
 
     //lift variables
-    enum LiftState {LiftBottom,LiftMiddle,LiftTop};
-    private LiftState PrimliftState = LiftState.LiftBottom;
-    private LiftState SecliftState = LiftState.LiftBottom;
+    enum LiftState {LiftBottom,LiftMiddle,LiftTop,None};
+    private LiftState PrimliftState = LiftBottom;
+    private LiftState SecliftState = LiftBottom;
 
     private boolean PrevPrimState = false;
     private long PrevPrimStateTime = 0;
     private boolean PrevSecState = false;
     private long PrevSecStateTime = 0;
+
+    public boolean buttonState_a = false;
+    public boolean lastButtonState_a = false;
+    public boolean state_a = false;
+    public boolean toggleFunction = false;
+
+    public boolean buttonState_y = false;
+    public boolean lastButtonState_y = false;
+    public boolean state_y = false;
+
+    public boolean buttonState_b = false;
+    public boolean lastButtonState_b = false;
+    public boolean state_b = false;
+
+
+
+    private double Toggle() {
+        //button a (bottom)
+        buttonState_a = opmode.gamepad2.a;
+        if (buttonState_a && !lastButtonState_a) {
+            state_a = !state_a;
+        }
+
+        if (buttonState_a != lastButtonState_a) {
+            lastButtonState_a = buttonState_a;
+        }
+
+        if (state_a) {
+            //On state
+            toggleFunction = true;
+
+        }
+        else {
+            //Off state
+
+            return 1.0;
+
+        }
+
+        //button y (top)
+        buttonState_y = opmode.gamepad2.y;
+        if (buttonState_y && !lastButtonState_y) {
+            state_y = !state_y;
+        }
+
+        if (buttonState_y != lastButtonState_y) {
+            lastButtonState_y = buttonState_y;
+        }
+
+        if (state_y) {
+            //On state
+            toggleFunction = true;
+
+        }
+        else {
+            //Off state
+
+            return 1.0;
+
+        }
+
+        // button b (middle)
+        buttonState_b = opmode.gamepad2.b;
+        if (buttonState_b && !lastButtonState_b) {
+            state_b = !state_b;
+        }
+
+        if (buttonState_b != lastButtonState_b) {
+            lastButtonState_b = buttonState_b;
+        }
+
+        if (state_b) {
+            //On state
+            toggleFunction = true;
+
+        }
+        else {
+            //Off state
+
+            return 1.0;
+
+        }
+
+        if (toggleFunction) {
+
+            if (opmode.gamepad1.left_stick_x > 0.3) {
+                return 0.5;
+            }
+
+            if (opmode.gamepad1.left_stick_x < -0.3) {
+                return 0.5;
+            }
+
+            else {
+                return 0.2;
+            }
+
+        }
+        return 1.0;
+    }
+
+
+
 
 
     public Lift(OpMode opmodeIn, RoverRucusConfiguration configIn) {
@@ -36,7 +141,7 @@ public class Lift {
     //Bumper Variables
 
 
-    /* public double liftPrim(double value) {
+    public double liftPrim(double value) {
 
         long CurrentTime = System.nanoTime();
 
@@ -81,7 +186,7 @@ public class Lift {
                     return value;
                 case LiftMiddle:
                     if(PrimStateHighToLow){
-                        PrimliftState = LiftState.LiftBottom;
+                        PrimliftState = LiftBottom;
                     }
                     return value;
                 case LiftBottom:
@@ -134,7 +239,7 @@ public class Lift {
                     return value;
                 case LiftMiddle:
                     if(SecStateHighToLow){
-                        SecliftState = LiftState.LiftBottom;
+                        SecliftState = LiftBottom;
                     }
                     return value;
                 case LiftBottom:
@@ -143,7 +248,6 @@ public class Lift {
         }
         return value;
     }
-    */
 
     public double rightBumper() {
         if (opmode.gamepad1.right_bumper) {
@@ -174,8 +278,8 @@ public class Lift {
         double right_control = -opmode.gamepad2.right_stick_y;
         double left_control = - opmode.gamepad2.left_stick_y;
 
-        config.prim_lift_motor.setPower(left_control);
-        config.sec_lift_motor.setPower(right_control);
+        config.prim_lift_motor.setPower(liftPrim(left_control));
+        config.sec_lift_motor.setPower(liftSec(right_control));
 
 
 
