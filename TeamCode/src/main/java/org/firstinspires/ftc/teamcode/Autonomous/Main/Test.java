@@ -101,9 +101,7 @@ public class Test extends OpMode {
         Tasks.add(new Task(300,0.3f,"Strafing"));
         Tasks.add(new Task(-300,0.3f,"Strafing"));
         */
-        Tasks.add(new Task(true,0.5f));
-        Tasks.add(new Task(false, 0.5f));
-
+        Tasks.add(new Task(300,0.5f,"Strafing"));
 
     }
 
@@ -123,6 +121,11 @@ public class Test extends OpMode {
                     Drive.BoxCheck = false;
                     break;
                 case 2:
+                    Tasks.add(1,new Task(1300,0.3f,"Forward"));
+                    Tasks.add(2,new Task(135,0.3f,"Turning"));
+                    Drive.BoxCheck = false;
+                    break;
+                case 0:
                     Tasks.add(1,new Task(1300,0.3f,"Forward"));
                     Tasks.add(2,new Task(135,0.3f,"Turning"));
                     Drive.BoxCheck = false;

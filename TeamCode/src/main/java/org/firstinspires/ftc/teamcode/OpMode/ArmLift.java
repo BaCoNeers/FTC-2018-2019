@@ -22,6 +22,16 @@ public class ArmLift {
     private static double maximum_pos = 1.35;
     private static double minimum_pos = 0.23;
 
+    //lift variables
+    enum LiftState {LiftBottom,LiftMiddle,LiftTop};
+    LiftState PrimliftState = LiftState.LiftBottom;
+    LiftState SecliftState = LiftState.LiftBottom;
+
+    boolean PrevPrimState = false;
+    long PrevPrimStateTime = 0;
+    boolean PrevSecState = false;
+    long PrevSecStateTime = 0;
+
     //public static final double MAX = 0.45;
     //public static final double STOP = 0.5;
     //public static final double MIN = -0.45;
@@ -73,7 +83,7 @@ public class ArmLift {
 
         if(config.ArmPotentiometer.getVoltage() > maximum_pos){
             if(state){
-                return 0;
+                return 0.0;
             }
             else{
                 return value;
@@ -81,7 +91,7 @@ public class ArmLift {
         }
         else if(config.ArmPotentiometer.getVoltage() < minimum_pos) {
             if(!state) {
-                return 0;
+                return 0.0;
             }
             else{
                 return value;
@@ -99,11 +109,8 @@ public class ArmLift {
 
         config.arm_lift_motor.setPower(armLiftClip(arm_lift_power));
 
-        config.prim_box_arm_servo.setPower(arm_servo_power);
-        config.sec_box_arm_servo.setPower(-arm_servo_power);
-
-        //down 1.35
-        //up 0.8
+        config.prim_box_arm_servo.setPower(arm_servo_power*0.5);
+        config.sec_box_arm_servo.setPower(-arm_servo_power*0.5);
 
     }
 }

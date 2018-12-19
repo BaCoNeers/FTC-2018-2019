@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode.Autonomous.Main;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -55,6 +56,7 @@ import java.util.ArrayList;
  */
 
 @Autonomous(name="CraterDuoAuto", group="SimonsPlayGround")
+@Disabled
 public class CraterDuo extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -96,6 +98,9 @@ public class CraterDuo extends OpMode {
 
         //Context Forward Turning Strafing
         tensorFlow.start();
+        Tasks.add(new Task(true,1f));
+        Tasks.add(new Task(100f,0.3f,"Forward"));
+        Tasks.add(new Task(false,1f));
         Tasks.add(new Task(tensorFlow));
         Tasks.add(new Task(500,0.3f,"Forward"));//0
         Tasks.add(new Task(500,0.3f,"Forward"));//2
@@ -131,6 +136,10 @@ public class CraterDuo extends OpMode {
                     Drive.BoxCheck = false;
                     break;
                     //right
+                case 0:
+                    Tasks.add(4,new Task(1200,0.3f,"Forward"));
+                    Drive.BoxCheck = false;
+                    break;
                 case 3:
                     Tasks.add(1,new Task(340, 0.3f, "Strafing"));
                     Tasks.add(5,new Task(1000,0.3f,"Forward"));
