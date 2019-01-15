@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.Autonomous.Path_Finder;
 
-import org.firstinspires.ftc.teamcode.Autonomous.Drive.Coordinates;
+import org.firstinspires.ftc.teamcode.Autonomous.Drive.Old.Coordinates;
 
 /**
  * Created by Simon on 18/10/2018.

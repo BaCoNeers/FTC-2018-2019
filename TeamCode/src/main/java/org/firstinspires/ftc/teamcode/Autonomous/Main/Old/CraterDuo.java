@@ -27,22 +27,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.Autonomous.Main;
+package org.firstinspires.ftc.teamcode.Autonomous.Main.Old;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.Autonomous.Drive.AutoDrive;
-import org.firstinspires.ftc.teamcode.Autonomous.Drive.Task;
+import org.firstinspires.ftc.teamcode.Autonomous.Drive.Old.AutoDrive;
+import org.firstinspires.ftc.teamcode.Autonomous.Drive.Old.Task;
 import org.firstinspires.ftc.teamcode.Autonomous.ObjectIdentification.TensorFlowCubeDetection;
-import org.firstinspires.ftc.teamcode.Autonomous.Path_Finder.PathFinder;
 import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
-import java.util.concurrent.TimeUnit;
 
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -58,9 +55,9 @@ import java.util.concurrent.TimeUnit;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="CraterAuto", group="SimonsPlayGround")
+@Autonomous(name="CraterDuoAuto", group="SimonsPlayGround")
 @Disabled
-public class Crater extends OpMode {
+public class CraterDuo extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -105,23 +102,13 @@ public class Crater extends OpMode {
         Tasks.add(new Task(100f,0.3f,"Forward"));
         Tasks.add(new Task(false,1f));
         Tasks.add(new Task(tensorFlow));
-        Tasks.add(new Task(500,0.3f,"Forward"));
-        //new direction
-        Tasks.add(new Task(500,0.3f,"Forward"));
-        Tasks.add(new Task(-500,0.3f,"Forward"));
-        Tasks.add(new Task(-90,0.3f,"Turning"));
-        //new direction
-        Tasks.add(new Task(-45,0.3f,"Turning"));
-        Tasks.add(new Task(800,0.3f,"Forward"));
-        Tasks.add(new Task(3f,"Marker"));
-        Tasks.add(new Task(180,0.3f,"Turning"));
-        Tasks.add(new Task(-200,0.3f,"Strafing"));
-        Tasks.add(new Task(100,0.3f,"Strafing"));
-        Tasks.add(new Task(1300,0.5f,"Forward"));
-        Tasks.add(new Task(-200,0.5f,"Strafing"));
-        Tasks.add(new Task(200,0.3f,"Forward"));
-
-
+        Tasks.add(new Task(500,0.3f,"Forward"));//0
+        Tasks.add(new Task(500,0.3f,"Forward"));//2
+        Tasks.add(new Task(-500,0.3f,"Forward"));//3
+        Tasks.add(new Task(-90,0.3f,"Turning"));//4
+        Tasks.add(new Task(-45,0.3f,"Turning"));//6
+        Tasks.add(new Task(-200,0.4f,"Strafing"));//7
+        Tasks.add(new Task(100,0.3f,"Strafing"));//8
     }
 
 
@@ -131,18 +118,39 @@ public class Crater extends OpMode {
 
         if(Drive.BoxCheck){
             switch (Drive.BoxPosition){
+                //left
                 case 1:
-                    Tasks.add(1,new Task(-380, 0.5f, "Strafing"));
+                    Tasks.add(1,new Task(-380, 0.3f, "Strafing"));
                     Tasks.add(5,new Task(800,0.3f,"Forward"));
+                    Tasks.add(9,new Task(-110,0.3f,"Turning"));
+                    Tasks.add(10,new Task(800,0.3f,"Forward"));
+                    Tasks.add(11,new Task(40,0.3f,"Turning"));
+                    Tasks.add(12,new Task(1100,0.3f,"Forward"));
+                    Tasks.add(13,new Task(-20,0.3f,"Turning"));
+                    Tasks.add(14,new Task(-200,0.3f,"Strafing"));
+                    Tasks.add(15,new Task(100,0.3f,"Strafing"));
                     Drive.BoxCheck = false;
                     break;
                 case 2:
                     Tasks.add(4,new Task(1200,0.3f,"Forward"));
                     Drive.BoxCheck = false;
                     break;
+                    //right
+                case 0:
+                    Tasks.add(4,new Task(1200,0.3f,"Forward"));
+                    Drive.BoxCheck = false;
+                    break;
                 case 3:
-                    Tasks.add(1,new Task(340, 0.5f, "Strafing"));
-                    Tasks.add(5,new Task(1600,0.3f,"Forward"));
+                    Tasks.add(1,new Task(340, 0.3f, "Strafing"));
+                    Tasks.add(5,new Task(1000,0.3f,"Forward"));
+                    Tasks.add(7,new Task(700,0.3f,"Forward"));
+                    Tasks.add(8,new Task(20,0.3f,"Turning"));
+                    Tasks.add(9,new Task(600,0.3f,"Forward"));
+                    Tasks.add(10,new Task(145,0.3f,"Turning"));
+                    Tasks.add(11,new Task(1300,0.5f,"Forward"));
+                    Tasks.add(12,new Task(-200,0.4f,"Strafing"));
+                    Tasks.add(13,new Task(200,0.3f,"Forward"));
+
                     Drive.BoxCheck = false;
                     break;
             }
