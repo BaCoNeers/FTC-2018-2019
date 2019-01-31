@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.Autonomous.Drive.New;
 
 import org.firstinspires.ftc.teamcode.Autonomous.ObjectIdentification.TensorFlowCubeDetection;
 
+import java.util.ArrayList;
+
 /**
  * Created by Simon on 13/12/2018.
  */
@@ -19,9 +21,9 @@ public class MainTask {
 
     boolean LiftState;
 
-    MainTask[] Right;
-    MainTask[] Middle;
-    MainTask[] Left;
+    ArrayList<MainTask> Right;
+    ArrayList<MainTask> Middle;
+    ArrayList<MainTask> Left;
 
     static int maxLoop = 300;
     int currentLoop = 0;

@@ -1,8 +1,14 @@
 package org.firstinspires.ftc.teamcode.Autonomous.Drive.New;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Autonomous.ObjectIdentification.TensorFlowCubeDetection;
 import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
 
@@ -36,6 +42,10 @@ public class NewAutoDrive {
     private Telemetry tel;
     private RoverRucusConfiguration config;
 
+    //IMU
+    BNO055IMU imu;
+    Orientation lastAngles = new Orientation();
+    double globalAngle, power = .30, correction;
 
     public NewAutoDrive(RoverRucusConfiguration config, Telemetry tel) {
         this.config = config;
@@ -44,6 +54,30 @@ public class NewAutoDrive {
         Motors[2] = this.config.rear_left_motor;
         Motors[3] = this.config.rear_right_motor;
         this.tel = tel;
+
+    }
+
+    public void InitialiseIMU(HardwareMap hardwareMap){
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+
+        parameters.mode                = BNO055IMU.SensorMode.IMU;
+        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.loggingEnabled      = false;
+
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+
+    }
+    public boolean CalabrateIMU(){
+        if (!imu.isGyroCalibrated())
+        {
+            return true;
+        }
+        else{
+            return false;
+        }
+
     }
 
 
@@ -62,7 +96,11 @@ public class NewAutoDrive {
                         }
                         break;
                     case "Turning":
-                        if (Rotate(tasks.get(0).value,tasks.get(0).power)){
+                        /*if (Rotate(tasks.get(0).value,tasks.get(0).power)){
+                            tasks.remove(0);
+                            return;
+                        }*/
+                        if(IMURotation(tasks.get(0).value,tasks.get(0).power)){
                             tasks.remove(0);
                             return;
                         }
@@ -123,6 +161,27 @@ public class NewAutoDrive {
             UpdateMotor(false);
             ResestMotors();
             UpdateEncoders();
+            return true;
+        }
+    }
+
+    private boolean IMURotation(float Angle, float power){
+        int direction = 1;
+        if(Angle>0){
+            direction = -1;
+        }
+        if(Math.abs(getAngle()) < Math.abs(Angle)){
+            MotorPower[0] = power*direction;
+            MotorPower[1] = -power*direction;
+            MotorPower[2] = power*direction;
+            MotorPower[3] = -power*direction;
+            UpdateMotor(true);
+            tel.addLine("Angle: "+getAngle());
+            return false;
+        }
+        else{
+            resetAngle();
+            UpdateMotor(false);
             return true;
         }
     }
@@ -190,7 +249,6 @@ public class NewAutoDrive {
         return true;
     }
 
-
     private boolean start = true;
     private float count;
     private boolean Marker(float value){
@@ -210,32 +268,39 @@ public class NewAutoDrive {
             return true;
         }
     }
+    public int TensorFlowPosition;
+    public boolean BoxCheck = false;
 
     private boolean TensorFlow(TensorFlowCubeDetection tensorFlow, ArrayList<MainTask> tasks, long time,
-                               MainTask[] Left, MainTask[] Middle, MainTask[] Right) {
+                               ArrayList<MainTask> Left, ArrayList<MainTask> Middle, ArrayList<MainTask> Right) {
+
         if (System.nanoTime() > time) {
-            for(int i=Middle.length;i>0;i--){
-                tasks.add(1,Middle[i]);
+            TensorFlowPosition = tensorFlow.GetCubePos();
+            for(int i=Middle.size();i>0;i--){
+                tasks.add(1,Middle.get(i));
             }
+            BoxCheck = true;
             return true;
         } else {
             if (tensorFlow.GetCubePos() != 0) {
+                TensorFlowPosition = tensorFlow.GetCubePos();
                 switch (tensorFlow.GetCubePos()){
                     case 1:
-                        for(int i=Right.length;i>0;i--) {
-                            tasks.add(1, Right[i]);
+                        for(int i=Right.size();i>0;i--) {
+                            tasks.add(1, Right.get(i));
                         }
                         break;
                     case 2:
-                        for(int i=Middle.length;i>0;i--){
-                            tasks.add(1,Middle[i]);
+                        for(int i=Middle.size();i>0;i--){
+                            tasks.add(1,Middle.get(i));
                         }
                         break;
                     case 3:
-                        for(int i=Left.length;i>0;i--){
-                            tasks.add(1,Left[i]);
+                        for(int i=Left.size();i>0;i--){
+                            tasks.add(1,Left.get(i));
                         }
                 }
+                BoxCheck = true;
                 return true;
             }
         }
@@ -395,6 +460,42 @@ public class NewAutoDrive {
 
     private float ConverForStrafe(float Encoder) {
         return (Encoder * WheelCount) * 0.86f;
+    }
+
+    //http://stemrobotics.cs.pdx.edu/node/7265
+
+    private void resetAngle()
+    {
+        lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        globalAngle = 0;
+    }
+
+    /**
+     * Get current cumulative angle rotation from last reset.
+     * @return Angle in degrees. + = left, - = right.
+     */
+    private double getAngle()
+    {
+        // We experimentally determined the Z axis is the axis we want to use for heading angle.
+        // We have to process the angle because the imu works in euler angles so the Z axis is
+        // returned as 0 to +180 or 0 to -180 rolling back to -179 or +179 when rotation passes
+        // 180 degrees. We detect this transition and track the total cumulative angle of rotation.
+
+        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
+
+        if (deltaAngle < -180)
+            deltaAngle += 360;
+        else if (deltaAngle > 180)
+            deltaAngle -= 360;
+
+        globalAngle += deltaAngle;
+
+        lastAngles = angles;
+
+        return globalAngle;
     }
 
     private void UpdateMotor(boolean On) {

@@ -37,6 +37,7 @@ import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.NewAutoDrive;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.ForwardTask;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.LiftTask;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.MainTask;
+import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.TensorFlow;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.TurningTask;
 import org.firstinspires.ftc.teamcode.Autonomous.ObjectIdentification.TensorFlowCubeDetection;
 import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
@@ -58,7 +59,7 @@ import java.util.ArrayList;
  */
 
 @Autonomous(name="Test", group="SimonsPlayGround")
-class Test extends OpMode {
+public class Test extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -70,13 +71,21 @@ class Test extends OpMode {
 
     private ArrayList<MainTask> Tasks = new ArrayList<>();
 
+    ArrayList<MainTask> left = new ArrayList<>();
+    ArrayList<MainTask> middle = new ArrayList<>();
+    ArrayList<MainTask> right = new ArrayList<>();
+
 
     @Override
     public void init() {
         config = RoverRucusConfiguration.newConfig(hardwareMap,telemetry);
 
         Drive = new NewAutoDrive(config,telemetry);
-        tensorFlow.Int(telemetry,hardwareMap);
+        //tensorFlow.Int(telemetry,hardwareMap);
+
+        Drive.InitialiseIMU(hardwareMap);
+        while (Drive.CalabrateIMU());
+
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -100,6 +109,7 @@ class Test extends OpMode {
 
         //Context Forward Turning Strafing
         tensorFlow.start();
+        /*
         Tasks.add(new ForwardTask(0.3f, 20));
         Tasks.add(new TurningTask(0.3f, 90));
         Tasks.add(new TurningTask(0.3f, -90));
@@ -107,6 +117,20 @@ class Test extends OpMode {
         Tasks.add(new LiftTask(true, 0.3f));
         Tasks.add(new LiftTask(false, 0.3f));
 
+        //left
+        left.add(new ForwardTask(0.3f,20));
+
+        //middle
+        middle.add(new ForwardTask(0.3f,20));
+
+        //right
+        right.add(new ForwardTask(0.3f,20));
+
+
+        Tasks.add(new TensorFlow(tensorFlow,left,middle,right));
+
+        */
+        Tasks.add(new TurningTask(0.3f,90));
     }
 
 
@@ -114,6 +138,25 @@ class Test extends OpMode {
     public void loop() {
         Drive.Update(Tasks);
 
+        //After all tasks
+        if(Drive.BoxCheck) {
+            switch (Drive.TensorFlowPosition) {
+                case 0:
+
+                    break;
+                case 1:
+
+                    break;
+
+                case 2:
+
+                    break;
+                case 3:
+
+                    break;
+            }
+            Drive.BoxCheck = false;
+        }
 
         telemetry.update();
     }
