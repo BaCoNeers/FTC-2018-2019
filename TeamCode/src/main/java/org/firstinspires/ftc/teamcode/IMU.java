@@ -43,6 +43,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -67,7 +68,10 @@ public class IMU extends LinearOpMode {
     BNO055IMU imu;
     Orientation lastAngles = new Orientation();
     double globalAngle, power = .30, correction;
-    Acceleration gravity;
+
+    double GravityForce = 0;
+
+    double Speed = 0;
 
     @Override
     public void runOpMode() {
@@ -97,16 +101,30 @@ public class IMU extends LinearOpMode {
         telemetry.addData("Mode", "waiting for start");
         telemetry.addData("imu calib status", imu.getCalibrationStatus().toString());
 
+
+        double time = 0;
+
+        StartClock();
+        while(time < 1){
+            time = DeltaTime();
+        }
+
+
+
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
 
+        GravityForce = GetSumGravity();
+
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            telemetry.addData("Angle: ",getAngle());
+            telemetry.addData("Delta TIme: ", DeltaTime());
 
-            telemetry.addData("Accel: ",getGravity());
+            Speed+= imu.getGravity().xAccel;
+
+            telemetry.addData("Distance", Speed*DeltaTime());
 
             telemetry.update();
         }
@@ -148,14 +166,34 @@ public class IMU extends LinearOpMode {
         return globalAngle;
     }
 
-    private String getGravity(){
-        gravity  = imu.getGravity();
+    private String getGravity() {
+        Acceleration gravity = imu.getGravity();
 
-        return "X Accel: "+String.format(Locale.getDefault(), "%.3f",
-                gravity.xAccel)+ " Y Accel: "+
+        return "X Accel: " + String.format(Locale.getDefault(), "%.3f",
+                gravity.xAccel) + " Y Accel: " +
                 String.format(Locale.getDefault(), "%.3f",
-                        gravity.yAccel)+ " Z Accel: "+
+                        gravity.yAccel) + " Z Accel: " +
                 String.format(Locale.getDefault(), "%.3f",
                         gravity.zAccel);
 
+    }
+
+    private double GetSumGravity(){
+        Acceleration gravity = imu.getGravity();
+
+        double vector =  Math.pow(gravity.xAccel,2) + Math.pow(gravity.yAccel,2) + Math.pow(gravity.zAccel,2);
+
+        return vector;
+    }
+
+    private float StartTime;
+
+    private void StartClock(){
+        StartTime = System.nanoTime();
+    }
+
+    private double DeltaTime(){
+        return (System.nanoTime() - StartTime)*1000000;
+
+    }
 }

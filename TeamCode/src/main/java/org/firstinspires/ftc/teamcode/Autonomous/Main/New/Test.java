@@ -109,7 +109,7 @@ public class Test extends OpMode {
 
         //Context Forward Turning Strafing
         tensorFlow.start();
-        /*
+
         Tasks.add(new ForwardTask(0.3f, 20));
         Tasks.add(new TurningTask(0.3f, 90));
         Tasks.add(new TurningTask(0.3f, -90));
@@ -118,7 +118,9 @@ public class Test extends OpMode {
         Tasks.add(new LiftTask(false, 0.3f));
 
         //left
+        left.add(new TurningTask(0.3f,30));
         left.add(new ForwardTask(0.3f,20));
+
 
         //middle
         middle.add(new ForwardTask(0.3f,20));
@@ -128,8 +130,6 @@ public class Test extends OpMode {
 
 
         Tasks.add(new TensorFlow(tensorFlow,left,middle,right));
-
-        */
         Tasks.add(new TurningTask(0.3f,90));
     }
 
@@ -141,16 +141,19 @@ public class Test extends OpMode {
         //After all tasks
         if(Drive.BoxCheck) {
             switch (Drive.TensorFlowPosition) {
+                //no position found
                 case 0:
 
                     break;
+                //left
                 case 1:
 
                     break;
-
+                //middle
                 case 2:
 
                     break;
+                //right
                 case 3:
 
                     break;
