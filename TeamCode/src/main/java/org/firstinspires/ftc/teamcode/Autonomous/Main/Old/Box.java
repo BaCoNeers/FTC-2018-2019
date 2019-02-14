@@ -27,14 +27,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.Autonomous.Main;
+package org.firstinspires.ftc.teamcode.Autonomous.Main.Old;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.Autonomous.Drive.AutoDrive;
-import org.firstinspires.ftc.teamcode.Autonomous.Drive.Task;
+import org.firstinspires.ftc.teamcode.Autonomous.Drive.Old.AutoDrive;
+import org.firstinspires.ftc.teamcode.Autonomous.Drive.Old.Task;
 import org.firstinspires.ftc.teamcode.Autonomous.ObjectIdentification.TensorFlowCubeDetection;
 import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
 
@@ -54,17 +55,20 @@ import java.util.ArrayList;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Test", group="SimonsPlayGround")
-public class Test extends OpMode {
+@Autonomous(name="BoxAuto", group="SimonsPlayGround")
+@Disabled
+public class Box extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-
 
     RoverRucusConfiguration config;
     //Task management
     private ArrayList<Task> Tasks = new ArrayList<Task>();
+
     private AutoDrive Drive;
+
     private TensorFlowCubeDetection tensorFlow = new TensorFlowCubeDetection();
+    Boolean TensorFlowTest = false;
 
     @Override
     public void init() {
@@ -91,17 +95,19 @@ public class Test extends OpMode {
     public void start() {
         runtime.reset();
 
+
         //Context Forward Turning Strafing
         tensorFlow.start();
-        /*
-        Tasks.add(new Task(300,0.3f,"Forward"));
-        Tasks.add(new Task(-300,0.3f,"Forward"));
-        Tasks.add(new Task(90,0.3f,"Turning"));
-        Tasks.add(new Task(-90,0.3f,"Turning"));
-        Tasks.add(new Task(300,0.3f,"Strafing"));
-        Tasks.add(new Task(-300,0.3f,"Strafing"));
-        */
-        Tasks.add(new Task(300,0.5f,"Strafing"));
+        Tasks.add(new Task(true,1f));
+        Tasks.add(new Task(100f,0.3f,"Forward"));
+        Tasks.add(new Task(false,1f));
+        Tasks.add(new Task(tensorFlow));
+        Tasks.add(new Task(500,0.3f,"Forward"));
+        Tasks.add(new Task(-300,0.4f,"Strafing"));
+        Tasks.add(new Task(100,0.4f,"Strafing"));
+        Tasks.add(new Task(1700,0.5f,"Forward"));
+        Tasks.add(new Task(-200,0.4f,"Strafing"));
+        Tasks.add(new Task(200,0.4f,"Forward"));
 
     }
 
@@ -113,36 +119,39 @@ public class Test extends OpMode {
         if(Drive.BoxCheck){
             switch (Drive.BoxPosition){
                 case 1:
-                    Tasks.add(1,new Task(380, -0.3f, "Strafing"));
-                    Tasks.add(2,new Task(700,0.3f,"Forward"));
-                    Tasks.add(3,new Task(45,0.3f,"Turning"));
-                    Tasks.add(4,new Task(580,0.3f,"Forward"));
-                    Tasks.add(5,new Task(90,0.3f,"Turning"));
+                    Tasks.add(1,new Task(-380, 0.4f, "Strafing"));
+
+                    Tasks.add(2,new Task(700,0.4f,"Forward"));
+                    Tasks.add(3,new Task(45,0.4f,"Turning"));
+                    Tasks.add(4,new Task(580,0.4f,"Forward"));
+                    Tasks.add(5,new Task(3f,"Marker"));
+                    Tasks.add(6,new Task(90,0.4f,"Turning"));
                     Drive.BoxCheck = false;
                     break;
                 case 2:
-                    Tasks.add(1,new Task(1300,0.3f,"Forward"));
-                    Tasks.add(2,new Task(135,0.3f,"Turning"));
+                    Tasks.add(1,new Task(800,0.4f,"Forward"));
+                    Tasks.add(2,new Task(3f,"Marker"));
+                    Tasks.add(3,new Task(135,0.4f,"Turning"));
                     Drive.BoxCheck = false;
                     break;
                 case 0:
-                    Tasks.add(1,new Task(1300,0.3f,"Forward"));
-                    Tasks.add(2,new Task(135,0.3f,"Turning"));
+                    Tasks.add(1,new Task(800,0.4f,"Forward"));
+                    Tasks.add(2,new Task(3f,"Marker"));
+                    Tasks.add(3,new Task(135,0.4f,"Turning"));
                     Drive.BoxCheck = false;
                     break;
                 case 3:
-                    Tasks.add(1,new Task(380, 0.3f, "Strafing"));
-                    Tasks.add(2,new Task(700,0.3f,"Forward"));
-                    Tasks.add(3,new Task(45,-0.3f,"Turning"));
-                    Tasks.add(4,new Task(620,0.3f,"Forward"));
-                    Tasks.add(5,new Task(180,0.3f,"Turning"));
+                    Tasks.add(1,new Task(380, 0.4f, "Strafing"));
+                    Tasks.add(2,new Task(700,0.4f,"Forward"));
+                    Tasks.add(3,new Task(-45,0.4f,"Turning"));
+                    Tasks.add(4,new Task(500,0.4f,"Forward"));
+                    Tasks.add(5,new Task(3f,"Marker"));
+                    Tasks.add(6,new Task(180,0.4f,"Turning"));
                     Drive.BoxCheck = false;
                     break;
             }
         }
 
-
-        telemetry.addLine("Tasks: "+Tasks.size());
         telemetry.update();
     }
 

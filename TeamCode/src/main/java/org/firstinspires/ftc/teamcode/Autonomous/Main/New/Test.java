@@ -27,14 +27,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.Autonomous.Main;
+package org.firstinspires.ftc.teamcode.Autonomous.Main.New;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.Autonomous.Drive.AutoDrive;
-import org.firstinspires.ftc.teamcode.Autonomous.Drive.Task;
+import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.NewAutoDrive;
+import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.ForwardTask;
+import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.LiftTask;
+import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.MainTask;
+import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.TensorFlow;
+import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.TurningTask;
 import org.firstinspires.ftc.teamcode.Autonomous.ObjectIdentification.TensorFlowCubeDetection;
 import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
 
@@ -54,27 +58,34 @@ import java.util.ArrayList;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="NewCraterAuto", group="SimonsPlayGround")
-public class NewCrater extends OpMode {
+@Autonomous(name="Test", group="SimonsPlayGround")
+public class Test extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
 
 
-    RoverRucusConfiguration config;
+    private RoverRucusConfiguration config;
     //Task management
-    private ArrayList<Task> Tasks = new ArrayList<Task>();
-
-    private AutoDrive Drive;
-
+    private NewAutoDrive Drive;
     private TensorFlowCubeDetection tensorFlow = new TensorFlowCubeDetection();
-    Boolean TensorFlowTest = false;
+
+    private ArrayList<MainTask> Tasks = new ArrayList<>();
+
+    ArrayList<MainTask> left = new ArrayList<>();
+    ArrayList<MainTask> middle = new ArrayList<>();
+    ArrayList<MainTask> right = new ArrayList<>();
+
 
     @Override
     public void init() {
         config = RoverRucusConfiguration.newConfig(hardwareMap,telemetry);
 
-        Drive = new AutoDrive(config,telemetry);
-        tensorFlow.Int(telemetry,hardwareMap);
+        Drive = new NewAutoDrive(config,telemetry);
+        //tensorFlow.Int(telemetry,hardwareMap);
+
+        Drive.InitialiseIMU(hardwareMap);
+        while (Drive.CalabrateIMU());
+
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -94,16 +105,32 @@ public class NewCrater extends OpMode {
     public void start() {
         runtime.reset();
 
+
+
         //Context Forward Turning Strafing
         tensorFlow.start();
-        Tasks.add(new Task(true,1f));
-        Tasks.add(new Task(50f,0.4f,"Forward"));
-        Tasks.add(new Task(false,1f));
-        Tasks.add(new Task(tensorFlow));
-        Tasks.add(new Task(500,0.4f,"Forward"));
-        Tasks.add(new Task(700,1f,"Forward"));
+
+        Tasks.add(new ForwardTask(0.3f, 20));
+        Tasks.add(new TurningTask(0.3f, 90));
+        Tasks.add(new TurningTask(0.3f, -90));
+        Tasks.add(new ForwardTask(0.3f, -20));
+        Tasks.add(new LiftTask(true, 0.3f));
+        Tasks.add(new LiftTask(false, 0.3f));
+
+        //left
+        left.add(new TurningTask(0.3f,30));
+        left.add(new ForwardTask(0.3f,20));
 
 
+        //middle
+        middle.add(new ForwardTask(0.3f,20));
+
+        //right
+        right.add(new ForwardTask(0.3f,20));
+
+
+        Tasks.add(new TensorFlow(tensorFlow,left,middle,right));
+        Tasks.add(new TurningTask(0.3f,90));
     }
 
 
@@ -111,24 +138,27 @@ public class NewCrater extends OpMode {
     public void loop() {
         Drive.Update(Tasks);
 
-        if(Drive.BoxCheck){
-            switch (Drive.BoxPosition){
+        //After all tasks
+        if(Drive.BoxCheck) {
+            switch (Drive.TensorFlowPosition) {
+                //no position found
+                case 0:
+
+                    break;
+                //left
                 case 1:
-                    //Tasks.add(1,new Task(-400, 0.5f, "Strafing"));
-                    Tasks.add(0,new Task(-30,0.3f,"Turning"));
-                    Tasks.add(3,new Task(30,0.3f,"Turning"));
-                    Drive.BoxCheck = false;
+
                     break;
+                //middle
                 case 2:
-                    Drive.BoxCheck = false;
+
                     break;
+                //right
                 case 3:
-                    //Tasks.add(1,new Task(400, 0.5f, "Strafing"));
-                    Tasks.add(0,new Task(30,0.3f,"Turning"));
-                    Tasks.add(3,new Task(-30,0.3f,"Turning"));
-                    Drive.BoxCheck = false;
+
                     break;
             }
+            Drive.BoxCheck = false;
         }
 
         telemetry.update();

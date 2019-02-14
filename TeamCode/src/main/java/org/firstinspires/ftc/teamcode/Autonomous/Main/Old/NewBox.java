@@ -27,15 +27,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.Autonomous.Main;
+package org.firstinspires.ftc.teamcode.Autonomous.Main.Old;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.Autonomous.Drive.AutoDrive;
-import org.firstinspires.ftc.teamcode.Autonomous.Drive.Task;
+import org.firstinspires.ftc.teamcode.Autonomous.Drive.Old.AutoDrive;
+import org.firstinspires.ftc.teamcode.Autonomous.Drive.Old.Task;
 import org.firstinspires.ftc.teamcode.Autonomous.ObjectIdentification.TensorFlowCubeDetection;
 import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
 
@@ -55,9 +55,9 @@ import java.util.ArrayList;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="BoxDuoAuto", group="SimonsPlayGround")
+@Autonomous(name="NewBoxAuto", group="SimonsPlayGround")
 @Disabled
-public class BoxDuo extends OpMode {
+public class NewBox extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -99,21 +99,10 @@ public class BoxDuo extends OpMode {
         //Context Forward Turning Strafing
         tensorFlow.start();
         Tasks.add(new Task(true,1f));
-        Tasks.add(new Task(100f,0.3f,"Forward"));
+        Tasks.add(new Task(50f,0.4f,"Forward"));
         Tasks.add(new Task(false,1f));
         Tasks.add(new Task(tensorFlow));
-        Tasks.add(new Task(500,0.5f,"Forward"));
-        Tasks.add(new Task(-300,0.4f,"Strafing"));
-        Tasks.add(new Task(100,0.3f,"Strafing"));
-
-
-        //Other cube run
-        Tasks.add(new Task(1250,0.5f,"Forward"));
-        Tasks.add(new Task(-300,0.4f,"Strafing"));
-        Tasks.add(new Task(100,0.3f,"Strafing"));
-        Tasks.add(new Task(45,0.3f,"Turning"));
-        Tasks.add(new Task(1000,0.5f,"Forward"));
-        Tasks.add(new Task(-90,0.3f,"Turning"));
+        Tasks.add(new Task(350,0.4f,"Forward"));
     }
 
 
@@ -124,39 +113,23 @@ public class BoxDuo extends OpMode {
         if(Drive.BoxCheck){
             switch (Drive.BoxPosition){
                 case 1:
-                    Tasks.add(1,new Task(-380, 0.3f, "Strafing"));
-                    Tasks.add(2,new Task(700,0.3f,"Forward"));
-                    Tasks.add(3,new Task(45,0.3f,"Turning"));
-                    Tasks.add(4,new Task(580,0.3f,"Forward"));
-                    Tasks.add(5,new Task(90,0.3f,"Turning"));
-
-                    //Cube run
-                    Tasks.add(new Task(-380, 0.3f, "Strafing"));
-                    Tasks.add(new Task(550,0.5f,"Forward"));
-
-                    Drive.BoxCheck = false;
+                    Tasks.add(1,new Task(-380, 0.4f, "Strafing"));
+                    Tasks.add(2,new Task(700,0.4f,"Forward"));
+                    Tasks.add(3,new Task(45,0.4f,"Turning"));
+                    Tasks.add(4,new Task(400,0.4f,"Forward"));
+                    Tasks.add(5,new Task(300,"Marker"));
                     break;
                 case 2:
-                    Tasks.add(1,new Task(1000,0.3f,"Forward"));
-                    Tasks.add(2,new Task(270,0.3f,"Forward"));
-                    Drive.BoxCheck = false;
-                    break;
-                case 0:
-                    Tasks.add(1,new Task(1000,0.3f,"Forward"));
-                    Tasks.add(2,new Task(270,0.3f,"Forward"));
+                    Tasks.add(1,new Task(500,0.4f,"Forward"));
+                    Tasks.add(2,new Task(300,"Marker"));
                     Drive.BoxCheck = false;
                     break;
                 case 3:
-                    Tasks.add(1,new Task(380, 0.3f, "Strafing"));
-                    Tasks.add(2,new Task(700,0.3f,"Forward"));
-                    Tasks.add(3,new Task(-45,0.3f,"Turning"));
-                    Tasks.add(4,new Task(400,0.3f,"Forward"));
-                    Tasks.add(5,new Task(180,0.3f,"Turning"));
-
-                    //cube run
-                    Tasks.add(new Task(-380, 0.3f, "Strafing"));
-                    Tasks.add(new Task(550,0.5f,"Forward"));
-
+                    Tasks.add(1,new Task(380, 0.4f, "Strafing"));
+                    Tasks.add(2,new Task(700,0.4f,"Forward"));
+                    Tasks.add(3,new Task(-45,0.4f,"Turning"));
+                    Tasks.add(4,new Task(400,0.4f,"Forward"));
+                    Tasks.add(5,new Task(300,"Marker"));
                     Drive.BoxCheck = false;
                     break;
             }

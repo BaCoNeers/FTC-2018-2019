@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.Autonomous.Path_Finder;
 
 
-import org.firstinspires.ftc.teamcode.Autonomous.Drive.AutoDrive;
-import org.firstinspires.ftc.teamcode.Autonomous.Drive.Coordinates;
+import org.firstinspires.ftc.teamcode.Autonomous.Drive.Old.AutoDrive;
+import org.firstinspires.ftc.teamcode.Autonomous.Drive.Old.Coordinates;
 
 import java.util.ArrayList;
 
