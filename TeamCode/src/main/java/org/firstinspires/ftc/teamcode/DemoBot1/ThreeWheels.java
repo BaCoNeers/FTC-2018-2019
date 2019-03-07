@@ -82,10 +82,10 @@ public class ThreeWheels extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            double drivePower = gamepad1.left_stick_y;
+            double frontPower = gamepad1.left_stick_y;
             double turnPower = gamepad1.right_stick_x;
 
-            frontDrive.setPower(drivePower);
+            frontDrive.setPower(frontPower);
             turnDrive.setPower(turnPower);
 
             // Show the elapsed game time and wheel power.

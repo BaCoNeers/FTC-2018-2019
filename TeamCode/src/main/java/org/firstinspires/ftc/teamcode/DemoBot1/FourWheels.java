@@ -60,7 +60,6 @@ public class FourWheels extends LinearOpMode {
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
 
-    @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -91,6 +90,7 @@ public class FourWheels extends LinearOpMode {
                 leftPower = turnPower;
                 rightPower = -turnPower;
             }
+
 
             leftDrive.setPower(leftPower);
             rightDrive.setPower(rightPower);
