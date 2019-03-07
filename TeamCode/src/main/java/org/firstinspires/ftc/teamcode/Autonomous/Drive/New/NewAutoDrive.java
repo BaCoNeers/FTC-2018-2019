@@ -285,7 +285,7 @@ public class NewAutoDrive {
     private boolean TensorFlow(ArrayList<MainTask> Left, ArrayList<MainTask> Middle, ArrayList<MainTask> Right) {
         switch (CubePosition){
             case 0:
-                for(int i=0;i;i--){
+                for(int i=Middle.size()-1;i<=0;i--){
                     Tasks.add(1,Middle.get(i));
                 }
                 break;
