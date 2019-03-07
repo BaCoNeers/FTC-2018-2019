@@ -23,8 +23,6 @@ public class NewAutoDrive {
 
     //Robot size
     private static float Encoder = 1120f;
-    private static float RobotCirumfrance = 1957.39f;
-    private static float RobotOneDeg = RobotCirumfrance / 360f;
     private static float WheelCirumfrance = 320;
     private static float WheelCount = WheelCirumfrance / Encoder;
     
@@ -42,20 +40,33 @@ public class NewAutoDrive {
     private Telemetry tel;
     private RoverRucusConfiguration config;
 
+    private TensorFlowCubeDetection tensorFlow = new TensorFlowCubeDetection();
+
     //IMU
     BNO055IMU imu;
     Orientation lastAngles = new Orientation();
-    double globalAngle, power = .30, correction;
+    double globalAngle;
 
-    public NewAutoDrive(RoverRucusConfiguration config, Telemetry tel) {
+    //cube detection
+    public boolean BoxCheck = false;
+    public int CubePosition;
+    boolean Looping = true;
+
+    //Tasks
+    public ArrayList<MainTask> Tasks = new ArrayList<>();
+
+
+    public NewAutoDrive(RoverRucusConfiguration config, Telemetry tel, HardwareMap hardwaremap) {
         this.config = config;
         Motors[0] = this.config.front_left_motor;
         Motors[1] = this.config.front_right_motor;
         Motors[2] = this.config.rear_left_motor;
         Motors[3] = this.config.rear_right_motor;
         this.tel = tel;
+        tensorFlow.Int(this.tel,hardwaremap);
 
     }
+
 
     public void InitialiseIMU(HardwareMap hardwareMap){
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -70,79 +81,63 @@ public class NewAutoDrive {
 
     }
     public boolean CalabrateIMU(){
-        if (!imu.isGyroCalibrated())
-        {
-            return true;
-        }
-        else{
-            return false;
-        }
+        return (!imu.isGyroCalibrated());
 
     }
 
 
-    public void Update(ArrayList<MainTask> tasks) {
+    public void Update() {
         UpdateTelemetry();
         UpdateEncoders();
-        if (tasks.size() > 0) {
+        if (Tasks.size() > 0) {
             //check if task is stuck in loop
-            if (tasks.get(0).CheckTask()) {
+            MainTask currentTask = Tasks.get(0);
+            if (Tasks.get(0).CheckTask()) {
                 //check what type of task
-                switch (tasks.get(0).context) {
+                switch (Tasks.get(0).context) {
                     case "Forward":
-                        if (Forward(tasks.get(0).value, tasks.get(0).power)) {
-                            tasks.remove(0);
-                            return;
+                        if (Forward(Tasks.get(0).value, Tasks.get(0).power)) {
+                            Tasks.remove(0);
                         }
                         break;
                     case "Turning":
-                        /*if (Rotate(tasks.get(0).value,tasks.get(0).power)){
-                            tasks.remove(0);
-                            return;
-                        }*/
-                        if(IMURotation(tasks.get(0).value,tasks.get(0).power)){
-                            tasks.remove(0);
-                            return;
+                        if(IMURotation(Tasks.get(0).value,Tasks.get(0).power)){
+                            Tasks.remove(0);
                         }
                         break;
                     case "Strafing":
-                        if (Strafe(tasks.get(0).value, tasks.get(0).power)) {
-                            tasks.remove(0);
-                            return;
+                        if (Strafe(Tasks.get(0).value, Tasks.get(0).power)) {
+                            Tasks.remove(0);
                         }
                         break;
                     case "CubeDetection":
-                        if (TensorFlow(tasks.get(0).tensorFlow, tasks, tasks.get(0).disiredTime,
-                                tasks.get(0).Right,tasks.get(0).Middle,tasks.get(0).Left)){
-                            tasks.remove(0);
-                            return;
+                        if (TensorFlow(Tasks.get(0).Left,Tasks.get(0).Middle,Tasks.get(0).Right)){
+                            Tasks.remove(0);
                         }
                         break;
                     case "Lift":
-                        if(Lift(tasks.get(0).LiftState,tasks.get(0).power )){
-                            tasks.remove(0);
-                            return;
+                        if(Lift(Tasks.get(0).LiftState,Tasks.get(0).power )){
+                            Tasks.remove(0);
                         }
                         break;
                     case "SetPosition":
-                        if(SetPosition(tasks.get(0).disiredTime)){
-                            tasks.remove(0);
-                            return;
+                        if(SetPosition(Tasks.get(0).disiredTime)){
+                            Tasks.remove(0);
                         }
                         break;
                     case "Marker":
-                        if(Marker(tasks.get(0).value)){
-                            tasks.remove(0);
-                            return;
+                        if(Marker(Tasks.get(0).value)){
+                            Tasks.remove(0);
                         }
                         break;
                 }
             } else {
-                tasks.remove(0);
+                Tasks.remove(0);
             }
         }
     }
 
+    /*
      private boolean Rotate(float Angle, float power) {
         int direction = 1;
         if(Angle<0){
@@ -164,6 +159,7 @@ public class NewAutoDrive {
             return true;
         }
     }
+    */
 
     private boolean IMURotation(float Angle, float power){
         int direction = 1;
@@ -268,43 +264,48 @@ public class NewAutoDrive {
             return true;
         }
     }
-    public int TensorFlowPosition;
-    public boolean BoxCheck = false;
 
-    private boolean TensorFlow(TensorFlowCubeDetection tensorFlow, ArrayList<MainTask> tasks, long time,
-                               ArrayList<MainTask> Left, ArrayList<MainTask> Middle, ArrayList<MainTask> Right) {
+    public void CubePosition(){
+        tensorFlow.start();
+        int count = 0;
 
-        if (System.nanoTime() > time) {
-            TensorFlowPosition = tensorFlow.GetCubePos();
-            for(int i=Middle.size();i>0;i--){
-                tasks.add(1,Middle.get(i));
-            }
-            BoxCheck = true;
-            return true;
-        } else {
-            if (tensorFlow.GetCubePos() != 0) {
-                TensorFlowPosition = tensorFlow.GetCubePos();
-                switch (tensorFlow.GetCubePos()){
-                    case 1:
-                        for(int i=Right.size();i>0;i--) {
-                            tasks.add(1, Right.get(i));
-                        }
-                        break;
-                    case 2:
-                        for(int i=Middle.size();i>0;i--){
-                            tasks.add(1,Middle.get(i));
-                        }
-                        break;
-                    case 3:
-                        for(int i=Left.size();i>0;i--){
-                            tasks.add(1,Left.get(i));
-                        }
-                }
-                BoxCheck = true;
-                return true;
+        while(tensorFlow.GetCubePos() == 0){
+            count++;
+            if(count > 2000){
+                Looping = false;
             }
         }
-        return false;
+
+        Looping = false;
+        BoxCheck = true;
+        tensorFlow.running = false;
+        CubePosition = tensorFlow.GetCubePos();
+    }
+
+    private boolean TensorFlow(ArrayList<MainTask> Left, ArrayList<MainTask> Middle, ArrayList<MainTask> Right) {
+        switch (CubePosition){
+            case 0:
+                for(int i=0;i;i--){
+                    Tasks.add(1,Middle.get(i));
+                }
+                break;
+            case 1:
+                for(int i=Left.size()-1;i>=0; i--) {
+                    Tasks.add(1,Left.get(i));
+                }
+                break;
+            case 2:
+                for(int i=Middle.size()-1;i>=0;i--){
+                    Tasks.add(1,Middle.get(i));
+                }
+                break;
+            case 3:
+                for(int i=Right.size()-1;i>=0;i--){
+                    Tasks.add(1,Right.get(i));
+                }
+        }
+        BoxCheck = true;
+        return true;
     }
 
 
@@ -454,9 +455,10 @@ public class NewAutoDrive {
         return Encoder * WheelCount;
     }
 
-    private float ConvertToAngle(float Encoder) {
+    /*private float ConvertToAngle(float Encoder) {
         return (Encoder * WheelCount) / RobotOneDeg;
     }
+    */
 
     private float ConverForStrafe(float Encoder) {
         return (Encoder * WheelCount) * 0.86f;
@@ -534,7 +536,9 @@ public class NewAutoDrive {
     }
 
     private void UpdateTelemetry() {
-        tel.addLine("Avg Encoder: " + GetAvarage());
+        for(int i=0;i<Tasks.size();i++) {
+            tel.addLine(Tasks.get(i).context + "\n");
+        }
     }
 
 

@@ -58,8 +58,8 @@ import java.util.ArrayList;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Test", group="SimonsPlayGround")
-public class Test extends OpMode {
+@Autonomous(name="Template", group="SimonsPlayGround")
+public class Template extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -67,9 +67,6 @@ public class Test extends OpMode {
     private RoverRucusConfiguration config;
     //Task management
     private NewAutoDrive Drive;
-    private TensorFlowCubeDetection tensorFlow = new TensorFlowCubeDetection();
-
-    private ArrayList<MainTask> Tasks = new ArrayList<>();
 
     ArrayList<MainTask> left = new ArrayList<>();
     ArrayList<MainTask> middle = new ArrayList<>();
@@ -80,8 +77,7 @@ public class Test extends OpMode {
     public void init() {
         config = RoverRucusConfiguration.newConfig(hardwareMap,telemetry);
 
-        Drive = new NewAutoDrive(config,telemetry);
-        //tensorFlow.Int(telemetry,hardwareMap);
+        Drive = new NewAutoDrive(config,telemetry,hardwareMap);
 
         Drive.InitialiseIMU(hardwareMap);
         while (Drive.CalabrateIMU());
@@ -107,60 +103,64 @@ public class Test extends OpMode {
 
 
 
-        //Context Forward Turning Strafing
-        tensorFlow.start();
+        //Find the position of the cube. This should be run when the camera can see
+        //all three objects. Unless it cant find all three objects it will defualt to the middle position
+        Drive.CubePosition();
 
-        Tasks.add(new ForwardTask(0.3f, 20));
-        Tasks.add(new TurningTask(0.3f, 90));
-        Tasks.add(new TurningTask(0.3f, -90));
-        Tasks.add(new ForwardTask(0.3f, -20));
-        Tasks.add(new LiftTask(true, 0.3f));
-        Tasks.add(new LiftTask(false, 0.3f));
+        //Forward movement is mesaured in mm
+        //turning is measured in degrees
+
 
         //left
         left.add(new TurningTask(0.3f,30));
-        left.add(new ForwardTask(0.3f,20));
+        left.add(new ForwardTask(0.3f,200));
 
 
         //middle
-        middle.add(new ForwardTask(0.3f,20));
+        middle.add(new ForwardTask(0.3f,200));
 
         //right
-        right.add(new ForwardTask(0.3f,20));
+        right.add(new TurningTask(0.3f,-30));
+        right.add(new ForwardTask(0.3f,200));
 
 
-        Tasks.add(new TensorFlow(tensorFlow,left,middle,right));
-        Tasks.add(new TurningTask(0.3f,90));
+        Drive.Tasks.add(new TensorFlow(left,middle,right));
     }
 
 
     @Override
     public void loop() {
-        Drive.Update(Tasks);
+
+        telemetry.addData("Cubposition: ",Drive.CubePosition);
+
+        Drive.Update();
 
         //After all tasks
+        /*
         if(Drive.BoxCheck) {
-            switch (Drive.TensorFlowPosition) {
+            switch (Drive.CubePosition) {
                 //no position found
                 case 0:
-
+                    Drive.Tasks.add(new ForwardTask(0.3f,-200));
                     break;
                 //left
                 case 1:
-
+                    Drive.Tasks.add(new ForwardTask(0.3f,-200));
+                    Drive.Tasks.add(new TurningTask(0.3f,-30));
                     break;
                 //middle
                 case 2:
-
+                    Drive.Tasks.add(new ForwardTask(0.3f,-200));
                     break;
                 //right
                 case 3:
-
+                    Drive.Tasks.add(new ForwardTask(0.3f,-200));
+                    Drive.Tasks.add(new TurningTask(0.3f,30));
                     break;
             }
             Drive.BoxCheck = false;
         }
-
+        */
         telemetry.update();
     }
 
