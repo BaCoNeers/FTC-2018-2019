@@ -3,12 +3,14 @@ package org.firstinspires.ftc.teamcode.Autonomous.Drive.New;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.vuforia.TrackableResult;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.teamcode.Autonomous.NewAttempt.Task;
 import org.firstinspires.ftc.teamcode.Autonomous.ObjectIdentification.TensorFlowCubeDetection;
 import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
 
@@ -92,76 +94,81 @@ public class NewAutoDrive {
         if (Tasks.size() > 0) {
             //check if task is stuck in loop
             MainTask currentTask = Tasks.get(0);
-            if (Tasks.get(0).CheckTask()) {
+            if (currentTask.CheckTask()) {
                 //check what type of task
-                switch (Tasks.get(0).context) {
+                switch (currentTask.context) {
                     case "Forward":
-                        if (Forward(Tasks.get(0).value, Tasks.get(0).power)) {
-                            Tasks.remove(0);
+                        if (Forward(currentTask.value, currentTask.power)) {
+                            Tasks.remove(currentTask);
+                            Status.add(currentTask.context + "finished");
+                            return;
                         }
                         break;
                     case "Turning":
-                        if(IMURotation(Tasks.get(0).value,Tasks.get(0).power)){
-                            Tasks.remove(0);
+                        if(IMURotation(currentTask.value,currentTask.power)){
+                            Tasks.remove(currentTask);
+                            Status.add(currentTask.context + "finished");
+                            return;
                         }
                         break;
                     case "Strafing":
-                        if (Strafe(Tasks.get(0).value, Tasks.get(0).power)) {
-                            Tasks.remove(0);
+                        if (Strafe(currentTask.value, currentTask.power)) {
+                            Tasks.remove(currentTask);
+                            Status.add(currentTask.context + "finished");
+                            return;
                         }
                         break;
                     case "CubeDetection":
-                        if (TensorFlow(Tasks.get(0).Left,Tasks.get(0).Middle,Tasks.get(0).Right)){
-                            Tasks.remove(0);
+                        if (TensorFlow(currentTask.Left,currentTask.Middle,currentTask.Right)){
+                            Tasks.remove(currentTask);
+                            Status.add(currentTask.context + "finished");
+                            return;
                         }
                         break;
                     case "Lift":
-                        if(Lift(Tasks.get(0).LiftState,Tasks.get(0).power )){
-                            Tasks.remove(0);
+                        if(Lift(currentTask.LiftState,currentTask.power )){
+                            Tasks.remove(currentTask);
+                            Status.add(currentTask.context + "finished");
+                            return;
                         }
                         break;
                     case "SetPosition":
-                        if(SetPosition(Tasks.get(0).disiredTime)){
-                            Tasks.remove(0);
+                        if(SetPosition(currentTask.disiredTime)){
+                            Tasks.remove(currentTask);
+                            Status.add(currentTask.context + "finished");
+                            return;
                         }
                         break;
                     case "Marker":
-                        if(Marker(Tasks.get(0).value)){
-                            Tasks.remove(0);
+                        if(Marker(currentTask.value)){
+                            Tasks.remove(currentTask);
+                            Status.add(currentTask.context + "finished");
+                            return;
+                        }
+                        break;
+                    case "Wait":
+                        if(wait(currentTask.value)){
+                            Tasks.remove(currentTask);
+                            Status.add(currentTask.context + "finished");
+                            return;
                         }
                         break;
                 }
             } else {
-                Tasks.remove(0);
+                Tasks.remove(currentTask);
             }
         }
     }
 
-    /*
-     private boolean Rotate(float Angle, float power) {
-        int direction = 1;
-        if(Angle<0){
-            direction = -1;
-        }
-        if (Math.abs(ConvertToAngle(GetAvarage())) < Math.abs(Angle)) {
-            MotorPower[0] = power*direction;
-            MotorPower[1] = -power*direction;
-            MotorPower[2] = power*direction;
-            MotorPower[3] = -power*direction;
-            UpdateMotor(true);
-            UpdateEncoders();
-            tel.addLine("Turning Running....");
-            return false;
-        } else {
-            UpdateMotor(false);
-            ResestMotors();
-            UpdateEncoders();
+    private boolean wait(float seconds){
+        if(seconds < System.nanoTime()){
             return true;
         }
+        return false;
     }
-    */
 
     private boolean IMURotation(float Angle, float power){
+        tel.addLine("Turning.....");
         int direction = 1;
         if(Angle>0){
             direction = -1;
@@ -176,6 +183,8 @@ public class NewAutoDrive {
             return false;
         }
         else{
+            ResestMotors();
+            UpdateEncoders();
             resetAngle();
             UpdateMotor(false);
             return true;
@@ -184,6 +193,7 @@ public class NewAutoDrive {
 
     public boolean Forward(float Distance, float power) {
         tel.addLine("Forward Running....");
+        tel.addLine("Encoder: "+GetAvarage());
         int direction = 1;
         if(Distance<0){
             direction = -1;
@@ -192,10 +202,10 @@ public class NewAutoDrive {
         MotorPower[1] = power*direction;
         MotorPower[2] = power*direction;
         MotorPower[3] = power*direction;
+        UpdateEncoders();
         ForwardScale(Distance);
         if (GetAvaragepower() > 0.1) {
             UpdateMotor(true);
-            UpdateEncoders();
             return false;
         } else {
             UpdateMotor(false);
@@ -204,6 +214,8 @@ public class NewAutoDrive {
             return true;
         }
     }
+
+
 
     private boolean Strafe(float Distance, float power) {
         int direction = 1;
@@ -285,14 +297,16 @@ public class NewAutoDrive {
     private boolean TensorFlow(ArrayList<MainTask> Left, ArrayList<MainTask> Middle, ArrayList<MainTask> Right) {
         switch (CubePosition){
             case 0:
-                for(int i=Middle.size()-1;i<=0;i--){
+                for(int i=Middle.size()-1;i>=0;i--){
                     Tasks.add(1,Middle.get(i));
                 }
                 break;
             case 1:
-                for(int i=Left.size()-1;i>=0; i--) {
+                
+                for(int i=Left.size()-1;i>=0;i--) {
                     Tasks.add(1,Left.get(i));
                 }
+
                 break;
             case 2:
                 for(int i=Middle.size()-1;i>=0;i--){
@@ -535,10 +549,35 @@ public class NewAutoDrive {
 
     }
 
+    private StringBuffer sb = new StringBuffer();
+
+    ArrayList<String> Jobs = new ArrayList<>();
+    ArrayList<String> Status = new ArrayList<>();
+    ArrayList<Boolean> Completed = new ArrayList<>();
+    MainTask prevjob;
     private void UpdateTelemetry() {
-        for(int i=0;i<Tasks.size();i++) {
-            tel.addLine(Tasks.get(i).context + "\n");
+        if(Tasks.size() != 0) {
+            if (Jobs.size() != 0) {
+                if (Tasks.get(0) != prevjob) {
+                    Jobs.add(Tasks.get(0).context);
+                    Completed.add(false);
+                    Completed.set(0,true);
+                    prevjob = Tasks.get(0);
+                }
+            } else {
+                Jobs.add(Tasks.get(0).context);
+                Completed.add(false);
+                prevjob = Tasks.get(0);
+            }
         }
+        tel.addLine("Task size: "+Tasks.size());
+        for(int i=0;i<Jobs.size();i++){
+            tel.addLine("Job: "+Jobs.get(i)+" Competed: "+Completed.get(i));
+        }
+        for(int i=0;i<Status.size();i++){
+            tel.addLine("Job: "+Status.get(i));
+        }
+
     }
 
 
