@@ -27,12 +27,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.OpMode;
+package org.firstinspires.ftc.teamcode.OpMode.WorldsCode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
 import org.firstinspires.ftc.teamcode.Configuration.WorldsConfiguration;
 import org.firstinspires.ftc.teamcode.common.BaconOpMode;
 
@@ -56,7 +55,8 @@ public class WorldsOpMode extends BaconOpMode {
     @Override
     protected void onInit(){
         config = WorldsConfiguration.newConfig(hardwareMap, telemetry);
-        drive = new WorldsDrive(this, config);
+
+        //drive = new WorldsDrive(this, config);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
     }

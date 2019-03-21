@@ -313,40 +313,27 @@ public class NewAutoDrive {
         long CurrentTime = System.nanoTime();
 
         boolean PrimTimeElapsed = (PrevPrimStateTime + 200000000) < CurrentTime;
-        boolean SecTImeElapsed = (PrevSecStateTime + 200000000) < CurrentTime;
 
         if(state && PrimliftState.equals(LiftState.LiftTop)){
             config.prim_lift_motor.setPower(0);
         }
-        if(state && SecliftState.equals(LiftState.LiftTop)){
-            config.sec_lift_motor.setPower(0);
-        }
         if(!state && PrimliftState.equals(LiftState.LiftBottom)){
             config.prim_lift_motor.setPower(0);
         }
-        if(!state && SecliftState.equals(LiftState.LiftBottom)){
-            config.sec_lift_motor.setPower(0);
-        }
-        if(state && PrimliftState.equals(LiftState.LiftTop) && SecliftState.equals(LiftState.LiftTop)) {
+        if(state && PrimliftState.equals(LiftState.LiftTop)) {
             return true;
         }
-        if(!state && PrimliftState.equals(LiftState.LiftBottom) && SecliftState.equals(LiftState.LiftBottom)) {
+        if(!state && PrimliftState.equals(LiftState.LiftBottom)) {
             return true;
         }
 
         boolean PrimStateLowToHigh = PrimTimeElapsed && !PrevPrimState && config.PrimLimitSwitch.getState();
         boolean PrimStateHighToLow = PrimTimeElapsed && PrevPrimState && !config.PrimLimitSwitch.getState();
 
-        boolean SecStateLowToHigh = SecTImeElapsed && !PrevSecState && config.SecLimitSwitch.getState();
-        boolean SecStateHighToLow = SecTImeElapsed && PrevSecState && !config.SecLimitSwitch.getState();
 
         if(PrimStateHighToLow || PrimStateLowToHigh) {
             PrevPrimState = config.PrimLimitSwitch.getState();
             PrevPrimStateTime = CurrentTime;
-        }
-        if(SecStateHighToLow || SecStateLowToHigh){
-            PrevSecState = config.SecLimitSwitch.getState();
-            PrevSecStateTime = CurrentTime;
         }
 
         if (state) {
@@ -367,22 +354,6 @@ public class NewAutoDrive {
                 default:
                     break;
             }
-            switch (SecliftState){
-                case LiftBottom:
-                    config.sec_lift_motor.setPower(power);
-                    if (SecStateLowToHigh) {
-                        SecliftState = LiftState.LiftMiddle;
-                    }
-                    break;
-                case LiftMiddle:
-                    config.sec_lift_motor.setPower(power);
-                    if (SecStateHighToLow) {
-                        SecliftState = LiftState.LiftTop;
-                    }
-                    break;
-                default:
-                    break;
-            }
         } else {
             //Going Down
             switch (PrimliftState){
@@ -396,22 +367,6 @@ public class NewAutoDrive {
                     config.prim_lift_motor.setPower(power);
                     if(PrimStateHighToLow){
                         PrimliftState = LiftState.LiftBottom;
-                    }
-                    break;
-                default:
-                    break;
-            }
-            switch (SecliftState){
-                case LiftTop:
-                    config.sec_lift_motor.setPower(-power);
-                    if (SecStateLowToHigh) {
-                        SecliftState = LiftState.LiftMiddle;
-                    }
-                    break;
-                case LiftMiddle:
-                    config.sec_lift_motor.setPower(-power);
-                    if (SecStateHighToLow) {
-                        SecliftState = LiftState.LiftBottom;
                     }
                     break;
                 default:
