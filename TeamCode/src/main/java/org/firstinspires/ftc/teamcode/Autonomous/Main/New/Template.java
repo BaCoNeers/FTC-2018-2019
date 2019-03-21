@@ -33,12 +33,14 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.NewAutoDrive;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.ForwardTask;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.LiftTask;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.MainTask;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.TensorFlow;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.TurningTask;
+import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.Wait;
 import org.firstinspires.ftc.teamcode.Autonomous.ObjectIdentification.TensorFlowCubeDetection;
 import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
 
@@ -77,7 +79,7 @@ public class Template extends OpMode {
     public void init() {
         config = RoverRucusConfiguration.newConfig(hardwareMap,telemetry);
 
-        Drive = new NewAutoDrive(config,telemetry,hardwareMap);
+        Drive = new NewAutoDrive(config,320,1120,telemetry,hardwareMap);
 
         Drive.InitialiseIMU(hardwareMap);
         while (Drive.CalabrateIMU());
@@ -92,6 +94,8 @@ public class Template extends OpMode {
      */
     @Override
     public void init_loop() {
+        telemetry.addLine("Initialized");
+        telemetry.update();
     }
 
     /*
@@ -100,6 +104,7 @@ public class Template extends OpMode {
     @Override
     public void start() {
         runtime.reset();
+        telemetry.addLine("Starting");
 
 
 
@@ -109,7 +114,6 @@ public class Template extends OpMode {
 
         //Forward movement is mesaured in mm
         //turning is measured in degrees
-
 
         //left
         left.add(new TurningTask(0.3f,30));
@@ -125,42 +129,13 @@ public class Template extends OpMode {
 
 
         Drive.Tasks.add(new TensorFlow(left,middle,right));
+        telemetry.update();
     }
 
 
     @Override
     public void loop() {
-
-        telemetry.addData("Cubposition: ",Drive.CubePosition);
-
         Drive.Update();
-
-        //After all tasks
-        /*
-        if(Drive.BoxCheck) {
-            switch (Drive.CubePosition) {
-                //no position found
-                case 0:
-                    Drive.Tasks.add(new ForwardTask(0.3f,-200));
-                    break;
-                //left
-                case 1:
-                    Drive.Tasks.add(new ForwardTask(0.3f,-200));
-                    Drive.Tasks.add(new TurningTask(0.3f,-30));
-                    break;
-                //middle
-                case 2:
-                    Drive.Tasks.add(new ForwardTask(0.3f,-200));
-                    break;
-                //right
-                case 3:
-                    Drive.Tasks.add(new ForwardTask(0.3f,-200));
-                    Drive.Tasks.add(new TurningTask(0.3f,30));
-                    break;
-            }
-            Drive.BoxCheck = false;
-        }
-        */
         telemetry.update();
     }
 
