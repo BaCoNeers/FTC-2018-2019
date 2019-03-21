@@ -79,7 +79,7 @@ public class Template extends OpMode {
     public void init() {
         config = RoverRucusConfiguration.newConfig(hardwareMap,telemetry);
 
-        Drive = new NewAutoDrive(config,telemetry,hardwareMap);
+        Drive = new NewAutoDrive(config,320,1120,telemetry,hardwareMap);
 
         Drive.InitialiseIMU(hardwareMap);
         while (Drive.CalabrateIMU());
@@ -135,37 +135,7 @@ public class Template extends OpMode {
 
     @Override
     public void loop() {
-
-        telemetry.addData("Cubposition: ",Drive.CubePosition);
-
         Drive.Update();
-
-        //After all tasks
-        /*
-        if(Drive.BoxCheck) {
-            switch (Drive.CubePosition) {
-                //no position found
-                case 0:
-                    Drive.Tasks.add(new ForwardTask(0.3f,-200));
-                    break;
-                //left
-                case 1:
-                    Drive.Tasks.add(new ForwardTask(0.3f,-200));
-                    Drive.Tasks.add(new TurningTask(0.3f,-30));
-                    break;
-                //middle
-                case 2:
-                    Drive.Tasks.add(new ForwardTask(0.3f,-200));
-                    break;
-                //right
-                case 3:
-                    Drive.Tasks.add(new ForwardTask(0.3f,-200));
-                    Drive.Tasks.add(new TurningTask(0.3f,30));
-                    break;
-            }
-            Drive.BoxCheck = false;
-        }
-        */
         telemetry.update();
     }
 

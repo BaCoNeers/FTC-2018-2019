@@ -58,7 +58,7 @@ public class NewAutoDrive {
     public ArrayList<MainTask> Tasks = new ArrayList<>();
 
 
-    public NewAutoDrive(RoverRucusConfiguration config, Telemetry tel, HardwareMap hardwaremap) {
+    public NewAutoDrive(RoverRucusConfiguration config, float wheelCircumgfranceMM, float encoderFullrotation, Telemetry tel, HardwareMap hardwaremap) {
         this.config = config;
         Motors[0] = this.config.front_left_motor;
         Motors[1] = this.config.front_right_motor;
@@ -67,6 +67,9 @@ public class NewAutoDrive {
         this.tel = tel;
         tensorFlow.Int(this.tel,hardwaremap);
 
+        WheelCirumfrance = wheelCircumgfranceMM;
+        Encoder = encoderFullrotation;
+        WheelCount = WheelCirumfrance / Encoder;
     }
 
 
@@ -302,7 +305,7 @@ public class NewAutoDrive {
                 }
                 break;
             case 1:
-                
+
                 for(int i=Left.size()-1;i>=0;i--) {
                     Tasks.add(1,Left.get(i));
                 }
@@ -469,11 +472,6 @@ public class NewAutoDrive {
         return Encoder * WheelCount;
     }
 
-    /*private float ConvertToAngle(float Encoder) {
-        return (Encoder * WheelCount) / RobotOneDeg;
-    }
-    */
-
     private float ConverForStrafe(float Encoder) {
         return (Encoder * WheelCount) * 0.86f;
     }
@@ -535,7 +533,6 @@ public class NewAutoDrive {
         Encoders[3] = Motors[3].getCurrentPosition();
     }
 
-
     private void ResestMotors() {
         Motors[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Motors[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -549,31 +546,8 @@ public class NewAutoDrive {
 
     }
 
-    private StringBuffer sb = new StringBuffer();
-
-    ArrayList<String> Jobs = new ArrayList<>();
     ArrayList<String> Status = new ArrayList<>();
-    ArrayList<Boolean> Completed = new ArrayList<>();
-    MainTask prevjob;
     private void UpdateTelemetry() {
-        if(Tasks.size() != 0) {
-            if (Jobs.size() != 0) {
-                if (Tasks.get(0) != prevjob) {
-                    Jobs.add(Tasks.get(0).context);
-                    Completed.add(false);
-                    Completed.set(0,true);
-                    prevjob = Tasks.get(0);
-                }
-            } else {
-                Jobs.add(Tasks.get(0).context);
-                Completed.add(false);
-                prevjob = Tasks.get(0);
-            }
-        }
-        tel.addLine("Task size: "+Tasks.size());
-        for(int i=0;i<Jobs.size();i++){
-            tel.addLine("Job: "+Jobs.get(i)+" Competed: "+Completed.get(i));
-        }
         for(int i=0;i<Status.size();i++){
             tel.addLine("Job: "+Status.get(i));
         }
