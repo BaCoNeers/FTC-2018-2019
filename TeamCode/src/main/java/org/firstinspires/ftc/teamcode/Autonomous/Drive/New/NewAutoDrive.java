@@ -35,8 +35,6 @@ public class NewAutoDrive {
     private LiftState SecliftState = LiftState.LiftBottom;
     private boolean PrevPrimState = false;
     private long PrevPrimStateTime = 0;
-    private boolean PrevSecState = false;
-    private long PrevSecStateTime = 0;
 
 
     private Telemetry tel;
@@ -306,19 +304,18 @@ public class NewAutoDrive {
         long CurrentTime = System.nanoTime();
 
         boolean PrimTimeElapsed = (PrevPrimStateTime + 200000000) < CurrentTime;
-        boolean SecTImeElapsed = (PrevSecStateTime + 200000000) < CurrentTime;
 
         if(state && PrimliftState.equals(LiftState.LiftTop)){
-            config.prim_lift_motor.setPower(0);
+            config.robot_lift_motor.setPower(0);
         }
         if(state && SecliftState.equals(LiftState.LiftTop)){
-            config.sec_lift_motor.setPower(0);
+            config.robot_lift_motor.setPower(0);
         }
         if(!state && PrimliftState.equals(LiftState.LiftBottom)){
-            config.prim_lift_motor.setPower(0);
+            config.robot_lift_motor.setPower(0);
         }
         if(!state && SecliftState.equals(LiftState.LiftBottom)){
-            config.sec_lift_motor.setPower(0);
+            config.robot_lift_motor.setPower(0);
         }
         if(state && PrimliftState.equals(LiftState.LiftTop) && SecliftState.equals(LiftState.LiftTop)) {
             return true;
@@ -330,47 +327,24 @@ public class NewAutoDrive {
         boolean PrimStateLowToHigh = PrimTimeElapsed && !PrevPrimState && config.PrimLimitSwitch.getState();
         boolean PrimStateHighToLow = PrimTimeElapsed && PrevPrimState && !config.PrimLimitSwitch.getState();
 
-        boolean SecStateLowToHigh = SecTImeElapsed && !PrevSecState && config.SecLimitSwitch.getState();
-        boolean SecStateHighToLow = SecTImeElapsed && PrevSecState && !config.SecLimitSwitch.getState();
-
         if(PrimStateHighToLow || PrimStateLowToHigh) {
             PrevPrimState = config.PrimLimitSwitch.getState();
             PrevPrimStateTime = CurrentTime;
-        }
-        if(SecStateHighToLow || SecStateLowToHigh){
-            PrevSecState = config.SecLimitSwitch.getState();
-            PrevSecStateTime = CurrentTime;
         }
 
         if (state) {
             // Going up to top
             switch (PrimliftState) {
                 case LiftBottom:
-                    config.prim_lift_motor.setPower(-power);
+                    config.robot_lift_motor.setPower(-power);
                     if (PrimStateLowToHigh) {
                         PrimliftState = LiftState.LiftMiddle;
                     }
                     break;
                 case LiftMiddle:
-                    config.prim_lift_motor.setPower(-power);
+                    config.robot_lift_motor.setPower(-power);
                     if (PrimStateHighToLow) {
                         PrimliftState = LiftState.LiftTop;
-                    }
-                    break;
-                default:
-                    break;
-            }
-            switch (SecliftState){
-                case LiftBottom:
-                    config.sec_lift_motor.setPower(power);
-                    if (SecStateLowToHigh) {
-                        SecliftState = LiftState.LiftMiddle;
-                    }
-                    break;
-                case LiftMiddle:
-                    config.sec_lift_motor.setPower(power);
-                    if (SecStateHighToLow) {
-                        SecliftState = LiftState.LiftTop;
                     }
                     break;
                 default:
@@ -380,31 +354,15 @@ public class NewAutoDrive {
             //Going Down
             switch (PrimliftState){
                 case LiftTop:
-                    config.prim_lift_motor.setPower(power);
+                    config.robot_lift_motor.setPower(power);
                     if(PrimStateLowToHigh){
                         PrimliftState = LiftState.LiftMiddle;
                     }
                     break;
                 case LiftMiddle:
-                    config.prim_lift_motor.setPower(power);
+                    config.robot_lift_motor.setPower(power);
                     if(PrimStateHighToLow){
                         PrimliftState = LiftState.LiftBottom;
-                    }
-                    break;
-                default:
-                    break;
-            }
-            switch (SecliftState){
-                case LiftTop:
-                    config.sec_lift_motor.setPower(-power);
-                    if (SecStateLowToHigh) {
-                        SecliftState = LiftState.LiftMiddle;
-                    }
-                    break;
-                case LiftMiddle:
-                    config.sec_lift_motor.setPower(-power);
-                    if (SecStateHighToLow) {
-                        SecliftState = LiftState.LiftBottom;
                     }
                     break;
                 default:
