@@ -39,10 +39,10 @@ public class WorldsConfiguration extends RobotConfiguration {
         rear_left_motor = hardwareMap.get(DcMotor.class,"BackLeftMotor");
         rear_right_motor = hardwareMap.get(DcMotor.class,"BackRightMotor");
 
-        front_left_motor.setDirection(DcMotor.Direction.FORWARD);
-        front_right_motor.setDirection(DcMotor.Direction.REVERSE);
-        rear_left_motor.setDirection(DcMotor.Direction.FORWARD);
-        rear_right_motor.setDirection(DcMotor.Direction.REVERSE);
+        front_left_motor.setDirection(DcMotor.Direction.REVERSE);
+        front_right_motor.setDirection(DcMotor.Direction.FORWARD);
+        rear_left_motor.setDirection(DcMotor.Direction.REVERSE);
+        rear_right_motor.setDirection(DcMotor.Direction.FORWARD);
 
         front_left_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         front_right_motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

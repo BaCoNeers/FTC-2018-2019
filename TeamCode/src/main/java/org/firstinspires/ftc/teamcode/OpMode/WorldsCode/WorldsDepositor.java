@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.Configuration.WorldsConfiguration;
 public class WorldsDepositor {
     // members:
     private OpMode opmode = null;
-    private RoverRucusConfiguration config = null;
+    private WorldsConfiguration config = null;
     public boolean buttonState = false;
     public boolean lastButtonState = false;
     public boolean state = false;
