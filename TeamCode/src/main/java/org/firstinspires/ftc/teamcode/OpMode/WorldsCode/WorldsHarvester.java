@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.Configuration.WorldsConfiguration;
  * Created by Baconeers on 8/11/2018.
  */
 
-public class WorldsDrive {
+public class WorldsHarvester {
     // members:
     private OpMode opmode = null;
     private RoverRucusConfiguration config = null;
@@ -59,7 +59,7 @@ public class WorldsDrive {
      return 1.0;
     }
 
-    public WorldsDrive(OpMode opmodeIn, WorldsConfiguration configIn) {
+    public WorldsHarvester(OpMode opmodeIn, WorldsConfiguration configIn) {
         super();
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration

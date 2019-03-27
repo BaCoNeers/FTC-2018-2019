@@ -27,11 +27,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.OpMode.WorldsCode;
+package org.firstinspires.ftc.teamcode.OpMode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
 import org.firstinspires.ftc.teamcode.Configuration.WorldsConfiguration;
 import org.firstinspires.ftc.teamcode.common.BaconOpMode;
 
@@ -44,40 +45,30 @@ import org.firstinspires.ftc.teamcode.common.BaconOpMode;
 >>>>>>> autonomous
  */
 
-@TeleOp (name="Worlds Code")
+@TeleOp
 public class WorldsOpMode extends BaconOpMode {
 
     // Declare OpMode members.
     public ElapsedTime runtime = new ElapsedTime();
     public WorldsConfiguration config;
-    public WorldsDrive drive;
-    public WorldsDepositor depositor;
-    public WorldsHarvester harvester;
-    public WorldsLift lift;
+    public Drive drive;
 
     @Override
     protected void onInit(){
-        config = WorldsConfiguration.newConfig(hardwareMap, telemetry);
-
-        drive = new WorldsDrive(this, config);
-        depositor = new WorldsDepositor(this, config);
-        harvester = new WorldsHarvester(this, config);
-        lift = new WorldsLift(this, config);
+        config = RoverRucusConfiguration.newConfig(hardwareMap, telemetry);
+        drive = new Drive(this, config);
+        lift = new Lift(this, config);
+        armLift = new ArmLift(this, config);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
     }
 
     @Override
-    protected void onStart() {
-
-    }
-
-    @Override
     protected void activeLoop(){
-        drive.update();
-        depositor.update();
-        harvester.update();
-        lift.update();
+        drive.updateDrive();
+        lift.updateLift();
+        armLift.updateArmLift();
+        telemetry.addLine("Pot: "+config.ArmPotentiometer.getVoltage());
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.update();
     }

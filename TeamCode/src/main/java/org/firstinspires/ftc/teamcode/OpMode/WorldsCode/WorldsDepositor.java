@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.Configuration.WorldsConfiguration;
  * Created by Baconeers on 8/11/2018.
  */
 
-public class WorldsDrive {
+public class WorldsDepositor {
     // members:
     private OpMode opmode = null;
     private RoverRucusConfiguration config = null;
@@ -18,6 +18,15 @@ public class WorldsDrive {
     public boolean lastButtonState = false;
     public boolean state = false;
     public boolean toggleFunction = false;
+
+    double servo_positions[][] = {
+            {0.0,0.0},
+            {0.0,0.0},
+            {0.2,0.15},
+            {0.4,0.3},
+            {0.6,0.2}
+    };
+    int servo_index = 0;
 
     public double Toggle() {
         buttonState = opmode.gamepad1.y;
@@ -59,7 +68,7 @@ public class WorldsDrive {
      return 1.0;
     }
 
-    public WorldsDrive(OpMode opmodeIn, WorldsConfiguration configIn) {
+    public WorldsDepositor(OpMode opmodeIn, WorldsConfiguration configIn) {
         super();
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
@@ -71,6 +80,22 @@ public class WorldsDrive {
     }
 
     public void update(){
+
+        // Manipulate the position of the servos
+        if (opmode.gamepad2.b) {
+            servo_index += 1;
+        } else  if (opmode.gamepad2.a) {
+            servo_index -= 1;
+        }
+        if (servo_index < 0) servo_index = 0;
+        if (servo_index >= servo_positions.length) servo_index = servo_positions.length - 1;
+
+       // config.dep_arm_servo.setPosition(servo_positions[servo_index][0]);
+        //config.dep_bkt_servo.setPosition(servo_positions[servo_index][1]);
+
+
+
+
         // Setup a variable for each drive wheel to save power level for telemetry
         double front_left_power;
         double front_right_power;
@@ -78,7 +103,7 @@ public class WorldsDrive {
         double rear_right_power;
 
         // Implement Mecanum drive using drive equations from Internet:
-        double left_y = opmode.gamepad1.left_stick_y; //forward
+        double left_y = opmode.gamepad2.left_stick_y; //forward
         double left_x  = -opmode.gamepad1.left_stick_x; //strafe
         double right_x = -opmode.gamepad1.right_stick_x; //turning
         front_left_power = Range.clip(left_y + left_x + right_x, -1.0, 1.0);
