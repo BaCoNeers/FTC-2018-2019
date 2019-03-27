@@ -135,13 +135,6 @@ public class NewAutoDrive {
                             return;
                         }
                         break;
-                    case "SetPosition":
-                        if(SetPosition(currentTask.disiredTime)){
-                            Tasks.remove(currentTask);
-                            Status.add(currentTask.context + "finished");
-                            return;
-                        }
-                        break;
                     case "Marker":
                         if(Marker(currentTask.value)){
                             Tasks.remove(currentTask);
@@ -242,23 +235,6 @@ public class NewAutoDrive {
         }
     }
 
-    private boolean SetPosition(float disiredTime) {
-        if (System.nanoTime() < disiredTime) {
-            config.prim_box_arm_servo.setPower(-0.3f);
-            config.sec_box_arm_servo.setPower(0.3f);
-            config.PrimHavServo.setPower(0.3f);
-            config.SecHavServo.setPower(-0.3f);
-            tel.addLine("Setting Position.....");
-            return false;
-        }
-        else{
-            config.prim_box_arm_servo.setPower(0);
-            config.sec_box_arm_servo.setPower(0);
-            config.PrimHavServo.setPower(0);
-            config.SecHavServo.setPower(0);
-        }
-        return true;
-    }
 
     private boolean start = true;
     private float count;
@@ -271,11 +247,11 @@ public class NewAutoDrive {
             count -= 1;
         }
         if(count>0){
-            config.MarkerDrop.setPower(.3f);
+            //config.MarkerDrop.setPower(.3f);
             return false;
         }
         else {
-            config.MarkerDrop.setPower(0);
+            //config.MarkerDrop.setPower(0);
             return true;
         }
     }

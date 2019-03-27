@@ -61,7 +61,7 @@ public class BaCoNTeleOp extends BaconOpMode {
         config = RoverRucusConfiguration.newConfig(hardwareMap, telemetry);
         drive = new Drive(this, config);
         lift = new Lift(this, config);
-        armLift = new ArmLift(this, config);
+        //armLift = new ArmLift(this, config);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
     }
@@ -71,7 +71,6 @@ public class BaCoNTeleOp extends BaconOpMode {
         drive.updateDrive();
         lift.updateLift();
         armLift.updateArmLift();
-        telemetry.addLine("Pot: "+config.ArmPotentiometer.getVoltage());
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.update();
     }

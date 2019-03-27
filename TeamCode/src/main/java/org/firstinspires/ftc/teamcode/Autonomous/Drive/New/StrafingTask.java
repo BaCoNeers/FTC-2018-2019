@@ -6,9 +6,9 @@ package org.firstinspires.ftc.teamcode.Autonomous.Drive.New;
 
 public class StrafingTask extends MainTask {
 
-    public StrafingTask(float Power, float Distance){
+    public StrafingTask(float Power, float DistanceMM){
         power = Power;
-        value = Distance;
+        value = DistanceMM;
         context = "Strafing";
     }
 }

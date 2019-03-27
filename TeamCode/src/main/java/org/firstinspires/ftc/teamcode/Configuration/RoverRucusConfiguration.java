@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.common.RobotConfiguration;
@@ -25,26 +27,27 @@ public class RoverRucusConfiguration extends RobotConfiguration {
     public DcMotor rear_left_motor = null;
     public DcMotor rear_right_motor = null;
 
-    public DcMotor prim_lift_motor = null;
-    public DcMotor sec_lift_motor = null;
+    public DcMotor robot_lift_motor = null;
 
-    public DcMotor arm_lift_motor = null;
+    public DcMotor dispenser_lift_motor = null;
 
-    public CRServo prim_box_arm_servo = null;
-    public CRServo sec_box_arm_servo = null;
+    public DcMotor harvister_arm_motor = null;
+    public DcMotor harvister_header_motor = null;
+
+    public Servo dispenser_a_servo = null;
+    public Servo dispenser_b_servo = null;
+
+    public CRServo marker_servo = null;
+
+   public TouchSensor dispenser_lift_limitswitch = null;
+
+
+
 
     public BNO055IMU imu = null;
 
     public DigitalChannel PrimLimitSwitch = null;
-    public DigitalChannel SecLimitSwitch = null;
 
-    public CRServo PrimHavServo = null;
-    public CRServo SecHavServo = null;
-
-    public CRServo MarkerDrop = null;
-
-
-    public AnalogInput ArmPotentiometer = null;
 
     /**
      * Assign your class instance variables to the saved device names in the hardware map
@@ -78,30 +81,22 @@ public class RoverRucusConfiguration extends RobotConfiguration {
         rear_right_motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
-        prim_lift_motor  = hardwareMap.get(DcMotor.class, "PrimLiftMotor");
-        sec_lift_motor = hardwareMap.get(DcMotor.class, "SecLiftMotor");
+        dispenser_lift_motor  = hardwareMap.get(DcMotor.class, "DispenserLiftMotor");
 
-        prim_lift_motor.setDirection(DcMotor.Direction.REVERSE);
-        sec_lift_motor.setDirection(DcMotor.Direction.FORWARD);
+        harvister_arm_motor  = hardwareMap.get(DcMotor.class, "HarvisterArmMotor");
 
-        prim_lift_motor.setPower(0);
-        sec_lift_motor.setPower(0);
+        harvister_header_motor  = hardwareMap.get(DcMotor.class, "HarvisterHeaderMotor");
 
-        arm_lift_motor  = hardwareMap.get(DcMotor.class, "ArmLiftMotor");
-        prim_box_arm_servo = hardwareMap.get(CRServo.class, "PrimBoxArmServo");
-        sec_box_arm_servo = hardwareMap.get (CRServo.class, "SecBoxArmServo");
+        dispenser_a_servo  = hardwareMap.get(Servo.class, "DispenserAServo");
+        dispenser_b_servo  = hardwareMap.get(Servo.class, "DispenserBServo");
 
-        arm_lift_motor.setDirection(DcMotor.Direction.FORWARD);
+        marker_servo  = hardwareMap.get(CRServo.class, "MarkerCRServo");
+
+        dispenser_lift_limitswitch  = hardwareMap.get(TouchSensor.class, "DispenserLiftLimitSwitch");
+
 
         PrimLimitSwitch = hardwareMap.get(DigitalChannel.class,"PrimLimitSwitch");
-        SecLimitSwitch = hardwareMap.get(DigitalChannel.class,"SecLimitSwitch");
 
-        PrimHavServo = hardwareMap.get(CRServo.class,"PrimHavServo");
-        SecHavServo = hardwareMap.get(CRServo.class,"SecHavServo");
-
-        MarkerDrop = hardwareMap.get(CRServo.class,"MarkDrop");
-
-        ArmPotentiometer = hardwareMap.get(AnalogInput.class,"ArmPot");
 
         telemetry.addData("Initialized","True");
         telemetry.update();

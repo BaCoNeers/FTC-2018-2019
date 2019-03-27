@@ -6,9 +6,9 @@ package org.firstinspires.ftc.teamcode.Autonomous.Drive.New;
 
 public class TurningTask extends MainTask {
 
-    public TurningTask(float Power, float Angle){
+    public TurningTask(float Power, float AngleDEG){
         power = Power;
-        value = Angle;
+        value = AngleDEG;
         context = "Turning";
     }
 }

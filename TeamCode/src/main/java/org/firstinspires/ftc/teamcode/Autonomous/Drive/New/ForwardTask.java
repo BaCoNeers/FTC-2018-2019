@@ -7,9 +7,9 @@ package org.firstinspires.ftc.teamcode.Autonomous.Drive.New;
 public class ForwardTask extends MainTask {
 
 
-    public ForwardTask(float Power,float Distance){
+    public ForwardTask(float Power,float DistanceMM){
         power = Power;
-        value = Distance;
+        value = DistanceMM;
         context = "Forward";
     }
 }
