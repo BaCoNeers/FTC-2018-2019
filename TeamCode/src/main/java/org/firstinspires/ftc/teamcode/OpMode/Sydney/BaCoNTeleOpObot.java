@@ -27,10 +27,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.OpMode;
+package org.firstinspires.ftc.teamcode.OpMode.Sydney;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -38,30 +36,25 @@ import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
 import org.firstinspires.ftc.teamcode.common.BaconOpMode;
 
 /**
-<<<<<<< HEAD
- * Main TeleOp Class
- * This is TeleOp references other classes related to TeleOp.
+<<<<<<< HEAD:TeamCode/src/main/java/org/firstinspires/ftc/teamcode/OpMode/BaCoNTeleOpObot.java
+ * Main Teleop Class
+ * This teleop is for Obot that does not have a lift or armlift
 =======
  * Crater Teleop Class
->>>>>>> autonomous
+>>>>>>> autonomous:TeamCode/src/main/java/org/firstinspires/ftc/teamcode/OpMode/BaCoNTeleOpSecond.java
  */
 
 @TeleOp
-public class BaCoNTeleOp extends BaconOpMode {
+public class BaCoNTeleOpObot extends BaconOpMode {
 
     // Declare OpMode members.
     public ElapsedTime runtime = new ElapsedTime();
-    public RoverRucusConfiguration config;
-    public Drive drive;
-    public Lift lift;
-    public ArmLift armLift;
+    public RoverRucusConfiguration config = RoverRucusConfiguration.newConfig(hardwareMap,
+            telemetry);
+    public Drive drive = new Drive(this, config);
 
     @Override
     protected void onInit(){
-        config = RoverRucusConfiguration.newConfig(hardwareMap, telemetry);
-        drive = new Drive(this, config);
-        lift = new Lift(this, config);
-        armLift = new ArmLift(this, config);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
     }
@@ -69,9 +62,6 @@ public class BaCoNTeleOp extends BaconOpMode {
     @Override
     protected void activeLoop(){
         drive.updateDrive();
-        lift.updateLift();
-        armLift.updateArmLift();
-        telemetry.addLine("Pot: "+config.ArmPotentiometer.getVoltage());
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.update();
     }
