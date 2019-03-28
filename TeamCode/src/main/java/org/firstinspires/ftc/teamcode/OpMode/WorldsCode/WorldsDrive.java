@@ -19,6 +19,8 @@ public class WorldsDrive {
     public boolean toggleFunction = false;
 
     public double Toggle() {
+        return 1.0;
+        /*
         buttonState = opmode.gamepad1.y;
         if (buttonState && !lastButtonState) {
             state = !state;
@@ -30,7 +32,7 @@ public class WorldsDrive {
 
         if (state) {
             //On state
-            toggleFunction = true;
+           toggleFunction = true;
 
         }
         else {
@@ -56,6 +58,7 @@ public class WorldsDrive {
 
         }
      return 1.0;
+     */
     }
 
     public WorldsDrive(OpMode opmodeIn, WorldsConfiguration configIn) {
@@ -78,12 +81,12 @@ public class WorldsDrive {
 
         // Implement Mecanum drive using drive equations from Internet:
         double left_y = opmode.gamepad1.left_stick_y; //forward
-        double left_x  = -opmode.gamepad1.left_stick_x; //strafe
+        double strafe_left_x  = -opmode.gamepad1.left_stick_x; //strafe
         double right_x = -opmode.gamepad1.right_stick_x; //turning
-        front_left_power = Range.clip(left_y + left_x + right_x, -1.0, 1.0);
-        rear_left_power = Range.clip(left_y - left_x + right_x, -1.0, 1.0);
-        front_right_power = Range.clip(left_y - left_x - right_x, -1.0, 1.0);
-        rear_right_power = Range.clip(left_y + left_x - right_x, -1.0, 1.0);
+        front_left_power = Range.clip(left_y + strafe_left_x + right_x, -1.0, 1.0);
+        rear_left_power = Range.clip(left_y - strafe_left_x + right_x, -1.0, 1.0);
+        front_right_power = Range.clip(left_y - strafe_left_x - right_x, -1.0, 1.0);
+        rear_right_power = Range.clip(left_y + strafe_left_x - right_x, -1.0, 1.0);
 
         // Send calculated power to wheels
         config.front_left_motor.setPower(-front_left_power*Toggle());
