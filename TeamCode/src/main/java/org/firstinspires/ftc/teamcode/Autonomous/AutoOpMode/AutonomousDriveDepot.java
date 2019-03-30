@@ -40,6 +40,7 @@ import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.NewAutoDrive;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.TensorFlow;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.TurningTask;
 import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
+import org.firstinspires.ftc.teamcode.Configuration.WorldsConfiguration;
 
 import java.util.ArrayList;
 
@@ -63,7 +64,7 @@ public class AutonomousDriveDepot extends OpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
 
-    private RoverRucusConfiguration config;
+    private WorldsConfiguration config;
     //Task management
     private NewAutoDrive Drive;
 
@@ -74,7 +75,7 @@ public class AutonomousDriveDepot extends OpMode {
 
     @Override
     public void init() {
-        config = RoverRucusConfiguration.newConfig(hardwareMap,telemetry);
+        config = WorldsConfiguration.newConfig(hardwareMap,telemetry);
 
         Drive = new NewAutoDrive(config,telemetry,hardwareMap);
 
@@ -100,7 +101,7 @@ public class AutonomousDriveDepot extends OpMode {
     public void start() {
         runtime.reset();
 
-        Drive.Tasks.add(new LiftTask(true,0.5f));
+        //Drive.Tasks.add(new LiftTask(true,0.5f));
         Drive.Tasks.add(new ForwardTask(0.3f, -50));
         Drive.Tasks.add(new TurningTask(0.3f,90));
         Drive.Tasks.add(new ForwardTask(0.3f, 30));
@@ -115,7 +116,7 @@ public class AutonomousDriveDepot extends OpMode {
 
 
         //left
-        left.add(new TurningTask(0.3f,30));
+        left.add(new TurningTask(0.3f,-30));
         left.add(new ForwardTask(0.3f,200));
 
 
@@ -123,7 +124,7 @@ public class AutonomousDriveDepot extends OpMode {
         middle.add(new ForwardTask(0.3f,200));
 
         //right
-        right.add(new TurningTask(0.3f,-30));
+        right.add(new TurningTask(0.3f, 30));
         right.add(new ForwardTask(0.3f,200));
 
 
