@@ -11,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Autonomous.ObjectIdentification.TensorFlowCubeDetection;
 import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
+import org.firstinspires.ftc.teamcode.Configuration.WorldsConfiguration;
 
 import java.util.ArrayList;
 
@@ -38,7 +39,7 @@ public class NewAutoDrive {
 
 
     private Telemetry tel;
-    private RoverRucusConfiguration config;
+    private WorldsConfiguration config;
 
     private TensorFlowCubeDetection tensorFlow = new TensorFlowCubeDetection();
 
@@ -56,7 +57,7 @@ public class NewAutoDrive {
     public ArrayList<MainTask> Tasks = new ArrayList<>();
 
 
-    public NewAutoDrive(RoverRucusConfiguration config, Telemetry tel, HardwareMap hardwaremap) {
+    public NewAutoDrive(WorldsConfiguration config, Telemetry tel, HardwareMap hardwaremap) {
         this.config = config;
         Motors[0] = this.config.front_left_motor;
         Motors[1] = this.config.front_right_motor;
@@ -117,16 +118,6 @@ public class NewAutoDrive {
                         break;
                     case "Lift":
                         if(Lift(Tasks.get(0).LiftState,Tasks.get(0).power )){
-                            Tasks.remove(0);
-                        }
-                        break;
-                    case "SetPosition":
-                        if(SetPosition(Tasks.get(0).disiredTime)){
-                            Tasks.remove(0);
-                        }
-                        break;
-                    case "Marker":
-                        if(Marker(Tasks.get(0).value)){
                             Tasks.remove(0);
                         }
                         break;
@@ -227,43 +218,6 @@ public class NewAutoDrive {
         }
     }
 
-    private boolean SetPosition(float disiredTime) {
-        if (System.nanoTime() < disiredTime) {
-            config.prim_box_arm_servo.setPower(-0.3f);
-            config.sec_box_arm_servo.setPower(0.3f);
-            config.PrimHavServo.setPower(0.3f);
-            config.SecHavServo.setPower(-0.3f);
-            tel.addLine("Setting Position.....");
-            return false;
-        }
-        else{
-            config.prim_box_arm_servo.setPower(0);
-            config.sec_box_arm_servo.setPower(0);
-            config.PrimHavServo.setPower(0);
-            config.SecHavServo.setPower(0);
-        }
-        return true;
-    }
-
-    private boolean start = true;
-    private float count;
-    private boolean Marker(float value){
-        if(start){
-            count = value;
-            start = false;
-        }
-        else {
-            count -= 1;
-        }
-        if(count>0){
-            config.MarkerDrop.setPower(.3f);
-            return false;
-        }
-        else {
-            config.MarkerDrop.setPower(0);
-            return true;
-        }
-    }
 
     public void CubePosition(){
         tensorFlow.start();
@@ -315,10 +269,10 @@ public class NewAutoDrive {
         boolean PrimTimeElapsed = (PrevPrimStateTime + 200000000) < CurrentTime;
 
         if(state && PrimliftState.equals(LiftState.LiftTop)){
-            config.prim_lift_motor.setPower(0);
+            config.latch_lift.setPower(0);
         }
         if(!state && PrimliftState.equals(LiftState.LiftBottom)){
-            config.prim_lift_motor.setPower(0);
+            config.latch_lift.setPower(0);
         }
         if(state && PrimliftState.equals(LiftState.LiftTop)) {
             return true;
@@ -327,12 +281,12 @@ public class NewAutoDrive {
             return true;
         }
 
-        boolean PrimStateLowToHigh = PrimTimeElapsed && !PrevPrimState && config.PrimLimitSwitch.getState();
-        boolean PrimStateHighToLow = PrimTimeElapsed && PrevPrimState && !config.PrimLimitSwitch.getState();
+        boolean PrimStateLowToHigh = PrimTimeElapsed && !PrevPrimState && config.latch_limit_switch.getState();
+        boolean PrimStateHighToLow = PrimTimeElapsed && PrevPrimState && !config.latch_limit_switch.getState();
 
 
         if(PrimStateHighToLow || PrimStateLowToHigh) {
-            PrevPrimState = config.PrimLimitSwitch.getState();
+            PrevPrimState = config.latch_limit_switch.getState();
             PrevPrimStateTime = CurrentTime;
         }
 
@@ -340,13 +294,13 @@ public class NewAutoDrive {
             // Going up to top
             switch (PrimliftState) {
                 case LiftBottom:
-                    config.prim_lift_motor.setPower(-power);
+                    config.latch_lift.setPower(-power);
                     if (PrimStateLowToHigh) {
                         PrimliftState = LiftState.LiftMiddle;
                     }
                     break;
                 case LiftMiddle:
-                    config.prim_lift_motor.setPower(-power);
+                    config.latch_lift.setPower(-power);
                     if (PrimStateHighToLow) {
                         PrimliftState = LiftState.LiftTop;
                     }
@@ -358,13 +312,13 @@ public class NewAutoDrive {
             //Going Down
             switch (PrimliftState){
                 case LiftTop:
-                    config.prim_lift_motor.setPower(power);
+                    config.latch_lift.setPower(power);
                     if(PrimStateLowToHigh){
                         PrimliftState = LiftState.LiftMiddle;
                     }
                     break;
                 case LiftMiddle:
-                    config.prim_lift_motor.setPower(power);
+                    config.latch_lift.setPower(power);
                     if(PrimStateHighToLow){
                         PrimliftState = LiftState.LiftBottom;
                     }

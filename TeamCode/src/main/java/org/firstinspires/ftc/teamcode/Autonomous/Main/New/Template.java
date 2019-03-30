@@ -41,6 +41,7 @@ import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.TensorFlow;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.TurningTask;
 import org.firstinspires.ftc.teamcode.Autonomous.ObjectIdentification.TensorFlowCubeDetection;
 import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
+import org.firstinspires.ftc.teamcode.Configuration.WorldsConfiguration;
 
 import java.util.ArrayList;
 
@@ -64,7 +65,7 @@ public class Template extends OpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
 
-    private RoverRucusConfiguration config;
+    private WorldsConfiguration config;
     //Task management
     private NewAutoDrive Drive;
 
@@ -75,7 +76,7 @@ public class Template extends OpMode {
 
     @Override
     public void init() {
-        config = RoverRucusConfiguration.newConfig(hardwareMap,telemetry);
+        config = WorldsConfiguration.newConfig(hardwareMap,telemetry);
 
         Drive = new NewAutoDrive(config,telemetry,hardwareMap);
 

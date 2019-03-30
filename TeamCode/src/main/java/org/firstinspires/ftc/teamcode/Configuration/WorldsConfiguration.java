@@ -4,6 +4,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -22,6 +23,9 @@ public class WorldsConfiguration extends RobotConfiguration {
     public DcMotor front_right_motor = null;
     public DcMotor rear_left_motor = null;
     public DcMotor rear_right_motor = null;
+
+    public DcMotor latch_lift = null;
+    public DigitalChannel latch_limit_switch = null;
 
     /**
      * Assign your class instance variables to the saved device names in the hardware map
@@ -53,6 +57,16 @@ public class WorldsConfiguration extends RobotConfiguration {
         front_right_motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rear_left_motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rear_right_motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        latch_lift = hardwareMap.get(DcMotor.class, "LatchLift");
+
+        latch_lift.setDirection(DcMotorSimple.Direction.FORWARD);
+        latch_lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        latch_lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        latch_limit_switch = hardwareMap.get(DigitalChannel.class,"LatchLimitSwitch");
+
+
 
         telemetry.addData("Initialized","True");
         telemetry.update();
