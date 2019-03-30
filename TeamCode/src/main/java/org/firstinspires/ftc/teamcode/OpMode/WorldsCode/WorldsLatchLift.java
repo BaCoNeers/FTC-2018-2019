@@ -35,9 +35,10 @@ public class WorldsLatchLift {
         else if(opmode.gamepad1.x == true && opmode.gamepad1.y ==false){
             return -1f;
         }
-        else{
+        else if(opmode.gamepad1.x == true && opmode.gamepad1.y == true){
             return 1f;
         }
+        return 0;
     }
 
     public void update(){

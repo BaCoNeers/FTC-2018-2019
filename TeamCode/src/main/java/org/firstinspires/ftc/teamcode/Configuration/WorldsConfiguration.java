@@ -76,12 +76,12 @@ public class WorldsConfiguration extends RobotConfiguration {
 
         latch_limit_switch = hardwareMap.get(DigitalChannel.class,"LatchLimitSwitch");
 
-        havester_lift = hardwareMap.get(DcMotor.class, "HaversterLift");
+        havester_lift = hardwareMap.get(DcMotor.class, "HarvesterLift");
         havester_lift.setDirection(DcMotor.Direction.FORWARD);
         havester_lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         havester_lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        havester_sorter = hardwareMap.get(Servo.class,"HavesterSorter");
+        havester_sorter = hardwareMap.get(Servo.class,"HarvesterSorter");
 
         depositor_lift = hardwareMap.get(DcMotor.class, "DepositorLift");
         depositor_lift.setDirection(DcMotor.Direction.FORWARD);
