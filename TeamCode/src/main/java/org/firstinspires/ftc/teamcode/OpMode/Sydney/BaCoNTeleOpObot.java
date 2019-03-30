@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode.OpMode.Sydney;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -44,7 +45,8 @@ import org.firstinspires.ftc.teamcode.common.BaconOpMode;
 >>>>>>> autonomous:TeamCode/src/main/java/org/firstinspires/ftc/teamcode/OpMode/BaCoNTeleOpSecond.java
  */
 
-@TeleOp
+@TeleOp(name="BaCoNTeleOpBot")
+@Disabled
 public class BaCoNTeleOpObot extends BaconOpMode {
 
     // Declare OpMode members.

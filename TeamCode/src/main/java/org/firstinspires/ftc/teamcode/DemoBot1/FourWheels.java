@@ -52,7 +52,7 @@ import com.qualcomm.robotcore.util.Range;
  */
 
 @TeleOp(name="FourWheels", group="Linear Opmode")
-//@Disabled
+@Disabled
 public class FourWheels extends LinearOpMode {
 
     // Declare OpMode members.

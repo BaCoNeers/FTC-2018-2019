@@ -60,6 +60,7 @@ import java.util.concurrent.TimeUnit;
  */
 
 @TeleOp(name="Imu", group="Linear Opmode")
+@Disabled
 public class IMU extends LinearOpMode {
 
     // Declare OpMode members.

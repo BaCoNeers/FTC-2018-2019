@@ -51,7 +51,7 @@ import com.qualcomm.robotcore.util.Range;
  */
 
 @TeleOp(name="ThreeWheels", group="Linear Opmode")
-//@Disabled
+@Disabled
 public class ThreeWheels extends LinearOpMode {
 
     // Declare OpMode members.
