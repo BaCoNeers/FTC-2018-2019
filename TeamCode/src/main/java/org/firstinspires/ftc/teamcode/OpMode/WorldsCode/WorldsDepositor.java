@@ -47,8 +47,9 @@ public class WorldsDepositor {
         if (servo_index < 0) servo_index = 0;
         if (servo_index >= servo_positions.length) servo_index = servo_positions.length - 1;
 
-       // config.dep_arm_servo.setPosition(servo_positions[servo_index][0]);
-        //config.dep_bkt_servo.setPosition(servo_positions[servo_index][1]);
+        config.depositor_arm.setPosition(servo_positions[servo_index][0]);
+        config.depositor.setPosition(servo_positions[servo_index][1]);
+        
 
         double liftPower;
 
