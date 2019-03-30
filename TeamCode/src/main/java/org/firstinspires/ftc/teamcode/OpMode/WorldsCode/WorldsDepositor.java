@@ -49,7 +49,7 @@ public class WorldsDepositor {
 
         config.depositor_arm.setPosition(servo_positions[servo_index][0]);
         config.depositor.setPosition(servo_positions[servo_index][1]);
-        
+
 
 
     }
