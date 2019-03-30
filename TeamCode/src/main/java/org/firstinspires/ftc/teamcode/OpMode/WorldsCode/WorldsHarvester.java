@@ -13,6 +13,50 @@ public class WorldsHarvester {
     // members:
     private OpMode opmode = null;
     private WorldsConfiguration config = null;
+    public boolean buttonState = false;
+    public boolean lastButtonState = false;
+    public boolean state = false;
+    public boolean toggleFunction = false;
+
+    public double Toggle() {
+        buttonState = opmode.gamepad1.y;
+        if (buttonState && !lastButtonState) {
+            state = !state;
+        }
+
+        if (buttonState != lastButtonState) {
+            lastButtonState = buttonState;
+        }
+
+        if (state) {
+            //On state
+           toggleFunction = true;
+
+        }
+        else {
+            //Off state
+
+            return 1.0;
+
+        }
+
+        if (toggleFunction) {
+
+            if (opmode.gamepad1.left_stick_x > 0.3) {
+                return 0.5;
+            }
+
+            if (opmode.gamepad1.left_stick_x < -0.3) {
+                return 0.5;
+            }
+
+            else {
+                return 0.2;
+            }
+
+        }
+     return 1.0;
+    }
 
 
     public WorldsHarvester(OpMode opmodeIn, WorldsConfiguration configIn) {
@@ -27,6 +71,9 @@ public class WorldsHarvester {
     }
 
     public void update(){
+
+        config.havester_lift.setPower(opmode.g);
+
 
     }
 }
