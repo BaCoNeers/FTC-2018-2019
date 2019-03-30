@@ -72,7 +72,9 @@ public class WorldsHarvester {
 
     public void update(){
 
-        config.havester_lift.setPower(opmode.g);
+        float power = opmode.gamepad2.right_trigger-opmode.gamepad2.left_trigger;
+        power = Range.clip(power,-1,1);
+        config.havester_lift.setPower(power);
 
 
     }
