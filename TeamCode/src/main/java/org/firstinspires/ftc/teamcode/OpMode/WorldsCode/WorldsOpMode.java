@@ -53,7 +53,7 @@ public class WorldsOpMode extends BaconOpMode {
     public WorldsDrive drive;
     public WorldsDepositor depositor;
     public WorldsHarvester harvester;
-    public WorldsLift lift;
+    public WorldsLatchLift lift;
 
     @Override
     protected void onInit(){
@@ -62,7 +62,7 @@ public class WorldsOpMode extends BaconOpMode {
         drive = new WorldsDrive(this, config);
         depositor = new WorldsDepositor(this, config);
         harvester = new WorldsHarvester(this, config);
-        lift = new WorldsLift(this, config);
+        lift = new WorldsLatchLift(this, config);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
     }

@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.common.RobotConfiguration;
@@ -26,6 +27,15 @@ public class WorldsConfiguration extends RobotConfiguration {
 
     public DcMotor latch_lift = null;
     public DigitalChannel latch_limit_switch = null;
+
+    public DcMotor havester_lift = null;
+    public Servo havester_sorter = null;
+
+    public DcMotor depositor_lift = null;
+    public Servo depositor_arm = null;
+    public Servo depositor = null;
+
+    public Servo marker_deployer = null;
 
     /**
      * Assign your class instance variables to the saved device names in the hardware map
@@ -66,6 +76,22 @@ public class WorldsConfiguration extends RobotConfiguration {
 
         latch_limit_switch = hardwareMap.get(DigitalChannel.class,"LatchLimitSwitch");
 
+        havester_lift = hardwareMap.get(DcMotor.class, "HaversterLift");
+        havester_lift.setDirection(DcMotor.Direction.FORWARD);
+        havester_lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        havester_lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        havester_sorter = hardwareMap.get(Servo.class,"HavesterSorter");
+
+        depositor_lift = hardwareMap.get(DcMotor.class, "DepositorLift");
+        depositor_lift.setDirection(DcMotor.Direction.FORWARD);
+        depositor_lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        depositor_lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        depositor_arm = hardwareMap.get(Servo.class,"DepositorArm");
+        depositor = hardwareMap.get(Servo.class,"Depositor");
+
+        marker_deployer = hardwareMap.get(Servo.class, "MarkerDeployer");
 
 
         telemetry.addData("Initialized","True");
