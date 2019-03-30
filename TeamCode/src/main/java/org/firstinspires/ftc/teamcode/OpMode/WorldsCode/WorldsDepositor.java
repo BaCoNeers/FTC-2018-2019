@@ -50,6 +50,10 @@ public class WorldsDepositor {
        // config.dep_arm_servo.setPosition(servo_positions[servo_index][0]);
         //config.dep_bkt_servo.setPosition(servo_positions[servo_index][1]);
 
+        double liftPower;
 
+        liftPower = opmode.gamepad2.left_stick_y;
+
+        config.depositor_lift.setPower(liftPower);
     }
 }
