@@ -74,7 +74,7 @@ public class WorldsHarvester {
 
         float power = opmode.gamepad2.right_trigger-opmode.gamepad2.left_trigger;
         power = Range.clip(power,-1,1);
-        config.havester_lift.setPower(power);
+        config.harvester_lift.setPower(power);
 
 
     }

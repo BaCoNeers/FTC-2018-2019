@@ -18,10 +18,10 @@ public class WorldsDrive {
     public boolean state = false;
     public boolean toggleFunction = false;
 
-    public double Toggle() {
-        return 1.0;
-        /*
-        buttonState = opmode.gamepad1.y;
+   public double toggle(){
+       return 1.0;
+
+      /*  buttonState = opmode.gamepad1.y;
         if (buttonState && !lastButtonState) {
             state = !state;
         }
@@ -59,9 +59,9 @@ public class WorldsDrive {
         }
      return 1.0;
      */
-    }
 
-    public WorldsDrive(OpMode opmodeIn, WorldsConfiguration configIn) {
+   }
+       public WorldsDrive(OpMode opmodeIn, WorldsConfiguration configIn) {
         super();
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
@@ -81,7 +81,7 @@ public class WorldsDrive {
 
         // Implement Mecanum drive using drive equations from Internet:
         double left_y = opmode.gamepad1.left_stick_y; //forward
-        double strafe_left_x  = -opmode.gamepad1.left_stick_x; //strafe
+        double strafe_left_x  = opmode.gamepad1.left_stick_x; //strafe
         double right_x = -opmode.gamepad1.right_stick_x; //turning
         front_left_power = Range.clip(left_y + strafe_left_x + right_x, -1.0, 1.0);
         rear_left_power = Range.clip(left_y - strafe_left_x + right_x, -1.0, 1.0);
@@ -89,10 +89,10 @@ public class WorldsDrive {
         rear_right_power = Range.clip(left_y + strafe_left_x - right_x, -1.0, 1.0);
 
         // Send calculated power to wheels
-        config.front_left_motor.setPower(-front_left_power*Toggle());
-        config.front_right_motor.setPower(-front_right_power*Toggle());
-        config.rear_left_motor.setPower(-rear_left_power*Toggle());
-        config.rear_right_motor.setPower(-rear_right_power*Toggle());
+        config.front_left_motor.setPower(-front_left_power*toggle());
+        config.front_right_motor.setPower(-front_right_power*toggle());
+        config.rear_left_motor.setPower(-rear_left_power*toggle());
+        config.rear_right_motor.setPower(-rear_right_power*toggle());
 
         // Show the elapsed game time and wheel power.
         opmode.telemetry.addData("Motors", "front left (%.2f), front right (%.2f)",

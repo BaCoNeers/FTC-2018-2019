@@ -28,12 +28,12 @@ public class WorldsConfiguration extends RobotConfiguration {
     public DcMotor latch_lift = null;
     public DigitalChannel latch_limit_switch = null;
 
-    public DcMotor havester_lift = null;
-    public Servo havester_sorter = null;
+    public DcMotor harvester_lift = null;
+    public Servo harvester_sorter = null;
 
     public DcMotor depositor_lift = null;
     public Servo depositor_arm = null;
-    public Servo depositor = null;
+    public Servo mineral_depositor = null;
 
     public Servo marker_deployer = null;
 
@@ -76,12 +76,12 @@ public class WorldsConfiguration extends RobotConfiguration {
 
         latch_limit_switch = hardwareMap.get(DigitalChannel.class,"LatchLimitSwitch");
 
-        havester_lift = hardwareMap.get(DcMotor.class, "HaversterLift");
-        havester_lift.setDirection(DcMotor.Direction.FORWARD);
-        havester_lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        havester_lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        harvester_lift = hardwareMap.get(DcMotor.class, "HarvesterLift");
+        harvester_lift.setDirection(DcMotor.Direction.FORWARD);
+        harvester_lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        harvester_lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        havester_sorter = hardwareMap.get(Servo.class,"HavesterSorter");
+        harvester_sorter = hardwareMap.get(Servo.class,"HarvesterSorter");
 
         depositor_lift = hardwareMap.get(DcMotor.class, "DepositorLift");
         depositor_lift.setDirection(DcMotor.Direction.FORWARD);
@@ -89,7 +89,7 @@ public class WorldsConfiguration extends RobotConfiguration {
         depositor_lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         depositor_arm = hardwareMap.get(Servo.class,"DepositorArm");
-        depositor = hardwareMap.get(Servo.class,"Depositor");
+        mineral_depositor = hardwareMap.get(Servo.class,"MineralDepositor");
 
         marker_deployer = hardwareMap.get(Servo.class, "MarkerDeployer");
 

@@ -39,16 +39,16 @@ public class WorldsDepositor {
     public void update(){
 
         // Manipulate the position of the servos
-        if (opmode.gamepad2.b) {
+        if (opmode.gamepad2.b = true) {
             servo_index += 1;
-        } else  if (opmode.gamepad2.a) {
+        } else  if (opmode.gamepad2.a = true) {
             servo_index -= 1;
         }
         if (servo_index < 0) servo_index = 0;
         if (servo_index >= servo_positions.length) servo_index = servo_positions.length - 1;
 
         config.depositor_arm.setPosition(servo_positions[servo_index][0]);
-        config.depositor.setPosition(servo_positions[servo_index][1]);
+        config.mineral_depositor.setPosition(servo_positions[servo_index][1]);
         
 
         double liftPower;
