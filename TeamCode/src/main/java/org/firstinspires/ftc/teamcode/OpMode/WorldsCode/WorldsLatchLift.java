@@ -41,7 +41,69 @@ public class WorldsLatchLift {
         return 0;
     }
 
+    enum LiftState {LiftBottom,LiftMiddle,LiftTop}
+    private LiftState PrimliftState = LiftState.LiftBottom;
+    private boolean PrevPrimState = false;
+    private long PrevPrimStateTime = 0;
+
     public void update(){
-        config.latch_lift.setPower(power());
+
+        long CurrentTime = System.nanoTime();
+
+        boolean PrimTimeElapsed = (PrevPrimStateTime + 200000000) < CurrentTime;
+
+        boolean PrimStateLowToHigh = PrimTimeElapsed && !PrevPrimState && config.latch_limit_switch.getState();
+        boolean PrimStateHighToLow = PrimTimeElapsed && PrevPrimState && !config.latch_limit_switch.getState();
+
+
+        if(PrimStateHighToLow || PrimStateLowToHigh) {
+            PrevPrimState = config.latch_limit_switch.getState();
+            PrevPrimStateTime = CurrentTime;
+        }
+
+        if (opmode.gamepad1.y && !opmode.gamepad1.x) {
+            // Going up to top
+            switch (PrimliftState) {
+                case LiftBottom:
+                    config.latch_lift.setPower(1);
+                    if (PrimStateLowToHigh) {
+                        PrimliftState = LiftState.LiftMiddle;
+                    }
+                    break;
+                case LiftMiddle:
+                    config.latch_lift.setPower(1);
+                    if (PrimStateHighToLow) {
+                        PrimliftState = LiftState.LiftTop;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        } else if(opmode.gamepad1.x && !opmode.gamepad1.y) {
+            //Going Down
+            switch (PrimliftState){
+                case LiftTop:
+                    config.latch_lift.setPower(-1);
+                    if(PrimStateLowToHigh){
+                        PrimliftState = LiftState.LiftMiddle;
+                    }
+                    break;
+                case LiftMiddle:
+                    config.latch_lift.setPower(-1);
+                    if(PrimStateHighToLow){
+                        PrimliftState = LiftState.LiftBottom;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        else{
+            config.latch_lift.setPower(0);
+        }
+
+
+        //To use incase lift is faulty, comment out code above and uncomment out line below
+        //config.latch_lift.setPower(power());
     }
 }
