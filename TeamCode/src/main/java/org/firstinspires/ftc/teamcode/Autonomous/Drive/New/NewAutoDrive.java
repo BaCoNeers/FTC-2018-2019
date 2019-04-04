@@ -10,7 +10,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Autonomous.ObjectIdentification.TensorFlowCubeDetection;
-import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
 import org.firstinspires.ftc.teamcode.Configuration.WorldsConfiguration;
 
 import java.util.ArrayList;
@@ -23,9 +22,9 @@ public class NewAutoDrive {
     private float[] MotorPower = new float[4];
 
     //Robot size
-    private static float Encoder = 1120f;
-    private static float WheelCirumfrance = 320;
-    private static float WheelCount = WheelCirumfrance / Encoder;
+    private static float Encoder = 1620f;
+    private static float wheelCirumfrance = 320;
+    private static float WheelCount = wheelCirumfrance / Encoder;
     
 
     //Lift Varables
@@ -81,9 +80,21 @@ public class NewAutoDrive {
         imu.initialize(parameters);
 
     }
-    public boolean CalabrateIMU(){
-        return (!imu.isGyroCalibrated());
 
+    int count = 0;
+    boolean state = true;
+    public boolean CalabrateIMU(){
+
+        return (!imu.isGyroCalibrated());
+        /*
+        state = (!imu.isGyroCalibrated());
+
+        if (count<300){
+            count++;
+            return state;
+        }
+        return false;
+        */
     }
 
 
@@ -97,7 +108,7 @@ public class NewAutoDrive {
                 //check what type of task
                 switch (Tasks.get(0).context) {
                     case "Forward":
-                        if (Forward(Tasks.get(0).value, Tasks.get(0).power)) {
+                        if (ForwardNoScale(Tasks.get(0).value, Tasks.get(0).power)) {
                             Tasks.remove(0);
                         }
                         break;
@@ -128,29 +139,6 @@ public class NewAutoDrive {
         }
     }
 
-    /*
-     private boolean Rotate(float Angle, float power) {
-        int direction = 1;
-        if(Angle<0){
-            direction = -1;
-        }
-        if (Math.abs(ConvertToAngle(GetAvarage())) < Math.abs(Angle)) {
-            MotorPower[0] = power*direction;
-            MotorPower[1] = -power*direction;
-            MotorPower[2] = power*direction;
-            MotorPower[3] = -power*direction;
-            UpdateMotor(true);
-            UpdateEncoders();
-            tel.addLine("Turning Running....");
-            return false;
-        } else {
-            UpdateMotor(false);
-            ResestMotors();
-            UpdateEncoders();
-            return true;
-        }
-    }
-    */
 
     private boolean IMURotation(float Angle, float power){
         int direction = 1;
@@ -183,6 +171,7 @@ public class NewAutoDrive {
         MotorPower[1] = power*direction;
         MotorPower[2] = power*direction;
         MotorPower[3] = power*direction;
+        UpdateEncoders();
         ForwardScale(Distance);
         if (GetAvaragepower() > 0.1) {
             UpdateMotor(true);
@@ -193,6 +182,30 @@ public class NewAutoDrive {
             ResestMotors();
             UpdateEncoders();
             return true;
+        }
+    }
+
+    public boolean ForwardNoScale(float Distance, float power){
+        tel.addLine("Forward Running....");
+        int direction = 1;
+        if(Distance<0){
+            direction = -1;
+        }
+        MotorPower[0] = power*direction;
+        MotorPower[1] = power*direction;
+        MotorPower[2] = power*direction;
+        MotorPower[3] = power*direction;
+        UpdateEncoders();
+        if(ConvertToMM(GetAvarage())>Distance){
+            UpdateMotor(false);
+            ResestMotors();
+            UpdateEncoders();
+            return true;
+        }
+        else {
+            UpdateMotor(true);
+            UpdateEncoders();
+            return false;
         }
     }
 
@@ -223,7 +236,7 @@ public class NewAutoDrive {
         tensorFlow.start();
         int count = 0;
 
-        while(tensorFlow.GetCubePos() == 0){
+        while(tensorFlow.GetCubePos() == 0 && Looping){
             count++;
             if(count > 2000){
                 Looping = false;
@@ -360,8 +373,8 @@ public class NewAutoDrive {
         return value / Encoders.length;
     }
 
-    private float ConvertToMM(float Encoder) {
-        return Encoder * WheelCount;
+    private float ConvertToMM(float EncoderAvg) {
+        return EncoderAvg * WheelCount;
     }
 
     /*private float ConvertToAngle(float Encoder) {
@@ -448,6 +461,7 @@ public class NewAutoDrive {
         for(int i=0;i<Tasks.size();i++) {
             tel.addLine(Tasks.get(i).context + "\n");
         }
+        tel.addLine("avarage encoder: "+GetAvarage());
     }
 
 
