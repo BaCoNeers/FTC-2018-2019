@@ -73,6 +73,11 @@ public class WorldsDrive {
     }
 
     public void update(){
+        //Drive not working, strafing works fine, turning is faulty and forward isn't working
+        //When going forward the front and back wheels are going opposite directions
+        //when turning it seems that some wheel might be going slower then others causing it to NOT turn on the centre
+
+
         // Setup a variable for each drive wheel to save power level for telemetry
         double front_left_power;
         double front_right_power;

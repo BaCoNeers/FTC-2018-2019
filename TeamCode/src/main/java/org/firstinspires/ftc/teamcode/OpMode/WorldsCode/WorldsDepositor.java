@@ -35,10 +35,10 @@ public class WorldsDepositor {
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
     }
-/*
+
     public void update(){
 
-        // Manipulate the position of the servos
+        /* Manipulate the position of the servos
         if (opmode.gamepad2.b = true) {
             servo_index += 1;
         }
@@ -53,14 +53,12 @@ public class WorldsDepositor {
         }
 
 
-        config.depositor_arm.setPosition(servo_positions[servo_index][0]);
-        config.mineral_depositor.setPosition(servo_positions[servo_index][1]); */
-        
 
         double liftPower;
 
         liftPower = opmode.gamepad2.left_stick_y;
 
         config.depositor_lift.setPower(liftPower);
+        */
     }
 }
