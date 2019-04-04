@@ -24,6 +24,10 @@ public class WorldsLatchLift {
         opmode = opmodeIn;
         config = configIn;
 
+        if(!config.latch_limit_switch.getState()){
+            PrimliftState = LiftState.LiftMiddle;
+        }
+
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
     }
