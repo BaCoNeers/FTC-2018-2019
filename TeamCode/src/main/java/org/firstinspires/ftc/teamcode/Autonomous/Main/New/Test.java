@@ -33,14 +33,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.NewAutoDrive;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.ForwardTask;
-import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.LiftTask;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.MainTask;
+import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.NewAutoDrive;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.TensorFlow;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.TurningTask;
-import org.firstinspires.ftc.teamcode.Autonomous.ObjectIdentification.TensorFlowCubeDetection;
-import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
 import org.firstinspires.ftc.teamcode.Configuration.WorldsConfiguration;
 
 import java.util.ArrayList;
@@ -59,8 +56,8 @@ import java.util.ArrayList;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Template", group="SimonsPlayGround")
-public class Template extends OpMode {
+@Autonomous(name="Test", group="SimonsPlayGround")
+public class Test extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -104,26 +101,11 @@ public class Template extends OpMode {
 
         //Find the position of the cube. This should be run when the camera can see
         //all three objects. Unless it cant find all three objects it will defualt to the middle position
-        Drive.CubePosition();
 
-        //Forward movement is mesaured in mm
-        //turning is measured in degrees
+        Drive.Tasks.add(new ForwardTask(0.3f,320));
 
+        Drive.Tasks.add(new TurningTask(0.3f,90));
 
-        //left
-        left.add(new TurningTask(0.3f,30));
-        left.add(new ForwardTask(0.3f,200));
-
-
-        //middle
-        middle.add(new ForwardTask(0.3f,200));
-
-        //right
-        right.add(new TurningTask(0.3f,-30));
-        right.add(new ForwardTask(0.3f,200));
-
-
-        Drive.Tasks.add(new TensorFlow(left,middle,right));
     }
 
 
