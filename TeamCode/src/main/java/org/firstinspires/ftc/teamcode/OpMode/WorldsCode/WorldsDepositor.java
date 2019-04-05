@@ -37,12 +37,11 @@ public class WorldsDepositor {
     }
 
     public void update(){
-
-        /* Manipulate the position of the servos
-        if (opmode.gamepad2.b = true) {
+        // Manipulate the position of the servos
+        if (opmode.gamepad1.b = true) {
             servo_index += 1;
         }
-        else if (opmode.gamepad2.a = true) {
+        else if (opmode.gamepad1.a = true) {
             servo_index -= 1;
         }
         else if (servo_index < 0) {
@@ -56,9 +55,9 @@ public class WorldsDepositor {
 
         double liftPower;
 
-        liftPower = opmode.gamepad2.left_stick_y;
+        liftPower = opmode.gamepad2.right_stick_y;
 
         config.depositor_lift.setPower(liftPower);
-        */
+
     }
 }

@@ -19,7 +19,7 @@ public class WorldsHarvester {
     public boolean toggleFunction = false;
 
     public double Toggle() {
-        buttonState = opmode.gamepad1.y;
+        buttonState = opmode.gamepad2.y;
         if (buttonState && !lastButtonState) {
             state = !state;
         }
@@ -42,11 +42,11 @@ public class WorldsHarvester {
 
         if (toggleFunction) {
 
-            if (opmode.gamepad1.left_stick_x > 0.3) {
+            if (opmode.gamepad2.right_trigger > 0.3) {
                 return 0.5;
             }
 
-            if (opmode.gamepad1.left_stick_x < -0.3) {
+            if (opmode.gamepad2.left_trigger < -0.3) {
                 return 0.5;
             }
 

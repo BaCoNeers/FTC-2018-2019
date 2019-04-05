@@ -75,7 +75,7 @@ public class WorldsConfiguration extends RobotConfiguration {
         latch_lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         latch_limit_switch = hardwareMap.get(DigitalChannel.class,"LatchLimitSwitch");
-        
+
         harvester_lift = hardwareMap.get(DcMotor.class, "HarvesterLift");
         harvester_lift.setDirection(DcMotor.Direction.FORWARD);
         harvester_lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
