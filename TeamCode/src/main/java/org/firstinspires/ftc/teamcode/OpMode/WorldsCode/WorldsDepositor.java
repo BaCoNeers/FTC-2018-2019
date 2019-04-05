@@ -15,12 +15,13 @@ public class WorldsDepositor {
     private OpMode opmode = null;
     private WorldsConfiguration config = null;
 
+
     double servo_positions[][] = {
-            {0.0,0.0},
-            {0.0,0.0},
-            {0.2,0.15},
-            {0.4,0.3},
-            {0.6,0.2}
+            {0.0, 0.0},
+            {0.0, 0.0},
+            {0.2, 0.15},
+            {0.4, 0.3},
+            {0.6, 0.2}
     };
     int servo_index = 0;
 
@@ -36,14 +37,21 @@ public class WorldsDepositor {
         // Reverse the motor that runs backwards when connected directly to the battery
     }
 
-    public void update() {
+
+        public void update() {
+
+            double liftPower;
+
+            liftPower = opmode.gamepad1.right_stick_y;
+
+            config.depositor_lift.setPower(liftPower);
 
         // Manipulate the position of the servos
         if (opmode.gamepad1.b = true) {
 
 
             // Manipulate the position of the servos
-            if (opmode.gamepad2.b = true) {
+            if (opmode.gamepad1.b = true) {
 
                 servo_index += 1;
             } else if (opmode.gamepad1.a = true) {
@@ -55,12 +63,9 @@ public class WorldsDepositor {
             }
 
 
-            double liftPower;
-
-            liftPower = opmode.gamepad2.right_stick_y;
-
-            config.depositor_lift.setPower(liftPower);
 
         }
-
     }
+}
+
+
