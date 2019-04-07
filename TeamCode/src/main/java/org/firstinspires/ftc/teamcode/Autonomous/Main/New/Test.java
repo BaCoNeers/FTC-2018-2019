@@ -34,7 +34,9 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.ForwardTask;
+import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.LiftTask;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.MainTask;
+import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.MarkerTask;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.NewAutoDrive;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.TensorFlow;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.TurningTask;
@@ -102,9 +104,29 @@ public class Test extends OpMode {
         //Find the position of the cube. This should be run when the camera can see
         //all three objects. Unless it cant find all three objects it will defualt to the middle position
 
-        Drive.Tasks.add(new ForwardTask(0.3f,320));
+        Drive.Tasks.add(new LiftTask(true,1f));
+        Drive.Tasks.add(new LiftTask(false,1f));
+        Drive.Tasks.add(new MarkerTask());
 
-        Drive.Tasks.add(new TurningTask(0.3f,90));
+        Drive.CubePosition();
+
+        //Forward movement is mesaured in mm
+        //turning is measured in degrees
+
+
+        //left
+        left.add(new TurningTask(0.6f,30));
+
+
+        //middle
+        middle.add(new ForwardTask(0.3f,200));
+
+        //right
+        right.add(new TurningTask(0.6f, -30));
+
+
+        Drive.Tasks.add(new TensorFlow(left,middle,right));
+
 
     }
 

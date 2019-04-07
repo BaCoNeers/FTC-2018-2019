@@ -13,49 +13,54 @@ public class WorldsHarvester {
     // members:
     private OpMode opmode = null;
     private WorldsConfiguration config = null;
-    public boolean buttonState = false;
-    public boolean lastButtonState = false;
-    public boolean state = false;
+    public boolean AbuttonState = false;
+    public boolean AlastButtonState = false;
+    public boolean BbuttonState = false;
+    public boolean BlastButtonState = false;
+    public boolean Astate = false;
+    public boolean Bstate = false;
     public boolean toggleFunction = false;
+    int direction = 1;
 
-    public double Toggle() {
-        buttonState = opmode.gamepad2.y;
-        if (buttonState && !lastButtonState) {
-            state = !state;
+    public int direction(){
+        BbuttonState = opmode.gamepad2.b;
+
+
+        if (BbuttonState && !BlastButtonState) {
+            Bstate = !Bstate;
         }
 
-        if (buttonState != lastButtonState) {
-            lastButtonState = buttonState;
+        if (BbuttonState != BlastButtonState) {
+            BlastButtonState = BbuttonState;
         }
 
-        if (state) {
-            //On state
-           toggleFunction = true;
-
+        if (Bstate) {
+            return 1;
         }
         else {
-            //Off state
+            return -1;
+        }
+    }
 
-            return 1.0;
+    public double Toggle() {
+        AbuttonState = opmode.gamepad2.a;
 
+
+        if (AbuttonState && !AlastButtonState) {
+            Astate = !Astate;
         }
 
-        if (toggleFunction) {
-
-            if (opmode.gamepad2.right_trigger > 0.3) {
-                return 0.5;
-            }
-
-            if (opmode.gamepad2.left_trigger < -0.3) {
-                return 0.5;
-            }
-
-            else {
-                return 0.2;
-            }
-
+        if (AbuttonState != AlastButtonState) {
+            AlastButtonState = AbuttonState;
         }
-     return 1.0;
+
+        if (Astate) {
+            return 1*direction;
+        }
+        else {
+            return 0;
+        }
+
     }
 
 
@@ -70,11 +75,17 @@ public class WorldsHarvester {
         // Reverse the motor that runs backwards when connected directly to the battery
     }
 
+    float power;
+
     public void update(){
 
-        float power = opmode.gamepad2.right_trigger-opmode.gamepad2.left_trigger;
+        power = opmode.gamepad2.right_trigger-opmode.gamepad2.left_trigger;
         power = Range.clip(power,-1,1);
         config.harvester_lift.setPower(power);
+
+        config.harvester.setPower(Toggle());
+
+
 
 
     }

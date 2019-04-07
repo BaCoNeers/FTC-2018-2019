@@ -116,9 +116,9 @@ public class AutonomousDriveCrater extends OpMode {
 
 
         //left
-        left.add(new TurningTask(0.3f,-30));
-        left.add(new ForwardTask(0.3f,200));
         left.add(new TurningTask(0.3f,30));
+        left.add(new ForwardTask(0.3f,200));
+        left.add(new TurningTask(0.3f,-30));
         left.add(new ForwardTask(0.3f,100));
 
 
@@ -126,9 +126,9 @@ public class AutonomousDriveCrater extends OpMode {
         middle.add(new ForwardTask(0.3f,300));
 
         //right
-        right.add(new TurningTask(0.3f,30));
-        right.add(new ForwardTask(0.3f,200));
         right.add(new TurningTask(0.3f,-30));
+        right.add(new ForwardTask(0.3f,200));
+        right.add(new TurningTask(0.3f,30));
         right.add(new ForwardTask(0.3f,100));
 
 

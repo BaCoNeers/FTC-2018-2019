@@ -62,7 +62,7 @@ public class WorldsOpMode extends BaconOpMode {
         drive = new WorldsDrive(this, config);
         depositor = new WorldsDepositor(this, config);
         harvester = new WorldsHarvester(this, config);
-        lift = new WorldsLatchLift(this, config);
+        lift = new WorldsLatchLift(this, config, telemetry);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
     }

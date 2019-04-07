@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.OpMode.WorldsCode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Configuration.RoverRucusConfiguration;
 import org.firstinspires.ftc.teamcode.Configuration.WorldsConfiguration;
 
@@ -14,15 +15,17 @@ public class WorldsLatchLift {
     // members:
     private OpMode opmode = null;
     private WorldsConfiguration config = null;
+    private Telemetry tel = null;
 
 
 
-    public WorldsLatchLift(OpMode opmodeIn, WorldsConfiguration configIn) {
+    public WorldsLatchLift(OpMode opmodeIn, WorldsConfiguration configIn, Telemetry telin) {
         super();
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         opmode = opmodeIn;
         config = configIn;
+        tel = telin;
 
         if(!config.latch_limit_switch.getState()){
             PrimliftState = LiftState.LiftMiddle;
@@ -52,6 +55,8 @@ public class WorldsLatchLift {
 
     public void update(){
 
+
+        /*
         long CurrentTime = System.nanoTime();
 
         boolean PrimTimeElapsed = (PrevPrimStateTime + 200000000) < CurrentTime;
@@ -69,16 +74,19 @@ public class WorldsLatchLift {
             // Going up to top
             switch (PrimliftState) {
                 case LiftBottom:
-                    config.latch_lift.setPower(1);
-                    if (PrimStateLowToHigh) {
+                    config.latch_lift.setPower(-1);
+                    if (PrimStateHighToLow) {
                         PrimliftState = LiftState.LiftMiddle;
                     }
                     break;
                 case LiftMiddle:
-                    config.latch_lift.setPower(1);
-                    if (PrimStateHighToLow) {
+                    config.latch_lift.setPower(-1);
+                    if (PrimStateLowToHigh) {
                         PrimliftState = LiftState.LiftTop;
                     }
+                    break;
+                case LiftTop:
+                    config.latch_lift.setPower(0);
                     break;
                 default:
                     break;
@@ -87,17 +95,19 @@ public class WorldsLatchLift {
             //Going Down
             switch (PrimliftState){
                 case LiftTop:
-                    config.latch_lift.setPower(-1);
-                    if(PrimStateLowToHigh){
+                    config.latch_lift.setPower(1);
+                    if(PrimStateHighToLow){
                         PrimliftState = LiftState.LiftMiddle;
                     }
                     break;
                 case LiftMiddle:
-                    config.latch_lift.setPower(-1);
-                    if(PrimStateHighToLow){
+                    config.latch_lift.setPower(1);
+                    if(PrimStateLowToHigh){
                         PrimliftState = LiftState.LiftBottom;
                     }
                     break;
+                case LiftBottom:
+                    config.latch_lift.setPower(0);
                 default:
                     break;
             }
@@ -107,7 +117,14 @@ public class WorldsLatchLift {
         }
 
 
-        //To use incase lift is faulty, comment out code above and uncomment out line below
-        //config.latch_lift.setPower(power());
+        tel.addLine("lift state: "+PrimliftState);
+
+        */
+
+
+        //To use in case lift is faulty, comment out code above and uncomment out line below
+
+
+        config.latch_lift.setPower(power());
     }
 }

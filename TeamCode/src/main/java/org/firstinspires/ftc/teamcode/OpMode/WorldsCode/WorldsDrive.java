@@ -19,9 +19,7 @@ public class WorldsDrive {
     public boolean toggleFunction = false;
 
    public double toggle(){
-       return 1.0;
-
-      /*  buttonState = opmode.gamepad1.y;
+        buttonState = opmode.gamepad1.dpad_down;
         if (buttonState && !lastButtonState) {
             state = !state;
         }
@@ -30,9 +28,10 @@ public class WorldsDrive {
             lastButtonState = buttonState;
         }
 
+
         if (state) {
             //On state
-           toggleFunction = true;
+            return 0.5f;
 
         }
         else {
@@ -42,23 +41,6 @@ public class WorldsDrive {
 
         }
 
-        if (toggleFunction) {
-
-            if (opmode.gamepad1.left_stick_x > 0.3) {
-                return 0.5;
-            }
-
-            if (opmode.gamepad1.left_stick_x < -0.3) {
-                return 0.5;
-            }
-
-            else {
-                return 0.2;
-            }
-
-        }
-     return 1.0;
-     */
 
    }
        public WorldsDrive(OpMode opmodeIn, WorldsConfiguration configIn) {

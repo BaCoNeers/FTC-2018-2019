@@ -37,6 +37,7 @@ import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.ForwardTask;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.LiftTask;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.MainTask;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.NewAutoDrive;
+import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.StrafingTask;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.TensorFlow;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.TurningTask;
 import org.firstinspires.ftc.teamcode.Autonomous.ObjectIdentification.TensorFlowCubeDetection;
@@ -102,9 +103,11 @@ public class AutonomousDriveDepot extends OpMode {
     public void start() {
         runtime.reset();
 
-        //Drive.Tasks.add(new LiftTask(true,0.5f));
+        Drive.Tasks.add(new LiftTask(true,0.5f));
         Drive.Tasks.add(new ForwardTask(0.3f, -50));
-        Drive.Tasks.add(new TurningTask(0.3f,90));
+        Drive.Tasks.add(new LiftTask(false,0.5f));
+        Drive.Tasks.add(new StrafingTask(0.5f,50));
+        Drive.Tasks.add(new TurningTask(0.6f,90));
         Drive.Tasks.add(new ForwardTask(0.3f, 30));
 
 
@@ -117,7 +120,7 @@ public class AutonomousDriveDepot extends OpMode {
 
 
         //left
-        left.add(new TurningTask(0.3f,-30));
+        left.add(new TurningTask(0.6f,30));
         left.add(new ForwardTask(0.3f,200));
 
 
@@ -125,7 +128,7 @@ public class AutonomousDriveDepot extends OpMode {
         middle.add(new ForwardTask(0.3f,200));
 
         //right
-        right.add(new TurningTask(0.3f, 30));
+        right.add(new TurningTask(0.6f, -30));
         right.add(new ForwardTask(0.3f,200));
 
 

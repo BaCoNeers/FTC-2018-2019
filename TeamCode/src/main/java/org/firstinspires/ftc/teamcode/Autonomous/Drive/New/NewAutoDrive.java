@@ -45,7 +45,7 @@ public class NewAutoDrive {
     //IMU
     BNO055IMU imu;
     Orientation lastAngles = new Orientation();
-    double globalAngle;
+    double globalAngle = 0;
 
     //cube detection
     public boolean BoxCheck = false;
@@ -81,20 +81,18 @@ public class NewAutoDrive {
 
     }
 
-    int count = 0;
     boolean state = true;
     public boolean CalabrateIMU(){
 
-        return (!imu.isGyroCalibrated());
-        /*
-        state = (!imu.isGyroCalibrated());
+        state = imu.isGyroCalibrated();
 
-        if (count<300){
-            count++;
-            return state;
+        if(state){
+            resetAngle();
         }
-        return false;
-        */
+
+
+        return (!state);
+
     }
 
 
@@ -108,27 +106,32 @@ public class NewAutoDrive {
                 //check what type of task
                 switch (Tasks.get(0).context) {
                     case "Forward":
-                        if (ForwardNoScale(Tasks.get(0).value, Tasks.get(0).power)) {
+                        if (ForwardNoScale(currentTask.value, currentTask.power)) {
                             Tasks.remove(0);
                         }
                         break;
                     case "Turning":
-                        if(IMURotation(Tasks.get(0).value,Tasks.get(0).power)){
+                        if(IMURotation(currentTask.value,currentTask.power)){
                             Tasks.remove(0);
                         }
                         break;
                     case "Strafing":
-                        if (Strafe(Tasks.get(0).value, Tasks.get(0).power)) {
+                        if (Strafe(currentTask.value, currentTask.power)) {
                             Tasks.remove(0);
                         }
                         break;
                     case "CubeDetection":
-                        if (TensorFlow(Tasks.get(0).Left,Tasks.get(0).Middle,Tasks.get(0).Right)){
+                        if (TensorFlow(currentTask.Left,currentTask.Middle,currentTask.Right)){
                             Tasks.remove(0);
                         }
                         break;
                     case "Lift":
-                        if(Lift(Tasks.get(0).LiftState,Tasks.get(0).power )){
+                        if(Lift(currentTask.LiftState,currentTask.power )){
+                            Tasks.remove(0);
+                        }
+                        break;
+                    case "Marker":
+                        if(DropMarker()){
                             Tasks.remove(0);
                         }
                         break;
@@ -139,6 +142,11 @@ public class NewAutoDrive {
         }
     }
 
+
+    private boolean DropMarker(){
+        config.marker_deployer.setPower(1f);
+        return true;
+    }
 
     private boolean IMURotation(float Angle, float power){
         int direction = 1;
@@ -156,6 +164,7 @@ public class NewAutoDrive {
         }
         else{
             resetAngle();
+            ResestMotors();
             UpdateMotor(false);
             return true;
         }
@@ -332,7 +341,7 @@ public class NewAutoDrive {
                     break;
                 case LiftMiddle:
                     config.latch_lift.setPower(power);
-                    if(PrimStateHighToLow){
+                    if(PrimStateLowToHigh){
                         PrimliftState = LiftState.LiftBottom;
                     }
                     break;
@@ -408,7 +417,7 @@ public class NewAutoDrive {
 
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
-        double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
+        double deltaAngle =  Math.abs(angles.firstAngle - lastAngles.firstAngle);
 
         if (deltaAngle < -180)
             deltaAngle += 360;
@@ -462,6 +471,7 @@ public class NewAutoDrive {
             tel.addLine(Tasks.get(i).context + "\n");
         }
         tel.addLine("avarage encoder: "+GetAvarage());
+        tel.addLine("Lift state: "+PrimliftState);
     }
 
 

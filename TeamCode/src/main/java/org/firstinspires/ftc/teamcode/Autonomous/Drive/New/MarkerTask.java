@@ -6,8 +6,7 @@ package org.firstinspires.ftc.teamcode.Autonomous.Drive.New;
 
 public class MarkerTask extends MainTask{
 
-    public MarkerTask(float count){
-        value = count;
+    public MarkerTask(){
         context = "Marker";
     }
 }
