@@ -104,8 +104,7 @@ public class Test extends OpMode {
         //Find the position of the cube. This should be run when the camera can see
         //all three objects. Unless it cant find all three objects it will defualt to the middle position
 
-        Drive.Tasks.add(new LiftTask(true,1f));
-        Drive.Tasks.add(new LiftTask(false,1f));
+
         Drive.Tasks.add(new MarkerTask());
 
         Drive.CubePosition();

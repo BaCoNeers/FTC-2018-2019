@@ -55,7 +55,7 @@ public class WorldsHarvester {
         }
 
         if (Astate) {
-            return 1*direction;
+            return 1*direction();
         }
         else {
             return 0;
@@ -85,7 +85,15 @@ public class WorldsHarvester {
 
         config.harvester.setPower(Toggle());
 
+        if (opmode.gamepad2.x) {
+            config.harvester_sorter.setPosition(0.0);
 
+        }
+
+        else if (opmode.gamepad2.y) {
+            config.harvester_sorter.setPosition(1.0);
+
+        }
 
 
     }
