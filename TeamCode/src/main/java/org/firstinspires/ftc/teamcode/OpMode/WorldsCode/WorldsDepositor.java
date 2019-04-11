@@ -16,16 +16,6 @@ public class WorldsDepositor {
     private WorldsConfiguration config = null;
 
 
-    /*double servo_positions[][] = {
-            {0.0, 0.0},
-            {0.0, 0.0},
-            {0.2, 0.15},
-            {0.4, 0.3},
-            {0.6, 0.2}
-    };
-    int servo_index = 0; */
-
-
     public WorldsDepositor(OpMode opmodeIn, WorldsConfiguration configIn) {
         super();
         // Initialize the hardware variables. Note that the strings used here as parameters
@@ -56,7 +46,9 @@ public class WorldsDepositor {
     boolean buttonState3 = false;
     boolean lastButtonState3 = false;
     boolean state3 = false;
-    double arm_servo_value = 0.0;
+    double arm_servo_value = 0;
+
+
 
     //Variables for depositor
     boolean depositor_left;
@@ -139,12 +131,12 @@ public class WorldsDepositor {
 
             if (state3) {
                 //On state
-                arm_servo_value = 1.0;
+                arm_servo_value = 1;
 
             }
             else {
                 //Off state
-                arm_servo_value = 0.0;
+                arm_servo_value = 0;
 
             }
 
@@ -169,7 +161,7 @@ public class WorldsDepositor {
 
 
 
-            Range.clip(arm_servo_value, 0.0, 1.0);
+            Range.clip(arm_servo_value, 0, 1);
 
 
             depositor_left = opmode.gamepad1.dpad_left;
@@ -200,17 +192,17 @@ public class WorldsDepositor {
 
             //Depositor code (continuous)
             if (depositor_left) {
-                config.mineral_depositor.setPower(-1.0);
+                config.mineral_depositor.setPower(-1);
 
             }
 
             else if (depositor_right) {
-                config.mineral_depositor.setPower(1.0);
+                config.mineral_depositor.setPower(1);
 
             }
 
             else {
-                config.mineral_depositor.setPower(0.0);
+                config.mineral_depositor.setPower(0);
 
             }
 

@@ -37,7 +37,7 @@ public class WorldsDrive {
         else {
             //Off state
 
-            return 1.0;
+            return 1.0f;
 
         }
 
