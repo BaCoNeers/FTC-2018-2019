@@ -177,6 +177,7 @@ public class WorldsDepositor {
             depositor_right = opmode.gamepad1.dpad_right;
 
 
+            /*
             //Depositor code (set to position)
             if (depositor_default) {
                 config.mineral_depositor.setPosition(0.5);
@@ -194,9 +195,9 @@ public class WorldsDepositor {
 
 
             }
+            */
 
 
-            /*
             //Depositor code (continuous)
             if (depositor_left) {
                 config.mineral_depositor.setPower(-1.0);
@@ -213,7 +214,7 @@ public class WorldsDepositor {
 
             }
 
-            */
+
 
             config.depositor_arm.setPosition(arm_servo_value);
             //config.mineral_depositor.setPosition(depositor_servo_value);
