@@ -38,6 +38,7 @@ public class WorldsDepositor {
     }
 
 
+    /*
     //First set of variables for depositor
     boolean buttonState = false;
     boolean lastButtonState = false;
@@ -48,6 +49,7 @@ public class WorldsDepositor {
     boolean buttonState2 = false;
     boolean lastButtonState2 = false;
     boolean state2 = false;
+    */
 
 
     //Variables for depositor arm
@@ -56,6 +58,10 @@ public class WorldsDepositor {
     boolean state3 = false;
     double arm_servo_value = 0.0;
 
+    //Variables for depositor
+    boolean depositor_left;
+    boolean depositor_right;
+    boolean depositor_default;
 
 
 
@@ -70,6 +76,7 @@ public class WorldsDepositor {
             config.depositor_lift.setPower(liftPower);
 
 
+            /*
 
             //Servo depositor toggle 1
             buttonState = opmode.gamepad1.a;
@@ -116,6 +123,7 @@ public class WorldsDepositor {
 
             }
 
+            */
 
 
             //Servo Arm Toggle
@@ -141,6 +149,7 @@ public class WorldsDepositor {
             }
 
 
+            /*
 
             //Servo Increments
             if (opmode.gamepad1.right_trigger >= 0) {
@@ -156,11 +165,38 @@ public class WorldsDepositor {
 
             }
 
+            */
+
+
 
             Range.clip(arm_servo_value, 0.0, 1.0);
 
+
+            depositor_left = opmode.gamepad1.dpad_left;
+            depositor_default = opmode.gamepad1.dpad_up;
+            depositor_right = opmode.gamepad1.dpad_right;
+
+
+
+            if (depositor_default) {
+                config.mineral_depositor.setPosition(0.5);
+
+            }
+            else if (depositor_left) {
+                config.mineral_depositor.setPosition(0.0);
+
+            }
+            else if (depositor_right) {
+                config.mineral_depositor.setPosition(1.0);
+
+            }
+            else {
+
+
+            }
+
             config.depositor_arm.setPosition(arm_servo_value);
-            config.mineral_depositor.setPosition(depositor_servo_value);
+            //config.mineral_depositor.setPosition(depositor_servo_value);
 
         }
     }
