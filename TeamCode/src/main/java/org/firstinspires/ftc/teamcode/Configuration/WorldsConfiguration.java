@@ -34,7 +34,7 @@ public class WorldsConfiguration extends RobotConfiguration {
 
     public DcMotor depositor_lift = null;
     public Servo depositor_arm = null;
-    public Servo mineral_depositor = null;
+    public CRServo mineral_depositor = null;
 
     public CRServo marker_deployer = null;
 
@@ -103,7 +103,7 @@ public class WorldsConfiguration extends RobotConfiguration {
 
 
         depositor_arm = hardwareMap.get(Servo.class,"DepositorArm");
-        mineral_depositor = hardwareMap.get(Servo.class,"MineralDepositor");
+        mineral_depositor = hardwareMap.get(CRServo.class,"MineralDepositor");
 
         marker_deployer = hardwareMap.get(CRServo.class, "MarkerDeployer");
 
