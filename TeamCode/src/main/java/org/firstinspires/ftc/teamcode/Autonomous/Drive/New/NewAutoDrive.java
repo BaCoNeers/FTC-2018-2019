@@ -144,7 +144,7 @@ public class NewAutoDrive {
 
 
     private boolean DropMarker(){
-        config.marker_deployer.setPower(1f);
+        config.marker_deployer.setPower(-1f);
         return true;
     }
 
