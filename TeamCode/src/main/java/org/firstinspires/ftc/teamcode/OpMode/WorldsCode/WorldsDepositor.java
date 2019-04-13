@@ -28,20 +28,6 @@ public class WorldsDepositor {
     }
 
 
-    /*
-    //First set of variables for depositor
-    boolean buttonState = false;
-    boolean lastButtonState = false;
-    boolean state = false;
-    double depositor_servo_value = 0.5;
-
-    //Second set of variables for depositor
-    boolean buttonState2 = false;
-    boolean lastButtonState2 = false;
-    boolean state2 = false;
-    */
-
-
     //Variables for depositor arm
     boolean buttonState3 = false;
     boolean lastButtonState3 = false;
@@ -60,7 +46,10 @@ public class WorldsDepositor {
         public void update() {
 
 
-            //Code for the linear motion lift (mineral depositor)
+            //// DEPOSITOR LIFT CODE ///
+
+
+            //Code for the linear motion lift (mineral depositor lift)
             double liftPower;
 
             liftPower = opmode.gamepad1.right_stick_y;
@@ -68,56 +57,89 @@ public class WorldsDepositor {
             config.depositor_lift.setPower(liftPower);
 
 
+
+            //// MINERAL DEPOSITOR CODE ///
+
+
+
+            depositor_left = opmode.gamepad1.dpad_left;
+            depositor_default = opmode.gamepad1.dpad_up;
+            depositor_right = opmode.gamepad1.dpad_right;
+
+
+
+            //Depositor code (set to position)
+
             /*
+            if (depositor_default) {
+                config.mineral_depositor.setPosition(0.5);
 
-            //Servo depositor toggle 1
-            buttonState = opmode.gamepad1.a;
-            if (buttonState && !lastButtonState) {
-                state = !state;
             }
+            else if (depositor_left) {
+                config.mineral_depositor.setPosition(0.0);
 
-            if (buttonState != lastButtonState) {
-                lastButtonState = buttonState;
             }
-
-
-            if (state) {
-                //On state
-                depositor_servo_value = 0.0;
+            else if (depositor_right) {
+                config.mineral_depositor.setPosition(1.0);
 
             }
             else {
-                //Off state
-                depositor_servo_value = 0.5;
-            }
 
-
-
-            //Servo depositor toggle 2
-            buttonState2 = opmode.gamepad1.b;
-            if (buttonState2 && !lastButtonState2) {
-                state2 = !state2;
-            }
-
-            if (buttonState2 != lastButtonState2) {
-                lastButtonState2 = buttonState2;
-            }
-
-
-            if (state2) {
-                //On state
-                depositor_servo_value = 1.0;
 
             }
-            else {
-                //Off state
-                depositor_servo_value = 0.5;
-
-            }
-
             */
 
-            Range.clip(arm_servo_value, 0, 1);
+
+            //Depositor code (continuous)
+            if (depositor_left) {
+                config.mineral_depositor.setPower(-1f);
+
+            }
+
+            else if (depositor_right) {
+                config.mineral_depositor.setPower(1f);
+
+            }
+
+            else {
+                config.mineral_depositor.setPower(0f);
+
+            }
+
+
+
+            //// SERVO ARM CODE ////
+
+
+
+            //Servo Increments
+
+            /*
+            if (opmode.gamepad1.right_trigger >= 0.5) {
+                arm_servo_value += 0.2;
+
+            }
+            else if (opmode.gamepad1.right_bumper) {
+                arm_servo_value += 0.1;
+
+            }
+            else if (opmode.gamepad1.left_bumper) {
+                arm_servo_value -= 0.1;
+
+            }
+            */
+
+
+            //Servo Increments v2
+            if (opmode.gamepad1.right_bumper) {
+                arm_servo_value = arm_servo_value + 0.1;
+
+            }
+            else if (opmode.gamepad1.left_bumper) {
+                arm_servo_value = arm_servo_value - 0.1;
+
+            }
+
 
 
             //Servo Arm Toggle
@@ -144,67 +166,7 @@ public class WorldsDepositor {
 
 
 
-
-            //Servo Increments
-            if (opmode.gamepad1.right_trigger >= 0) {
-                arm_servo_value += 0.2;
-
-            }
-            else if (opmode.gamepad1.right_bumper) {
-                arm_servo_value += 0.1;
-
-            }
-            else if (opmode.gamepad1.left_bumper) {
-                arm_servo_value -= 0.1;
-
-            }
-
-            //Mineral Depositor
-
-            depositor_left = opmode.gamepad1.dpad_left;
-            depositor_default = opmode.gamepad1.dpad_up;
-            depositor_right = opmode.gamepad1.dpad_right;
-
-
-            /*
-            //Depositor code (set to position)
-            if (depositor_default) {
-                config.mineral_depositor.setPosition(0.5);
-
-            }
-            else if (depositor_left) {
-                config.mineral_depositor.setPosition(0.0);
-
-            }
-            else if (depositor_right) {
-                config.mineral_depositor.setPosition(1.0);
-
-            }
-            else {
-
-
-            }
-            */
-
-
-            //Depositor code (continuous)
-            if (depositor_left) {
-                config.mineral_depositor.setPower(-1);
-
-            }
-
-            else if (depositor_right) {
-                config.mineral_depositor.setPower(1);
-
-            }
-
-            else {
-                config.mineral_depositor.setPower(0);
-
-            }
-
-
-
+            Range.clip(arm_servo_value, 0, 1);
             config.depositor_arm.setPosition(arm_servo_value);
             //config.mineral_depositor.setPosition(depositor_servo_value);
 
@@ -212,4 +174,4 @@ public class WorldsDepositor {
     }
 
 
-
+            
