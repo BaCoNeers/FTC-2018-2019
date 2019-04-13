@@ -117,6 +117,8 @@ public class WorldsDepositor {
 
             */
 
+            Range.clip(arm_servo_value, 0, 1);
+
 
             //Servo Arm Toggle
             buttonState3 = opmode.gamepad1.left_bumper;
@@ -141,7 +143,7 @@ public class WorldsDepositor {
             }
 
 
-            /*
+
 
             //Servo Increments
             if (opmode.gamepad1.right_trigger >= 0) {
@@ -157,12 +159,7 @@ public class WorldsDepositor {
 
             }
 
-            */
-
-
-
-            Range.clip(arm_servo_value, 0, 1);
-
+            //Mineral Depositor
 
             depositor_left = opmode.gamepad1.dpad_left;
             depositor_default = opmode.gamepad1.dpad_up;
