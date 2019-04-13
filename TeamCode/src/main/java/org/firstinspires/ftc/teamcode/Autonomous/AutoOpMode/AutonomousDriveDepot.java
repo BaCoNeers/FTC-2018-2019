@@ -36,6 +36,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.ForwardTask;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.LiftTask;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.MainTask;
+import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.MarkerTask;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.NewAutoDrive;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.StrafingTask;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.TensorFlow;
@@ -122,17 +123,22 @@ public class AutonomousDriveDepot extends OpMode {
         //left
         left.add(new TurningTask(0.6f,30));
         left.add(new ForwardTask(0.3f,200));
+        left.add(new MarkerTask());
 
 
         //middle
         middle.add(new ForwardTask(0.3f,200));
+        middle.add(new MarkerTask());
 
         //right
         right.add(new TurningTask(0.6f, -30));
         right.add(new ForwardTask(0.3f,200));
+        right
+                .add(new MarkerTask());
 
 
         Drive.Tasks.add(new TensorFlow(left,middle,right));
+
 
     }
 
