@@ -33,13 +33,7 @@ public class WorldsDepositor {
     boolean lastButtonState3 = false;
     boolean state3 = false;
     double arm_servo_value = 0;
-
-
-
-    //Variables for depositor
-    boolean depositor_left;
-    boolean depositor_right;
-    boolean depositor_default;
+    
 
 
 
@@ -77,11 +71,6 @@ public class WorldsDepositor {
                 config.mineral_depositor.setPosition(1.0);
 
             }
-            else {
-
-
-            }
-
 
             /*
             //Depositor code (continuous)
