@@ -19,7 +19,7 @@ public class WorldsDrive {
     public boolean toggleFunction = false;
 
    public double toggle(){
-        buttonState = opmode.gamepad1.dpad_down;
+        buttonState = opmode.gamepad1.right_bumper;
         if (buttonState && !lastButtonState) {
             state = !state;
         }
