@@ -153,16 +153,17 @@ public class NewAutoDrive {
         if(Angle>0){
             direction = -1;
         }
-        if(Math.abs(getAngle()) < Math.abs(Angle)){
-            MotorPower[0] = power*direction;
-            MotorPower[1] = -power*direction;
-            MotorPower[2] = power*direction;
-            MotorPower[3] = -power*direction;
+        /*if*/while(Math.abs(getAngle()) < Math.abs(Angle)) {
+            MotorPower[0] = power * direction;
+            MotorPower[1] = -power * direction;
+            MotorPower[2] = power * direction;
+            MotorPower[3] = -power * direction;
             UpdateMotor(true);
-            tel.addLine("Angle: "+getAngle());
-            return false;
+            tel.addLine("Angle: " + getAngle());
         }
-        else{
+        if (Math.abs(getAngle()) < Math.abs(Angle)) return false;
+
+        else {
             resetAngle();
             ResestMotors();
             UpdateMotor(false);

@@ -37,6 +37,7 @@ import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.ForwardTask;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.LiftTask;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.MainTask;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.NewAutoDrive;
+import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.StrafingTask;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.TensorFlow;
 import org.firstinspires.ftc.teamcode.Autonomous.Drive.New.TurningTask;
 import org.firstinspires.ftc.teamcode.Autonomous.ObjectIdentification.TensorFlowCubeDetection;
@@ -101,21 +102,25 @@ public class AutonomousDriveCrater extends OpMode {
     public void start() {
         runtime.reset();
 
-        Drive.Tasks.add(new LiftTask(true,0.5f));
-        Drive.Tasks.add(new ForwardTask(0.3f, -50));
-        Drive.Tasks.add(new TurningTask(0.3f,90));
-        Drive.Tasks.add(new ForwardTask(0.3f, 30));
+        Drive.Tasks.add(new LiftTask(true,1f));
+        Drive.Tasks.add(new ForwardTask(-0.3f, 60));
+        Drive.Tasks.add(new StrafingTask(0.5f, 50));
+        Drive.Tasks.add(new TurningTask(0.6f,90));
+        Drive.Tasks.add(new ForwardTask(0.3f, -30));
+
 
 
         //Find the position of the cube. This should be run when the camera can see
-        //all three objects. Unless it cant find all three objects it will defualt to the middle position
+        //all three objects. Unless it cant find all three objects it will default to the middle position
         Drive.CubePosition();
 
-        //Forward movement is mesaured in mm
+        //Forward movement is measured in mm
         //turning is measured in degrees
 
+      /*Drive.Tasks.add(new TensorFlow(left,middle,right));
 
-        //left
+
+       //left
         left.add(new TurningTask(0.3f,30));
         left.add(new ForwardTask(0.3f,200));
         left.add(new TurningTask(0.3f,-30));
@@ -132,7 +137,7 @@ public class AutonomousDriveCrater extends OpMode {
         right.add(new ForwardTask(0.3f,100));
 
 
-        Drive.Tasks.add(new TensorFlow(left,middle,right));
+        */
 
     }
 
@@ -161,8 +166,7 @@ public class AutonomousDriveCrater extends OpMode {
                 case 2:
                     Drive.Tasks.add(new ForwardTask(0.3f,-200));
                     break;
-                //right
-                //right                                                                                                                                                             AAAAAA
+                //right                                                                                                                                                           AAAAAA
                 case 3:
                     Drive.Tasks.add(new ForwardTask(0.3f,-200));
                     Drive.Tasks.add(new TurningTask(0.3f,30));

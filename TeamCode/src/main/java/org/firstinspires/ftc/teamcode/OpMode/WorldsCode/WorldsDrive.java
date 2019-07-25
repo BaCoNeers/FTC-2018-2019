@@ -70,10 +70,25 @@ public class WorldsDrive {
         double left_y = opmode.gamepad1.left_stick_y; //forward
         double strafe_left_x  = opmode.gamepad1.left_stick_x; //strafe
         double right_x = -opmode.gamepad1.right_stick_x; //turning
-        front_left_power = Range.clip(left_y + strafe_left_x + right_x, -1.0, 1.0);
-        rear_left_power = Range.clip(left_y - strafe_left_x + right_x, -1.0, 1.0);
-        front_right_power = Range.clip(left_y - strafe_left_x - right_x, -1.0, 1.0);
-        rear_right_power = Range.clip(left_y + strafe_left_x - right_x, -1.0, 1.0);
+
+        if (left_y > 0.1 || left_y < -0.1) {
+            front_left_power = left_y;
+            rear_left_power = left_y;
+            front_right_power = left_y;
+            rear_right_power = left_y;
+        }
+        else if (right_x > 0.1 || right_x < -0.1) {
+            front_left_power = right_x;
+            rear_left_power = right_x;
+            front_right_power = -right_x;
+            rear_right_power = -right_x;
+        }
+        else {
+            front_left_power = Range.clip(left_y + strafe_left_x + right_x, -1.0, 1.0);
+            rear_left_power = Range.clip(left_y - strafe_left_x + right_x, -1.0, 1.0);
+            front_right_power = Range.clip(left_y - strafe_left_x - right_x, -1.0, 1.0);
+            rear_right_power = Range.clip(left_y + strafe_left_x - right_x, -1.0, 1.0);
+        }
 
         // Send calculated power to wheels
         config.front_left_motor.setPower(-front_left_power*toggle());

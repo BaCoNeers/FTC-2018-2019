@@ -104,24 +104,24 @@ public class AutonomousDriveDepot extends OpMode {
     public void start() {
         runtime.reset();
 
-        Drive.Tasks.add(new LiftTask(true,0.5f));
-        Drive.Tasks.add(new ForwardTask(0.3f, -50));
-        Drive.Tasks.add(new LiftTask(false,0.5f));
+        Drive.Tasks.add(new LiftTask(true,1f));
+        Drive.Tasks.add(new ForwardTask(-0.3f, 60));
         Drive.Tasks.add(new StrafingTask(0.5f,50));
-        Drive.Tasks.add(new TurningTask(0.6f,90));
-        Drive.Tasks.add(new ForwardTask(0.3f, 30));
+        Drive.Tasks.add(new TurningTask(0.6f,85));
+        Drive.Tasks.add(new ForwardTask(0.3f, 200));
+        Drive.Tasks.add(new MarkerTask());
 
 
-        //Find the position of the cube. This should be run when the camera can see
-        //all three objects. Unless it cant find all three objects it will defualt to the middle position
-        Drive.CubePosition();
+        //Find the position of the cube. This should be run when the camera can see all three objects.
+        //Unless it cant find all three objects it will default to the middle position
+      /* Drive.CubePosition();
 
-        //Forward movement is mesaured in mm
+        //Forward movement is measured in mm
         //turning is measured in degrees
 
 
         //left
-        left.add(new TurningTask(0.6f,30));
+        left.add(new TurningTask(0.6f,-30));
         left.add(new ForwardTask(0.3f,200));
         left.add(new MarkerTask());
 
@@ -131,15 +131,13 @@ public class AutonomousDriveDepot extends OpMode {
         middle.add(new MarkerTask());
 
         //right
-        right.add(new TurningTask(0.6f, -30));
+        right.add(new TurningTask(0.6f, 30));
         right.add(new ForwardTask(0.3f,200));
-        right
-                .add(new MarkerTask());
+        right.add(new MarkerTask());
 
 
         Drive.Tasks.add(new TensorFlow(left,middle,right));
-
-
+    */
     }
 
 

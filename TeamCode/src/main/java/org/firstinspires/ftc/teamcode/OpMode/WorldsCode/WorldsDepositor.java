@@ -61,7 +61,7 @@ public class WorldsDepositor {
 
 
             if (opmode.gamepad1.dpad_right) {
-                depositor_servo_value = 0.63;
+                depositor_servo_value = 0.0;
 
             }
             else if (opmode.gamepad1.dpad_down) {
@@ -73,26 +73,12 @@ public class WorldsDepositor {
 
             }
             else if (opmode.gamepad1.dpad_left) {
-                depositor_servo_value = 0.2;
+                depositor_servo_value = 0.5;
 
             }
 
             //// SERVO ARM CODE ////
 
-
-
-            //Servo Increments
-
-            /*
-            if (opmode.gamepad1.b) {
-                arm_servo_value = arm_servo_value + 0.1;
-
-            }
-            else if (opmode.gamepad1.a) {
-                arm_servo_value = arm_servo_value - 0.1;
-
-            }
-            */
 
 
             //Servo Arm Toggle
@@ -122,7 +108,7 @@ public class WorldsDepositor {
             Range.clip(arm_servo_value, 0, 1);
             config.depositor_arm.setPosition(arm_servo_value);
             config.mineral_depositor.setPosition(depositor_servo_value);
-            //config.mineral_depositor.setPosition(depositor_servo_value);
+
 
         }
     }
