@@ -48,25 +48,16 @@ import org.firstinspires.ftc.teamcode.common.BaconOpMode;
 >>>>>>> autonomous
  */
 
-@TeleOp (name="Worlds Code")
-public class DaVinciCode extends BaconOpMode {
+@TeleOp (name="DaVinciOpCode")
+public class DaVinciOpCode extends BaconOpMode {
 
     // Declare OpMode members.
     public ElapsedTime runtime = new ElapsedTime();
-    public WorldsConfiguration config;
-    public WorldsDrive drive;
-    public WorldsDepositor depositor;
-    public WorldsHarvester harvester;
-    public WorldsLatchLift lift;
+    public DaVinciDriveCode drive;
 
     @Override
     protected void onInit(){
-        config = WorldsConfiguration.newConfig(hardwareMap, telemetry);
-
-        drive = new WorldsDrive(this, config);
-        depositor = new WorldsDepositor(this, config);
-        harvester = new WorldsHarvester(this, config);
-        lift = new WorldsLatchLift(this, config, telemetry);
+        drive = new DaVinciDriveCode(this);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
     }
@@ -78,10 +69,7 @@ public class DaVinciCode extends BaconOpMode {
 
     @Override
     protected void activeLoop(){
-        drive.update();
-        depositor.update();
-        harvester.update();
-        lift.update();
+        drive.updateDaVinciDrive();
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.update();
     }
