@@ -77,24 +77,25 @@ public class WorldsHarvester {
 
     float power;
 
-    public void update(){
+    public void update() {
 
-        power = opmode.gamepad2.right_trigger-opmode.gamepad2.left_trigger;
-        power = Range.clip(power,-1,1);
-        config.harvester_lift.setPower(power);
-
-        config.harvester.setPower(Toggle());
-
-        if (opmode.gamepad2.x) {
-            config.harvester_sorter.setPosition(0.0);
-
-        }
-
-        else if (opmode.gamepad2.y) {
-            config.harvester_sorter.setPosition(1.0);
-
-        }
-
-
-    }
-}
+        power = opmode.gamepad2.right_trigger - opmode.gamepad2.left_trigger;
+        power = Range.clip(power, -1, 1);
+//        config.harvester_lift.setPower(power);
+//
+//        config.harvester.setPower(Toggle());
+//
+//        if (opmode.gamepad2.x) {
+//            config.harvester_sorter.setPosition(0.0);
+//
+//        }
+//
+//        else if (opmode.gamepad2.y) {
+//            config.harvester_sorter.setPosition(1.0);
+//
+//        }
+//
+//
+//    }
+//}
+    }}

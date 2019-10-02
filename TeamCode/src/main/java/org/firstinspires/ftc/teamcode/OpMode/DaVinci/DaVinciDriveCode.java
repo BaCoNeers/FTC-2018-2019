@@ -17,6 +17,10 @@ public class DaVinciDriveCode {
     private DcMotor rightMotor = null;
     private DcMotor leftMotor = null;
 
+    boolean buttonState = false;
+    boolean lastButtonState = false;
+    boolean state = false;
+
 
     public DaVinciDriveCode(OpMode opmodeIn) {
         super();
@@ -37,9 +41,35 @@ public class DaVinciDriveCode {
     public void updateDaVinciDrive(){
         double leftStickY = opmode.gamepad1.left_stick_y;
         double rightStickY = opmode.gamepad1.right_stick_y;
+        double power;
 
-        rightMotor.setPower(rightStickY);
-        leftMotor.setPower(leftStickY);
+        buttonState = opmode.gamepad1.a;
+        if (buttonState && !lastButtonState) {
+            state = !state;
+        }
+
+        if (buttonState != lastButtonState) {
+            lastButtonState = buttonState;
+        }
+
+
+        if (state) {
+            //On state
+            power = 0.5d;
+
+        }
+        else {
+            //Off state
+
+            power = 1.0d;
+        }
+
+
+        double rightPower = rightStickY*power;
+        double leftPower = leftStickY*power;
+
+        rightMotor.setPower(rightPower);
+        leftMotor.setPower(leftPower);
 
     }
 }

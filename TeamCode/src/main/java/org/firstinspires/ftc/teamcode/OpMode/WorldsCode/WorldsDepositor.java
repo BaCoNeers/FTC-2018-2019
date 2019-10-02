@@ -104,10 +104,9 @@ public class WorldsDepositor {
             }
 
 
-
             Range.clip(arm_servo_value, 0, 1);
-            config.depositor_arm.setPosition(arm_servo_value);
-            config.mineral_depositor.setPosition(depositor_servo_value);
+//            config.depositor_arm.setPosition(arm_servo_value);
+//            config.mineral_depositor.setPosition(depositor_servo_value);
 
 
         }

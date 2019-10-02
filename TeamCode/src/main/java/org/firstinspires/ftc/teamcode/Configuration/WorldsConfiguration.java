@@ -28,13 +28,13 @@ public class WorldsConfiguration extends RobotConfiguration {
     public DcMotor latch_lift = null;
     public DigitalChannel latch_limit_switch = null;
 
-    public DcMotor harvester_lift = null;
-    public DcMotor harvester = null;
-    public Servo harvester_sorter = null;
-
+//    public DcMotor harvester_lift = null;
+//    public DcMotor harvester = null;
+//    public Servo harvester_sorter = null;
+//
     public DcMotor depositor_lift = null;
-    public Servo depositor_arm = null;
-    public Servo mineral_depositor = null;
+//    public Servo depositor_arm = null;
+//    public Servo mineral_depositor = null;
 
     public CRServo marker_deployer = null;
 
@@ -84,15 +84,15 @@ public class WorldsConfiguration extends RobotConfiguration {
 
         latch_limit_switch = hardwareMap.get(DigitalChannel.class,"LatchLimitSwitch");
 
-        harvester_lift = hardwareMap.get(DcMotor.class, "HarvesterLift");
-        harvester_lift.setDirection(DcMotor.Direction.FORWARD);
-        harvester_lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        harvester_lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        harvester_lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        harvester = hardwareMap.get(DcMotor.class, "Harvester");
-
-        harvester_sorter = hardwareMap.get(Servo.class,"HarvesterSorter");
+//        harvester_lift = hardwareMap.get(DcMotor.class, "HarvesterLift");
+//        harvester_lift.setDirection(DcMotor.Direction.FORWARD);
+//        harvester_lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        harvester_lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        harvester_lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//
+//        harvester = hardwareMap.get(DcMotor.class, "Harvester");
+//
+//        harvester_sorter = hardwareMap.get(Servo.class,"HarvesterSorter");
 
 
         depositor_lift = hardwareMap.get(DcMotor.class, "DepositorLift");
@@ -102,8 +102,8 @@ public class WorldsConfiguration extends RobotConfiguration {
         depositor_lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
-        depositor_arm = hardwareMap.get(Servo.class,"DepositorArm");
-        mineral_depositor = hardwareMap.get(Servo.class,"MineralDepositor");
+//        depositor_arm = hardwareMap.get(Servo.class,"DepositorArm");
+//        mineral_depositor = hardwareMap.get(Servo.class,"MineralDepositor");
 
         marker_deployer = hardwareMap.get(CRServo.class, "MarkerDeployer");
 

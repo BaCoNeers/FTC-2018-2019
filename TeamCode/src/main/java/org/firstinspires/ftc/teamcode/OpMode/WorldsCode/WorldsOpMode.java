@@ -44,7 +44,7 @@ import org.firstinspires.ftc.teamcode.common.BaconOpMode;
 >>>>>>> autonomous
  */
 
-@TeleOp (name="Worlds Code")
+@TeleOp (name="Worlds Code Video Shoot")
 public class WorldsOpMode extends BaconOpMode {
 
     // Declare OpMode members.
@@ -61,7 +61,7 @@ public class WorldsOpMode extends BaconOpMode {
 
         drive = new WorldsDrive(this, config);
         depositor = new WorldsDepositor(this, config);
-        harvester = new WorldsHarvester(this, config);
+//        harvester = new WorldsHarvester(this, config);
         lift = new WorldsLatchLift(this, config, telemetry);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -76,7 +76,7 @@ public class WorldsOpMode extends BaconOpMode {
     protected void activeLoop(){
         drive.update();
         depositor.update();
-        harvester.update();
+//        harvester.update();
         lift.update();
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.update();
